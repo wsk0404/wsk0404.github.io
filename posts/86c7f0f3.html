@@ -1,0 +1,1853 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>集合与泛型 | Wsk Blog</title><meta name="keywords" content="集合框架,泛型"><meta name="author" content="Wsk,2047891093@qq.com"><meta name="copyright" content="Wsk"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="集合与泛型"><meta name="application-name" content="集合与泛型"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="集合与泛型"><meta property="og:url" content="https://wsk0404.github.io/posts/86c7f0f3.html"><meta property="og:site_name" content="Wsk Blog"><meta property="og:description" content="🎯 面试题：什么是泛型？有什么作用？ 一、面试官考察意图面试官主要考察候选人是否理解：  泛型的本质与实现机制（类型擦除 Type Erasure）； 泛型在集合框架与通用类设计中的应用； 泛型的编译期类型检查优势与运行期行为差异； 是否了解 通配符（? extends &amp;#x2F; ? supe"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=32c81b6c-1816-a337-3eac-75b42108d52c"><meta property="article:author" content="Wsk"><meta property="article:tag" content="博客,笔记,学习"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=32c81b6c-1816-a337-3eac-75b42108d52c"><meta name="description" content="🎯 面试题：什么是泛型？有什么作用？ 一、面试官考察意图面试官主要考察候选人是否理解：  泛型的本质与实现机制（类型擦除 Type Erasure）； 泛型在集合框架与通用类设计中的应用； 泛型的编译期类型检查优势与运行期行为差异； 是否了解 通配符（? extends &amp;#x2F; ? supe"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://wsk0404.github.io/posts/86c7f0f3"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2023/09/03/125766904/ee23df8517f3c3e3efc4145658269c06_5714860933110284659.png"},
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:{"enable":true,"maxBarrage":1,"barrageTime":4000,"accessToken":"","mailMd5":"3932F24FA213E964B6B1B0FD091F88CE"},
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: {"apiurl":"https://friends.anheyu.com/"},
+  navMusic: true,
+  mainTone: {"mode":"both","api":"https://img2color-go.vercel.app/api?img=","cover_change":true},
+  authorStatus: {"skills":["🤖️ 数码科技爱好者","🔍 分享与热心帮助","🔨 设计开发一条龙","🏃 脚踏实地行动派"]},
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    simplehomepage: false,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":true,"limitCount":50,"languages":{"author":"作者: Wsk","link":"链接: ","source":"来源: Wsk Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Wsk Blog',
+  title: '集合与泛型',
+  postAI: '',
+  pageFillDescription: '🎯 面试题：什么是泛型？有什么作用？, 一、面试官考察意图, 二、30 秒高分速答（简版）, 三、深入原理讲解, 1️⃣ 泛型的本质, 2️⃣ 泛型的底层实现原理：类型擦除机制（Type Erasure）, 四、泛型的分类与使用方式, ✅ 1️⃣ 泛型类（Generic Class）, ✅ 2️⃣ 泛型方法（Generic Method）, ✅ 3️⃣ 泛型接口（Generic Interface）, ✅ 4️⃣ 通配符（Wildcard）, 五、泛型的作用与优势, 六、项目中的实际应用（以 WMS 系统为例）, 七、常见追问与高分回答, 八、性能与陷阱分析 ⚠️, 九、框架中的典型应用, 🧠 十、高分总结（可背诵版）, 🎯 面试题：请你介绍一下 Java 中的集合框架（Collection Framework）, 一、面试官考察点, 二、30 秒高分速答（简版）, 三、集合框架的整体架构图（理解体系结构）, 四、各核心集合详解与底层原理, 1️⃣ List —— 有序、可重复, 2️⃣ Set —— 无序、不可重复, 3️⃣ Map —— 键值对存储, 五、HashMap 的底层结构（面试必问）, 🔹 JDK 1.7：, 🔹 JDK 1.8：, 六、常见时间复杂度（高频考点）, 七、线程安全集合（扩展）, 八、实际开发中集合的选型（WMS 系统案例）, 九、常见追问与高分回答, 🔟 一分钟高分总结（可背诵）, ⚙️ 十一、扩展思考（进阶）, 🎯 面试题：请谈谈 HashMap 的底层原理, 一、面试官考察点, 二、核心概念, 三、底层结构图（JDK8）, 四、关键机制, 1️⃣ 哈希函数, 2️⃣ 冲突处理, 3️⃣ 扩容机制, 4️⃣ 插入逻辑（put）, 5️⃣ 查询逻辑（get）, 6️⃣ JDK7 与 JDK8 区别, 7️⃣ 线程安全问题, 8️⃣ 面试高频追问, 9️⃣ 项目应用示例（WMS 系统）, 🔟 高分总结模板（可直接背诵）, 🎯 面试题：请你详细讲讲 ConcurrentHashMap 的底层原理、分段锁机制与 CAS 实现原理, 一、面试官考察点, 二、30 秒高分速答（简版）, 三、JDK 1.7 与 JDK 1.8 的结构对比, 四、JDK 1.7：Segment 分段锁机制原理, 1️⃣ 核心数据结构, 2️⃣ put() 过程, 五、JDK 1.8：CAS + synchronized 实现原理, 1️⃣ 数据结构, 2️⃣ 核心 put() 流程（JDK1.8）, 六、CAS 原理讲解（核心）, 1️⃣ 什么是 CAS？, 2️⃣ ConcurrentHashMap 中 CAS 的应用场景, 七、synchronized 在 ConcurrentHashMap 中的使用, 八、get() 过程（无锁操作）, 九、扩容机制（transfer）, 🔟 性能分析对比, 十一、常见面试追问与高分回答, 十二、项目实践（WMS 系统案例）, 十三、一分钟高分总结（可背诵）, 十四、扩展话题（高阶追问）, 🎯 面试题：请谈谈 hashCode 与 equals, 一、面试官考察点, 二、概念与区别, 三、hashCode 与 equals 契约, 四、集合中应用示例, 1️⃣ HashMap x2F HashSet, 2️⃣ String 与常量池, 五、hashCode 与 equals 重写原则, 六、面试高频追问, 七、高分总结模板（可直接背诵）, 🎯 面试题：什么是 Hash 冲突？发生冲突时 Java 是如何处理的？, 一、面试官考察点, 二、30 秒高分速答（简版）, 三、哈希表工作原理回顾, 四、Hash 冲突的本质与原因, 1️⃣ 定义：, 2️⃣ 原因：, 3️⃣ 示例：, 五、Java 中的冲突解决策略, 1️⃣ 拉链法（Separate Chaining）, 2️⃣ 红黑树化（JDK 8 之后）, 3️⃣ 树退化机制（Treeify x2F Untreeify）, 六、Hash 冲突示例演示, 七、hashCode() 与 equals() 的契约关系, 八、性能分析, 九、常见面试追问（及高分回答）, 🔟 常见陷阱与规避, 十一、项目实践场景（WMS 系统）, 十二、扩展话题（中高阶追问）, 🧠 一分钟高分总结（可背诵）面试题什么是泛型有什么作用一面试官考察意图面试官主要考察候选人是否理解泛型的本质与实现机制类型擦除泛型在集合框架与通用类设计中的应用泛型的编译期类型检查优势与运行期行为差异是否了解通配符泛型方法泛型约束等高级用法二秒高分速答简版泛型是一种参数化类型机制允许在定义类接口方法时使用类型参数从而在编译期进行类型检查增强代码的通用性与安全性泛型的作用主要包括类型安全在编译阶段发现类型错误减少强制类型转换提升代码复用性与可读性提高通用性三深入原理讲解泛型的本质泛型就是在定义时不确定类型使用时再确定类型的一种机制换句话说类型是参数化的示例不需要强制类型转换在没有泛型之前必须强转泛型在编译时进行类型检查但在运行时类型被擦除即泛型信息不会保留到字节码中泛型的底层实现原理类型擦除机制泛型是伪泛型即泛型信息只在编译期有效编译后实际运行的仍是普通类或边界类型这就是类型擦除示例输出结果为说明在运行时泛型类型被擦除了和实际上是同一个类四泛型的分类与使用方式泛型类在类定义时指定类型参数输出泛型方法在方法上定义类型参数自动推断类型为泛型接口通配符通配符用于表示未知类型用于方法参数中常见通配符含义示例任意类型或的子类上界可放入或的父类下界可放入或其子类示例五泛型的作用与优势作用说明类型安全编译时检查类型避免运行时消除强制类型转换让集合取出元素时不再需要强转提高代码复用性可定义通用类方法处理不同类型提高可读性与可维护性明确参数和返回类型提升清晰度提升框架扩展性各种框架都依赖泛型构建通用组件六项目中的实际应用以系统为例在我负责的仓储管理系统入库模块中我设计了一个通用的泛型基类通过泛型支持不同实体类的复用子类继承时具体入库保存逻辑数据库查询逻辑优点实现了业务逻辑的统一模板化减少重复代码可随时复用七常见追问与高分回答追问高分回答泛型是编译期还是运行期生效编译期生效编译器在编译阶段执行类型检查与类型擦除运行时不保留泛型信息泛型和多态的区别泛型是编译期的类型参数化多态是运行期的动态分派为什么泛型不能用于基本类型因为类型擦除后全部被替换为不能存放基本类型泛型数组为什么不安全类型擦除后无法检查元素真实类型会导致潜在类型安全问题什么是类型擦除编译器在编译后删除泛型参数统一用或边界类型替代八性能与陷阱分析问题说明性能损耗泛型在编译期处理不影响运行时性能数组泛型陷阱泛型类型擦除导致数组元素类型检查失效例如编译报错类型擦除陷阱和在运行时是同一类型反射中要格外小心九框架中的典型应用框架泛型应用场景泛型接口定义通用泛型封装反序列化时需要维持类型信息泛型广泛用于集合与工具类模板设计十高分总结可背诵版泛型是一种参数化类型机制允许在类接口方法定义中使用类型参数在编译时进行类型检查它能提高代码的类型安全性可复用性和可读性广泛用于集合框架通用模板类与框架设计中泛型在编译后通过类型擦除机制实现不会保留类型信息因此泛型仅在编译期有效实际开发中我在转换等场景中大量使用泛型来实现代码模板化与逻辑复用面试题请你介绍一下中的集合框架一面试官考察点面试官通常借此题考察你是否了解集合框架的整体架构与层级关系是否清楚各核心类的底层实现与区别是否知道常见容器的时间复杂度与线程安全性是否能结合实际开发谈出使用场景与选型依据是否了解之后的优化红黑树化是否了解并发集合等二秒高分速答简版集合框架主要分为两大体系接口用于存储单个对象包括接口用于存储键值对各主要实现类如下动态数组双向链表线程安全哈希表有序哈希表红黑树哈希表有序哈希表红黑树高并发哈希表其中和是集合框架的两大根接口几乎所有开发都会频繁使用三集合框架的整体架构图理解体系结构提示体系存放单个元素体系存放键值对所有集合类都在包下四各核心集合详解与底层原理有序可重复实现类底层结构线程安全特点动态数组查询快增删慢双向链表增删快查询慢动态数组同步已过时线程安全但性能低继承自栈结构后进先出示例输出无序不可重复实现类底层结构排序性特点基于实现元素唯一依赖和双向链表插入顺序可保持插入顺序红黑树自然顺序自动排序需实现或传入示例输出键值对存储实现类底层结构是否有序是否线程安全备注哈希表数组链表红黑树常用高性能双向链表插入顺序用于缓存如红黑树排序需实现分段锁或哈希表并发安全高性能哈希表全局锁过时性能差示例输出五的底层结构面试必问结构数组链表哈希冲突采用拉链法容量扩容时可能出现链表反转死循环多线程问题结构数组链表红黑树当链表长度且数组长度时转红黑树使用尾插法避免死循环算法优化扰动函数性能提升关键避免链表过长六常见时间复杂度高频考点集合类增删查备注尾插中间基于数组基于链表哈希表红黑树分段锁七线程安全集合扩展类名说明线程安全但效率低线程安全但过时分段锁主流并发读写分离写时复制无锁队列基于推荐使用包下的并发集合八实际开发中集合的选型系统案例在我开发的入库模块中对于批量导入订单使用暂存数据对于去重处理使用对于仓库映射表使用对于并发统计任务使用对于需排序的出库任务队列使用九常见追问与高分回答追问高分回答和区别线程不安全允许线程安全不允许为什么线程不安全并发会导致数据覆盖或链表丢失如何解决冲突采用链地址法数组链表红黑树如何实现线程安全使用分段锁使用扩容机制新容量旧容量与区别有序红黑树无序哈希表一分钟高分总结可背诵集合框架由两大体系组成存单个元素包括存键值对其中有序可重复典型实现有和无序不可重复常用和以键值对存储常用并发场景使用和底层结构包括数组链表红黑树哈希表对引入红黑树大幅提升性能十一扩展思考进阶红黑树化阈值为何是的是如何实现的为什么不允许或为的写时复制机制有什么开销如何手写一个简化版面试题请谈谈的底层原理一面试官考察点是否理解的数据结构数组链表红黑树是否理解哈希函数冲突处理和扩容机制是否了解与的底层差异是否知道线程安全问题是否能结合性能优化场景进行分析二核心概念是基于数组链表红黑树实现的数组存储桶链表哈希冲突的链式存储红黑树链表长度超过阈值后转为红黑树提高查找效率线程不安全多线程并发写入可能导致死循环或数据覆盖线程安全版本需使用允许可以为放在第号桶可以为三底层结构图桶数组链表红黑树节点四关键机制哈希函数用于散列异或高位减少哈希冲突桶索引冲突处理链表法初期哈希冲突的被挂在同一个桶的链表上查询时需遍历链表红黑树链表长度树化为红黑树查询插入删除减少高碰撞情况下的性能下降扩容机制默认容量默认负载因子触发条件扩容方式容量翻倍重新计算并迁移节点面试加分点扩容是操作成本较高尽量在初始化时指定合适容量插入逻辑计算的根据定位桶桶为空新节点直接放入桶非空遍历链表红黑树相同覆盖不同添加到链表末尾或红黑树超过阈值树化超过负载扩容查询逻辑计算的定位桶桶为空返回桶非空遍历链表红黑树相同比较找到返回否则返回与区别特性数据结构数组链表数组链表红黑树允许允许扩容链表节点复制链表节点迁移保持顺序多线程写可能死循环仍不安全线程安全问题在多线程环境下扩容可能链表成环占用多线程推荐分段锁链表红黑树或者使用整体加锁性能低面试高频追问追问高分回答允许吗允许为存放在号桶为什么查询快定位桶桶内链表红黑树查找扩容机制有什么问题重新代价高扩容期间可能影响性能链表为什么变红黑树减少高碰撞桶的查找时间由降到多线程安全吗不安全可能死循环或覆盖需要项目应用示例系统商品库存映射插入商品查询库存多线程库存更新需要线程安全高分总结模板可直接背诵是基于数组链表红黑树实现的键值对集合唯一可为可为中当链表长度超过时会树化为红黑树提高高碰撞情况下的查询效率默认容量负载因子超过阈值触发扩容查询通过定位桶再遍历链表红黑树查找多线程下不安全推荐使用或同步包装类面试题请你详细讲讲的底层原理分段锁机制与实现原理一面试官考察点此题常用于考察候选人对并发编程锁原子性的理解的线程安全改进方案与的并发容器优化锁粒度设计锁分离思想混合并发控制的理解二秒高分速答简版是线程安全的实现在中它采用分段锁机制将整个哈希表分成多个每个相当于一个小型用独立的控制支持多线程并发访问不同在中彻底重构为数组红黑树实现通过层级锁无锁操作提高并发性能不再使用分段锁而是对每个桶进行更细粒度的锁控制三与的结构对比特性底层结构数组数组数组链表红黑树锁机制分段锁继承桶级锁并发度由数量决定默认理论上无限每个桶都可并行哈希算法二次哈希扰动函数与一致插入方式需要锁尝试插入无锁失败再加锁性能较低锁竞争多更高细粒度锁无锁优化四分段锁机制原理核心数据结构整个被分成若干段每个是一个独立的小型每个内使用保证线程安全数量默认即并发度过程流程根据的定位获取该的独占锁在的数组中插入节点插入完成后释放锁伪代码特点只有同一个的线程才会竞争锁不同之间的线程可并发执行并发度由数量决定默认五实现原理去掉了整体结构更轻量数据结构与类似数组链表红黑树的与都是保证可见性不使用全局锁而是通过控制局部并发核心流程桶为空无锁插入扩容中帮助迁移桶非空进入锁定该桶插入或更新节点流程详解步骤操作说明是否加锁使用尝试将新节点放入空桶否若发现当前桶在扩容否协助扩容若桶已存在节点则锁定该桶是局部锁插入成功后检查是否需要树化或扩容否说明保证原子性仅锁定当前桶的头节点并发性能远高于级锁六原理讲解核心什么是是一种无锁原子操作它通过硬件指令级支持原语保证操作的原子性有三个操作数内存值预期值新值当且仅当时才将修改为否则不变示意中通过实现中的应用场景初始化数组插入第一个节点扩容时迁移数据统计示例成功插入无锁完成优点避免加锁非阻塞提高并发性能保证操作原子性七在中的使用使用锁定桶头节点插入链表或红黑树特点锁粒度更小已被优化偏向锁轻量级锁与配合锁竞争极低八过程无锁操作读取操作全程无锁依赖保证可见性性能极高九扩容机制的扩容是多线程协作完成的当一个线程发现容量不足时触发扩容其他线程会检测到扩容标识主动参与扩容扩容完成后自动恢复正常操作好处避免单线程扩容瓶颈减少暂停时间性能分析对比操作需要锁住桶级锁无锁读无锁读并发度数量默认理论上每个桶都可并行扩容单线程多线程协作性能较低极高十一常见面试追问与高分回答面试追问高分回答为什么去掉粒度仍偏大锁竞争多改为桶级锁无需分段锁提高并发度为什么不允许或为因为无法区分返回是键不存在还是键映射为是强一致性吗不是它保证单次操作的原子性和可见性但不保证复合操作如的原子性为什么不用加锁因为的与是保证可见性与顺序性如何计算通过分段计数并用更新会成为性能瓶颈吗不会因为它只锁桶头节点且多数操作用完成锁竞争极低十二项目实践系统案例在我开发的仓储管理系统入库模块中为了支持多线程并发处理入库单使用了存储货物编号货物对象手机多线程同时入库时无需手动加锁保证线程安全性能优于使用十三一分钟高分总结可背诵在中采用分段锁机制每个是一个小型通过控制并发默认并发度为在中彻底重构为红黑树实现取消改用桶级锁无锁插入极大提升并发性能读操作完全无锁写操作仅锁定桶级节点通过多线程协作扩容可见性与红黑树优化实现高性能线程安全不允许键或值是并发场景下最常用的实现十四扩展话题高阶追问与的区别使用全表锁性能低采用局部锁无锁读写性能高与的区别是对整个加锁细粒度锁无锁操作的是如何实现的分段计数需要多次采样确保一致性红黑树化的阈值是多少当链表长度且数组容量时树化面试题请谈谈与一面试官考察点是否理解与的作用及区别是否了解它们的契约是否知道在等集合中的应用是否能分析自定义对象存入集合的注意事项二概念与区别方法定义对象类型比较逻辑返回类型判断两个对象内容是否相等引用类型逻辑相等可自定义实现返回对象哈希值用于快速查找引用类型基于对象属性计算哈希码核心区别比较维度不同比较对象内容逻辑相等返回整数哈希值用于定位桶快速查找在集合中的作用使用定位桶用于解决冲突判断逻辑相等三与契约契约自反性对称性传递性一致性多次调用返回结果一致安全契约对象相等相等相等对象不一定相等多次调用同一对象的在程序执行期间必须一致四集合中应用示例测试不会重复快速定位桶判断逻辑相等避免重复插入面试加分点重写必须重写否则会出现逻辑错误与常量池判断内容保证查找一致判断引用地址五与重写原则重写必须重写使用对象核心字段计算保持的稳定性避免哈希冲突尽量均匀分布六面试高频追问追问高分回答为什么要与一致判断对象逻辑相等时先用定桶再用判断相等对象一定吗不一定冲突可能不同对象相等为什么可以直接作为重写了和且不可变保证安全重写时要注意什么保证自反对称传递一致性安全怎么设计才好使用关键字段保证分布均匀减少冲突保持稳定性七高分总结模板可直接背诵用于返回对象哈希值快速定位桶位置判断对象逻辑相等用于解决哈希冲突契约要求相等相等相等相等重写必须重写保证集合中逻辑一致性常见应用作为缓存系统面试题什么是冲突发生冲突时是如何处理的一面试官考察点是否理解哈希表的基本工作原理是否知道与的契约关系是否能解释中的冲突解决机制红黑树化能否分析冲突带来的性能影响与优化手段二秒高分速答简版当两个或多个不同的经过计算后得到相同的哈希值或映射到同一个桶索引时就会发生冲突中的典型解决方案是及之前使用链地址法拉链法即在同一个桶中用单向链表存储冲突元素之后当链表长度超过阈值默认时转为红黑树结构以提高查询效率通过这种方式能在冲突发生时仍维持接近的查找性能三哈希表工作原理回顾哈希表的核心思想是通过计算对象的哈希值根据哈希值与数组长度取模如计算存储位置将键值对放入该位置桶如果该位置已有其他元素则产生冲突示意图哈希函数计算链表树四冲突的本质与原因定义当不同的得到了相同的哈希索引时称为哈希冲突原因不同对象的值相同数组长度有限产生相同索引设计不良的函数哈希分布不均示例输出同样输出即使字符串内容不同值仍可能相同五中的冲突解决策略使用拉链法红黑树化拉链法每个桶存储一个链表或链表树结构当多个哈希到同一个时依次链接到同一个链表查找时需遍历链表或树示例简化结构链表插入方式新节点插入到链表头部头插法红黑树化之后当冲突节点数过多链表长度且桶数组长度时链表转换为红黑树优点查找时间复杂度从解决大规模冲突导致的性能下降问题源码片段树退化机制当红黑树节点减少至以下时重新退化为链表目的降低维护红黑树的开销六冲突示例演示若数组长度为和的位置相同冲突因为二者映射到同一个桶中形成冲突通过链表连接七与的契约关系契约规则如果两个对象的相等则必须相等如果不同则一定不相等如果相同不一定相等作用避免误判确保在比较时逻辑正确八性能分析阶段冲突结构时间复杂度描述无冲突无哈希分布均匀有冲突链表链表冲突越多越慢树化红黑树平衡冲突性能九常见面试追问及高分回答面试追问高分回答冲突怎么解决采用拉链法之后链表长度大于时转红黑树为什么转成红黑树而不是二叉树红黑树是自平衡树插入删除保持查询性能如何减少冲突优化实现使用合适容量的幂次控制负载因子一样不同会怎样会进入同一个桶链表或树中再通过精确比较不同相同会怎样违反契约可能无法正确定位对象出现逻辑错误常见陷阱与规避场景问题解决方案重新定义类但未重写不同对象放入同一桶重写必须同时重写链表过长性能下降查询升级到利用树化优化不合理负载因子冲突过多默认扩容时乘以计算过于简单哈希分布集中使用扰动函数优化散列分布十一项目实践场景系统在我开发的仓储系统入库模块中我们使用来缓存仓库货位信息为减少冲突自定义包含仓库编号货位编号并重写保证散列分布均匀当冲突出现时利用的红黑树结构确保性能稳定优点减少冲突提升并发访问性能保证数据定位准确十二扩展话题中高阶追问问如何避免冲突带来的锁竞争使用分段锁或的机制局部加锁并发更高问的扰动函数有什么作用减少高位的影响保证哈希分布更均匀问为什么数组长度必须是的幂便于通过快速定位桶索引避免取模运算提升效率一分钟高分总结可背诵冲突指不同计算出的哈希索引相同采用拉链法解决冲突即每个桶存放链表或红黑树结构之后当冲突链表长度超过时会转为红黑树以提升性能为避免冲突应合理设计与使用的幂次容量保持负载因子在以下冲突虽不可避免但可通过算法与数据结构优化将性能稳定维持在',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-11-03 21:55:29',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Wsk Blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" alt="微信" src="/./img/wechat.jpg"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/./img/alipay.jpg"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/IO/" style="font-size: 1.05rem;">IO<sup>1</sup></a><a href="/tags/JVM/" style="font-size: 1.05rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 1.05rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 1.05rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 1.05rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.05rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 1.05rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.05rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 1.05rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.05rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 1.05rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 1.05rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 1.05rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 1.05rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">十一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="anzhiyu.switchCommentBarrage()" title="热评开关"><a class="commentBarrage"><i class="anzhiyufont anzhiyu-icon-message"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>集合框架</span></a><a class="article-meta__tags" href="/tags/%E6%B3%9B%E5%9E%8B/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>泛型</span></a></span></div></div><h1 class="post-title" itemprop="name headline">集合与泛型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-11-03T13:55:29.730Z" title="更新于 2025-11-03 21:55:29">2025-11-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="集合与泛型"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为新乡"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>新乡</span><span class="post-meta-separator"></span><span class="post-meta-commentcount"><i class="anzhiyufont anzhiyu-icon-comments post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/86c7f0f3.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/posts/86c7f0f3.html" itemprop="commentCount"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></a></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=32c81b6c-1816-a337-3eac-75b42108d52c"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://wsk0404.github.io/posts/86c7f0f3.html"><header><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" tabindex="-1" itemprop="url">集合框架</a><a href="/tags/%E6%B3%9B%E5%9E%8B/" tabindex="-1" itemprop="url">泛型</a><h1 id="CrawlerTitle" itemprop="name headline">集合与泛型</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Wsk</span><time itemprop="dateCreated datePublished" datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time><time itemprop="dateCreated datePublished" datetime="2025-11-03T13:55:29.730Z" title="更新于 2025-11-03 21:55:29">2025-11-03</time></header><h1 id="🎯-面试题：什么是泛型？有什么作用？"><a href="#🎯-面试题：什么是泛型？有什么作用？" class="headerlink" title="🎯 面试题：什么是泛型？有什么作用？"></a>🎯 面试题：什么是泛型？有什么作用？</h1><hr>
+<h2 id="一、面试官考察意图"><a href="#一、面试官考察意图" class="headerlink" title="一、面试官考察意图"></a>一、面试官考察意图</h2><p>面试官主要考察候选人是否理解：</p>
+<ol>
+<li>泛型的<strong>本质与实现机制（类型擦除 Type Erasure）</strong>；</li>
+<li>泛型在<strong>集合框架与通用类设计</strong>中的应用；</li>
+<li>泛型的<strong>编译期类型检查优势与运行期行为差异</strong>；</li>
+<li>是否了解 <strong>通配符（? extends &#x2F; ? super）</strong>、<strong>泛型方法</strong>、<strong>泛型约束</strong> 等高级用法。</li>
+</ol>
+<hr>
+<h2 id="二、30-秒高分速答（简版）"><a href="#二、30-秒高分速答（简版）" class="headerlink" title="二、30 秒高分速答（简版）"></a>二、30 秒高分速答（简版）</h2><blockquote>
+<p>Java 泛型（Generics）是一种<strong>参数化类型机制</strong>，允许在定义类、接口、方法时使用类型参数，从而在编译期进行类型检查，增强代码的通用性与安全性。<br> 泛型的作用主要包括：</p>
+<ol>
+<li><strong>类型安全</strong>：在编译阶段发现类型错误；</li>
+<li><strong>减少强制类型转换</strong>；</li>
+<li><strong>提升代码复用性与可读性</strong>；</li>
+<li><strong>提高 API 通用性</strong>。</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="三、深入原理讲解"><a href="#三、深入原理讲解" class="headerlink" title="三、深入原理讲解"></a>三、深入原理讲解</h2><h3 id="1️⃣-泛型的本质"><a href="#1️⃣-泛型的本质" class="headerlink" title="1️⃣ 泛型的本质"></a>1️⃣ 泛型的本质</h3><p>泛型就是在<strong>定义时不确定类型，使用时再确定类型</strong>的一种机制。<br> 换句话说：<strong>类型是“参数化”的</strong>。</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> list.get(<span class="number">0</span>); <span class="comment">// 不需要强制类型转换</span></span><br></pre></td></tr></table></figure>
+
+<p>在没有泛型之前：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">list.add(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> (String) list.get(<span class="number">0</span>); <span class="comment">// 必须强转</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>✅ 泛型在编译时进行类型检查，但在运行时类型被“擦除”（Type Erasure），即泛型信息不会保留到字节码中。</p>
+</blockquote>
+<hr>
+<h3 id="2️⃣-泛型的底层实现原理：类型擦除机制（Type-Erasure）"><a href="#2️⃣-泛型的底层实现原理：类型擦除机制（Type-Erasure）" class="headerlink" title="2️⃣ 泛型的底层实现原理：类型擦除机制（Type Erasure）"></a>2️⃣ 泛型的底层实现原理：<strong>类型擦除机制（Type Erasure）</strong></h3><p>Java 泛型是<strong>伪泛型</strong>，即：</p>
+<ul>
+<li>泛型信息只在<strong>编译期有效</strong>；</li>
+<li>编译后，JVM 实际运行的仍是普通类（<code>Object</code> 或边界类型）；</li>
+<li>这就是“类型擦除”。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list1 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">List&lt;Integer&gt; list2 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">System.out.println(list1.getClass() == list2.getClass()); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>👉 输出结果为 <code>true</code>，说明在运行时泛型类型被擦除了，<code>list1</code> 和 <code>list2</code> 实际上是同一个类。</p>
+<hr>
+<h2 id="四、泛型的分类与使用方式"><a href="#四、泛型的分类与使用方式" class="headerlink" title="四、泛型的分类与使用方式"></a>四、泛型的分类与使用方式</h2><h3 id="✅-1️⃣-泛型类（Generic-Class）"><a href="#✅-1️⃣-泛型类（Generic-Class）" class="headerlink" title="✅ 1️⃣ 泛型类（Generic Class）"></a>✅ 1️⃣ 泛型类（Generic Class）</h3><p>在类定义时指定类型参数：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Box</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T value;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span> &#123; <span class="built_in">this</span>.value = value; &#125;</span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123; <span class="keyword">return</span> value; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Box&lt;String&gt; box = <span class="keyword">new</span> <span class="title class_">Box</span>&lt;&gt;();</span><br><span class="line">box.set(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">System.out.println(box.get()); <span class="comment">// 输出 Hello</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="✅-2️⃣-泛型方法（Generic-Method）"><a href="#✅-2️⃣-泛型方法（Generic-Method）" class="headerlink" title="✅ 2️⃣ 泛型方法（Generic Method）"></a>✅ 2️⃣ 泛型方法（Generic Method）</h3><p>在方法上定义类型参数：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">printArray</span><span class="params">(T[] array)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (T element : array) &#123;</span><br><span class="line">        System.out.println(element);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Integer[] nums = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">printArray(nums); <span class="comment">// 自动推断类型 T 为 Integer</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="✅-3️⃣-泛型接口（Generic-Interface）"><a href="#✅-3️⃣-泛型接口（Generic-Interface）" class="headerlink" title="✅ 3️⃣ 泛型接口（Generic Interface）"></a>✅ 3️⃣ 泛型接口（Generic Interface）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Repository</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">save</span><span class="params">(T entity)</span>;</span><br><span class="line">    T <span class="title function_">findById</span><span class="params">(<span class="type">int</span> id)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserRepository</span> <span class="keyword">implements</span> <span class="title class_">Repository</span>&lt;User&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">(User entity)</span> &#123;&#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">findById</span><span class="params">(<span class="type">int</span> id)</span> &#123; <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>(); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="✅-4️⃣-通配符（Wildcard）"><a href="#✅-4️⃣-通配符（Wildcard）" class="headerlink" title="✅ 4️⃣ 通配符（Wildcard）"></a>✅ 4️⃣ 通配符（Wildcard）</h3><p>通配符用于表示未知类型，用于方法参数中常见：</p>
+<table>
+<thead>
+<tr>
+<th>通配符</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>?</code></td>
+<td>任意类型</td>
+<td><code>List&lt;?&gt; list</code></td>
+</tr>
+<tr>
+<td><code>? extends T</code></td>
+<td>T 或 T 的子类（上界）</td>
+<td><code>List&lt;? extends Number&gt;</code> 可放入 Integer&#x2F;Double</td>
+</tr>
+<tr>
+<td><code>? super T</code></td>
+<td>T 或 T 的父类（下界）</td>
+<td><code>List&lt;? super Integer&gt;</code> 可放入 Integer 或其子类</td>
+</tr>
+</tbody></table>
+<p><strong>示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printList</span><span class="params">(List&lt;? extends Number&gt; list)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (Number n : list) &#123;</span><br><span class="line">        System.out.println(n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、泛型的作用与优势"><a href="#五、泛型的作用与优势" class="headerlink" title="五、泛型的作用与优势"></a>五、泛型的作用与优势</h2><table>
+<thead>
+<tr>
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ 类型安全</strong></td>
+<td>编译时检查类型，避免运行时 <code>ClassCastException</code></td>
+</tr>
+<tr>
+<td><strong>2️⃣ 消除强制类型转换</strong></td>
+<td>让集合取出元素时不再需要 <code>(Type)</code> 强转</td>
+</tr>
+<tr>
+<td><strong>3️⃣ 提高代码复用性</strong></td>
+<td>可定义通用类&#x2F;方法处理不同类型</td>
+</tr>
+<tr>
+<td><strong>4️⃣ 提高可读性与可维护性</strong></td>
+<td>明确参数和返回类型，提升 API 清晰度</td>
+</tr>
+<tr>
+<td><strong>5️⃣ 提升框架扩展性</strong></td>
+<td>各种框架（Spring、MyBatis、JPA）都依赖泛型构建通用组件</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、项目中的实际应用（以-WMS-系统为例）"><a href="#六、项目中的实际应用（以-WMS-系统为例）" class="headerlink" title="六、项目中的实际应用（以 WMS 系统为例）"></a>六、项目中的实际应用（以 WMS 系统为例）</h2><p>在我负责的 <strong>WMS（仓储管理系统）入库模块</strong> 中，我设计了一个通用的 <strong>BaseService 泛型基类</strong>，通过泛型支持不同实体类的复用。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">BaseService</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">(T entity)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> T <span class="title function_">findById</span><span class="params">(Long id)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>子类继承时：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InboundService</span> <span class="keyword">extends</span> <span class="title class_">BaseService</span>&lt;InboundOrder&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">(InboundOrder order)</span> &#123;</span><br><span class="line">        <span class="comment">// 具体入库保存逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> InboundOrder <span class="title function_">findById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="comment">// 数据库查询逻辑</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">InboundOrder</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>✅ 优点：实现了业务逻辑的统一模板化；减少重复代码；可随时复用。</p>
+</blockquote>
+<hr>
+<h2 id="七、常见追问与高分回答"><a href="#七、常见追问与高分回答" class="headerlink" title="七、常见追问与高分回答"></a>七、常见追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ 泛型是编译期还是运行期生效？</strong></td>
+<td>编译期生效。编译器在编译阶段执行类型检查与类型擦除，运行时不保留泛型信息。</td>
+</tr>
+<tr>
+<td><strong>2️⃣ 泛型和多态的区别？</strong></td>
+<td>泛型是编译期的类型参数化；多态是运行期的动态分派。</td>
+</tr>
+<tr>
+<td><strong>3️⃣ 为什么泛型不能用于基本类型？</strong></td>
+<td>因为类型擦除后全部被替换为 Object，Object 不能存放基本类型。</td>
+</tr>
+<tr>
+<td><strong>4️⃣ 泛型数组为什么不安全？</strong></td>
+<td>类型擦除后无法检查元素真实类型，会导致潜在类型安全问题。</td>
+</tr>
+<tr>
+<td><strong>5️⃣ 什么是类型擦除？</strong></td>
+<td>编译器在编译后删除泛型参数，统一用 Object 或边界类型替代。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、性能与陷阱分析-⚠️"><a href="#八、性能与陷阱分析-⚠️" class="headerlink" title="八、性能与陷阱分析 ⚠️"></a>八、性能与陷阱分析 ⚠️</h2><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>性能损耗？</strong></td>
+<td>泛型在编译期处理，不影响运行时性能。</td>
+</tr>
+<tr>
+<td><strong>数组 + 泛型陷阱</strong></td>
+<td>泛型类型擦除导致数组元素类型检查失效，例如：<code>List&lt;String&gt;[] arr = new ArrayList&lt;String&gt;[10];</code> 编译报错。</td>
+</tr>
+<tr>
+<td><strong>类型擦除陷阱</strong></td>
+<td><code>List&lt;String&gt;</code> 和 <code>List&lt;Integer&gt;</code> 在运行时是同一类型，反射中要格外小心。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、框架中的典型应用"><a href="#九、框架中的典型应用" class="headerlink" title="九、框架中的典型应用"></a>九、框架中的典型应用</h2><table>
+<thead>
+<tr>
+<th>框架</th>
+<th>泛型应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Spring</strong></td>
+<td><code>JpaRepository&lt;T, ID&gt;</code>、<code>ApplicationContextAware&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><strong>MyBatis</strong></td>
+<td>Mapper 泛型接口定义</td>
+</tr>
+<tr>
+<td><strong>JPA&#x2F;Hibernate</strong></td>
+<td>通用 Repository 泛型封装</td>
+</tr>
+<tr>
+<td><strong>Fastjson &#x2F; Gson</strong></td>
+<td>反序列化时需要 <code>TypeToken&lt;List&lt;T&gt;&gt;</code> 维持类型信息</td>
+</tr>
+<tr>
+<td><strong>Guava &#x2F; Collections API</strong></td>
+<td>泛型广泛用于集合与工具类模板设计</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🧠-十、高分总结（可背诵版）"><a href="#🧠-十、高分总结（可背诵版）" class="headerlink" title="🧠 十、高分总结（可背诵版）"></a>🧠 十、高分总结（可背诵版）</h2><blockquote>
+<p>Java 泛型是一种 <strong>参数化类型机制</strong>，允许在类、接口、方法定义中使用类型参数，在编译时进行类型检查。<br> 它能提高代码的 <strong>类型安全性、可复用性和可读性</strong>，广泛用于集合框架、通用模板类与框架设计中。<br> 泛型在编译后通过 <strong>类型擦除机制</strong> 实现，不会保留类型信息，因此泛型仅在编译期有效。<br> 实际开发中，我在 BaseService、Repository、DTO 转换等场景中大量使用泛型来实现代码模板化与逻辑复用。</p>
+</blockquote>
+<h1 id="🎯-面试题：请你介绍一下-Java-中的集合框架（Collection-Framework）"><a href="#🎯-面试题：请你介绍一下-Java-中的集合框架（Collection-Framework）" class="headerlink" title="🎯 面试题：请你介绍一下 Java 中的集合框架（Collection Framework）"></a>🎯 面试题：请你介绍一下 Java 中的集合框架（Collection Framework）</h1><hr>
+<h2 id="一、面试官考察点"><a href="#一、面试官考察点" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><p>面试官通常借此题考察：</p>
+<ol>
+<li>你是否了解 <strong>集合框架的整体架构与层级关系</strong>；</li>
+<li>是否清楚各核心类（List、Set、Map）的<strong>底层实现与区别</strong>；</li>
+<li>是否知道常见容器的<strong>时间复杂度与线程安全性</strong>；</li>
+<li>是否能结合实际开发谈出<strong>使用场景与选型依据</strong>；</li>
+<li>是否了解 <strong>JDK 1.8 之后 HashMap 的优化（红黑树化）</strong>；</li>
+<li>是否了解 <strong>并发集合（ConcurrentHashMap、CopyOnWriteArrayList 等）</strong>。</li>
+</ol>
+<hr>
+<h2 id="二、30-秒高分速答（简版）-1"><a href="#二、30-秒高分速答（简版）-1" class="headerlink" title="二、30 秒高分速答（简版）"></a>二、30 秒高分速答（简版）</h2><blockquote>
+<p>Java 集合框架主要分为两大体系：</p>
+<ul>
+<li><strong>Collection 接口</strong>：用于存储单个对象，包括 List、Set、Queue；</li>
+<li><strong>Map 接口</strong>：用于存储键值对（key-value）。</li>
+</ul>
+<p>各主要实现类如下：</p>
+<ul>
+<li><strong>List</strong>：<code>ArrayList</code>（动态数组）、<code>LinkedList</code>（双向链表）、<code>Vector</code>（线程安全）。</li>
+<li><strong>Set</strong>：<code>HashSet</code>（哈希表）、<code>LinkedHashSet</code>（有序哈希表）、<code>TreeSet</code>（红黑树）。</li>
+<li><strong>Map</strong>：<code>HashMap</code>（哈希表）、<code>LinkedHashMap</code>（有序哈希表）、<code>TreeMap</code>（红黑树）、<code>ConcurrentHashMap</code>（高并发哈希表）。</li>
+</ul>
+<p>其中，<code>Collection</code> 和 <code>Map</code> 是集合框架的两大根接口，几乎所有 Java 开发都会频繁使用。</p>
+</blockquote>
+<hr>
+<h2 id="三、集合框架的整体架构图（理解体系结构）"><a href="#三、集合框架的整体架构图（理解体系结构）" class="headerlink" title="三、集合框架的整体架构图（理解体系结构）"></a>三、集合框架的整体架构图（理解体系结构）</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">                Iterable</span><br><span class="line">                    │</span><br><span class="line">             ┌──────┴──────┐</span><br><span class="line">         Collection        Map</span><br><span class="line">             │              │</span><br><span class="line">    ┌────────┴───────┐      ├──────────────────┐</span><br><span class="line">   List             Set   SortedMap(NavigableMap)</span><br><span class="line">    │                │                │</span><br><span class="line">┌───┼───┐       ┌────┼────┐      ┌───┼────┐</span><br><span class="line">ArrayList LinkedList HashSet TreeSet HashMap TreeMap</span><br><span class="line">                         │                 │</span><br><span class="line">                    LinkedHashSet     LinkedHashMap</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 提示：</p>
+<ul>
+<li><strong>Collection</strong> 体系存放单个元素；</li>
+<li><strong>Map</strong> 体系存放键值对；</li>
+<li>所有集合类都在 <code>java.util</code> 包下。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="四、各核心集合详解与底层原理"><a href="#四、各核心集合详解与底层原理" class="headerlink" title="四、各核心集合详解与底层原理"></a>四、各核心集合详解与底层原理</h2><h3 id="1️⃣-List-——-有序、可重复"><a href="#1️⃣-List-——-有序、可重复" class="headerlink" title="1️⃣ List —— 有序、可重复"></a>1️⃣ List —— 有序、可重复</h3><table>
+<thead>
+<tr>
+<th>实现类</th>
+<th>底层结构</th>
+<th>线程安全</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ArrayList</strong></td>
+<td>动态数组（<code>Object[]</code>）</td>
+<td>❌</td>
+<td>查询快、增删慢</td>
+</tr>
+<tr>
+<td><strong>LinkedList</strong></td>
+<td>双向链表</td>
+<td>❌</td>
+<td>增删快、查询慢</td>
+</tr>
+<tr>
+<td><strong>Vector</strong></td>
+<td>动态数组（同步）</td>
+<td>✅</td>
+<td>已过时，线程安全但性能低</td>
+</tr>
+<tr>
+<td><strong>Stack</strong></td>
+<td>继承自 Vector</td>
+<td>✅</td>
+<td>栈结构（后进先出）</td>
+</tr>
+</tbody></table>
+<p>📌 示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">System.out.println(list.get(<span class="number">1</span>)); <span class="comment">// 输出 B</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2️⃣-Set-——-无序、不可重复"><a href="#2️⃣-Set-——-无序、不可重复" class="headerlink" title="2️⃣ Set —— 无序、不可重复"></a>2️⃣ Set —— 无序、不可重复</h3><table>
+<thead>
+<tr>
+<th>实现类</th>
+<th>底层结构</th>
+<th>排序性</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HashSet</strong></td>
+<td>基于 <code>HashMap</code> 实现</td>
+<td>❌</td>
+<td>元素唯一，依赖 <code>hashCode()</code> 和 <code>equals()</code></td>
+</tr>
+<tr>
+<td><strong>LinkedHashSet</strong></td>
+<td>Hash + 双向链表</td>
+<td>✅（插入顺序）</td>
+<td>可保持插入顺序</td>
+</tr>
+<tr>
+<td><strong>TreeSet</strong></td>
+<td>红黑树</td>
+<td>✅（自然顺序）</td>
+<td>自动排序，需实现 <code>Comparable</code> 或传入 <code>Comparator</code></td>
+</tr>
+</tbody></table>
+<p>📌 示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Set&lt;Integer&gt; set = <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;();</span><br><span class="line">set.add(<span class="number">3</span>); set.add(<span class="number">1</span>); set.add(<span class="number">2</span>);</span><br><span class="line">System.out.println(set); <span class="comment">// 输出 [1,2,3]</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3️⃣-Map-——-键值对存储"><a href="#3️⃣-Map-——-键值对存储" class="headerlink" title="3️⃣ Map —— 键值对存储"></a>3️⃣ Map —— 键值对存储</h3><table>
+<thead>
+<tr>
+<th>实现类</th>
+<th>底层结构</th>
+<th>是否有序</th>
+<th>是否线程安全</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HashMap</strong></td>
+<td>哈希表（数组 + 链表 + 红黑树）</td>
+<td>❌</td>
+<td>❌</td>
+<td>常用、高性能</td>
+</tr>
+<tr>
+<td><strong>LinkedHashMap</strong></td>
+<td>Hash + 双向链表</td>
+<td>✅（插入顺序）</td>
+<td>❌</td>
+<td>用于缓存（如 LRU）</td>
+</tr>
+<tr>
+<td><strong>TreeMap</strong></td>
+<td>红黑树</td>
+<td>✅（Key 排序）</td>
+<td>❌</td>
+<td>需实现 <code>Comparable</code></td>
+</tr>
+<tr>
+<td><strong>ConcurrentHashMap</strong></td>
+<td>分段锁或 CAS + 哈希表</td>
+<td>❌</td>
+<td>✅</td>
+<td>并发安全、高性能</td>
+</tr>
+<tr>
+<td><strong>Hashtable</strong></td>
+<td>哈希表（全局锁）</td>
+<td>❌</td>
+<td>✅</td>
+<td>过时，性能差</td>
+</tr>
+</tbody></table>
+<p>📌 HashMap 示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map.put(<span class="string">&quot;Java&quot;</span>, <span class="number">1</span>);</span><br><span class="line">map.put(<span class="string">&quot;Python&quot;</span>, <span class="number">2</span>);</span><br><span class="line">System.out.println(map.get(<span class="string">&quot;Java&quot;</span>)); <span class="comment">// 输出 1</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、HashMap-的底层结构（面试必问）"><a href="#五、HashMap-的底层结构（面试必问）" class="headerlink" title="五、HashMap 的底层结构（面试必问）"></a>五、HashMap 的底层结构（面试必问）</h2><h3 id="🔹-JDK-1-7："><a href="#🔹-JDK-1-7：" class="headerlink" title="🔹 JDK 1.7："></a>🔹 JDK 1.7：</h3><ul>
+<li>结构：数组 + 链表；</li>
+<li>哈希冲突采用拉链法；</li>
+<li>容量扩容时可能出现链表反转死循环（多线程问题）。</li>
+</ul>
+<h3 id="🔹-JDK-1-8："><a href="#🔹-JDK-1-8：" class="headerlink" title="🔹 JDK 1.8："></a>🔹 JDK 1.8：</h3><ul>
+<li>结构：数组 + 链表 + 红黑树；</li>
+<li>当链表长度 &gt; 8 且数组长度 &gt; 64 时转红黑树；</li>
+<li>使用尾插法避免死循环；</li>
+<li>hash 算法优化：扰动函数 <code>(h ^ (h &gt;&gt;&gt; 16))</code>。</li>
+</ul>
+<blockquote>
+<p>✅ 性能提升关键：避免链表过长（O(n) → O(logn)）。</p>
+</blockquote>
+<hr>
+<h2 id="六、常见时间复杂度（高频考点）"><a href="#六、常见时间复杂度（高频考点）" class="headerlink" title="六、常见时间复杂度（高频考点）"></a>六、常见时间复杂度（高频考点）</h2><table>
+<thead>
+<tr>
+<th>集合类</th>
+<th>增</th>
+<th>删</th>
+<th>查</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ArrayList</td>
+<td>O(1) 尾插 &#x2F; O(n) 中间</td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td>基于数组</td>
+</tr>
+<tr>
+<td>LinkedList</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+<td>基于链表</td>
+</tr>
+<tr>
+<td>HashSet &#x2F; HashMap</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>哈希表</td>
+</tr>
+<tr>
+<td>TreeSet &#x2F; TreeMap</td>
+<td>O(logn)</td>
+<td>O(logn)</td>
+<td>O(logn)</td>
+<td>红黑树</td>
+</tr>
+<tr>
+<td>ConcurrentHashMap</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>分段锁&#x2F;CAS</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、线程安全集合（扩展）"><a href="#七、线程安全集合（扩展）" class="headerlink" title="七、线程安全集合（扩展）"></a>七、线程安全集合（扩展）</h2><table>
+<thead>
+<tr>
+<th>类名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Vector</code></td>
+<td>线程安全但效率低</td>
+</tr>
+<tr>
+<td><code>Hashtable</code></td>
+<td>线程安全但过时</td>
+</tr>
+<tr>
+<td><code>ConcurrentHashMap</code></td>
+<td>分段锁&#x2F;CAS，主流并发 Map</td>
+</tr>
+<tr>
+<td><code>CopyOnWriteArrayList</code></td>
+<td>读写分离（写时复制）</td>
+</tr>
+<tr>
+<td><code>ConcurrentLinkedQueue</code></td>
+<td>无锁队列，基于 CAS</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚙️ 推荐使用 <code>java.util.concurrent</code> 包下的并发集合。</p>
+</blockquote>
+<hr>
+<h2 id="八、实际开发中集合的选型（WMS-系统案例）"><a href="#八、实际开发中集合的选型（WMS-系统案例）" class="headerlink" title="八、实际开发中集合的选型（WMS 系统案例）"></a>八、实际开发中集合的选型（WMS 系统案例）</h2><p>在我开发的 <strong>WMS 入库模块</strong> 中：</p>
+<ul>
+<li>对于 <strong>批量导入订单</strong>：使用 <code>ArrayList</code> 暂存数据；</li>
+<li>对于 <strong>去重处理</strong>：使用 <code>HashSet</code>；</li>
+<li>对于 <strong>仓库映射表</strong>：使用 <code>HashMap</code>；</li>
+<li>对于 <strong>并发统计任务</strong>：使用 <code>ConcurrentHashMap</code>；</li>
+<li>对于 <strong>需排序的出库任务队列</strong>：使用 <code>TreeSet</code>。</li>
+</ul>
+<hr>
+<h2 id="九、常见追问与高分回答"><a href="#九、常见追问与高分回答" class="headerlink" title="九、常见追问与高分回答"></a>九、常见追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ HashMap 和 Hashtable 区别？</strong></td>
+<td>HashMap 线程不安全、允许 null；Hashtable 线程安全、不允许 null。</td>
+</tr>
+<tr>
+<td><strong>2️⃣ HashMap 为什么线程不安全？</strong></td>
+<td>并发 put 会导致数据覆盖或链表丢失。</td>
+</tr>
+<tr>
+<td><strong>3️⃣ HashMap 如何解决 hash 冲突？</strong></td>
+<td>采用链地址法（数组 + 链表 + 红黑树）。</td>
+</tr>
+<tr>
+<td><strong>4️⃣ ConcurrentHashMap 如何实现线程安全？</strong></td>
+<td>JDK 1.7 使用分段锁；JDK 1.8 使用 CAS + synchronized。</td>
+</tr>
+<tr>
+<td><strong>5️⃣ ArrayList 扩容机制？</strong></td>
+<td>新容量 &#x3D; 旧容量 * 1.5 + 1。</td>
+</tr>
+<tr>
+<td><strong>6️⃣ TreeSet 与 HashSet 区别？</strong></td>
+<td>TreeSet 有序（红黑树），HashSet 无序（哈希表）。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔟-一分钟高分总结（可背诵）"><a href="#🔟-一分钟高分总结（可背诵）" class="headerlink" title="🔟 一分钟高分总结（可背诵）"></a>🔟 一分钟高分总结（可背诵）</h2><blockquote>
+<p>Java 集合框架由两大体系组成：</p>
+<ul>
+<li><strong>Collection</strong>（存单个元素）：包括 List、Set、Queue；</li>
+<li><strong>Map</strong>（存键值对）。<br> 其中：</li>
+<li>List 有序可重复，典型实现有 <code>ArrayList</code> 和 <code>LinkedList</code>；</li>
+<li>Set 无序不可重复，常用 <code>HashSet</code> 和 <code>TreeSet</code>；</li>
+<li>Map 以键值对存储，常用 <code>HashMap</code>、<code>LinkedHashMap</code>、<code>TreeMap</code>；</li>
+<li>并发场景使用 <code>ConcurrentHashMap</code> 和 <code>CopyOnWriteArrayList</code>；</li>
+<li>底层结构包括 <strong>数组、链表、红黑树、哈希表</strong>；</li>
+<li>JDK 1.8 对 HashMap 引入红黑树，大幅提升性能。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="⚙️-十一、扩展思考（进阶）"><a href="#⚙️-十一、扩展思考（进阶）" class="headerlink" title="⚙️ 十一、扩展思考（进阶）"></a>⚙️ 十一、扩展思考（进阶）</h2><ol>
+<li>HashMap 红黑树化阈值为何是 8？</li>
+<li>ConcurrentHashMap 的 size() 是如何实现的？</li>
+<li>为什么 ConcurrentHashMap 不允许 key 或 value 为 null？</li>
+<li>CopyOnWriteArrayList 的写时复制机制有什么开销？</li>
+<li>如何手写一个简化版 HashMap？</li>
+</ol>
+<h1 id="🎯-面试题：请谈谈-HashMap-的底层原理"><a href="#🎯-面试题：请谈谈-HashMap-的底层原理" class="headerlink" title="🎯 面试题：请谈谈 HashMap 的底层原理"></a>🎯 面试题：请谈谈 HashMap 的底层原理</h1><hr>
+<h2 id="一、面试官考察点-1"><a href="#一、面试官考察点-1" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否理解 <strong>HashMap 的数据结构</strong>（数组 + 链表&#x2F;红黑树）；</li>
+<li>是否理解 <strong>哈希函数、冲突处理和扩容机制</strong>；</li>
+<li>是否了解 <strong>JDK8 与 JDK7 的底层差异</strong>；</li>
+<li>是否知道 <strong>线程安全问题</strong>；</li>
+<li>是否能结合 <strong>性能优化场景</strong>进行分析。</li>
+</ol>
+<hr>
+<h2 id="二、核心概念"><a href="#二、核心概念" class="headerlink" title="二、核心概念"></a>二、核心概念</h2><ol>
+<li><strong>HashMap 是基于数组 + 链表&#x2F;红黑树实现的</strong><ul>
+<li>数组：存储桶（bucket）</li>
+<li>链表：哈希冲突的链式存储</li>
+<li>红黑树：链表长度超过阈值（JDK8+ 8）后转为红黑树，提高查找效率</li>
+</ul>
+</li>
+<li><strong>线程不安全</strong><ul>
+<li>多线程并发写入可能导致死循环或数据覆盖</li>
+<li>线程安全版本需使用 <code>ConcurrentHashMap</code></li>
+</ul>
+</li>
+<li><strong>允许 null</strong><ul>
+<li><code>key</code> 可以为 null（放在第 0 号桶）</li>
+<li><code>value</code> 可以为 null</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="三、底层结构图（JDK8）"><a href="#三、底层结构图（JDK8）" class="headerlink" title="三、底层结构图（JDK8）"></a>三、底层结构图（JDK8）</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HashMap</span><br><span class="line"> ├── table[] : Node&lt;K,V&gt;[]      // 桶数组</span><br><span class="line"> └── Node&lt;K,V&gt;                  // 链表/红黑树节点</span><br><span class="line">      ├── int hash</span><br><span class="line">      ├── K key</span><br><span class="line">      ├── V value</span><br><span class="line">      └── Node&lt;K,V&gt; next</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、关键机制"><a href="#四、关键机制" class="headerlink" title="四、关键机制"></a>四、关键机制</h2><h3 id="1️⃣-哈希函数"><a href="#1️⃣-哈希函数" class="headerlink" title="1️⃣ 哈希函数"></a>1️⃣ 哈希函数</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">hash</span><span class="params">(Object key)</span> &#123;</span><br><span class="line">    <span class="type">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="literal">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用于 <strong>散列 key</strong></li>
+<li>异或高位，减少哈希冲突</li>
+<li>桶索引 &#x3D; <code>hash &amp; (table.length - 1)</code></li>
+</ul>
+<hr>
+<h3 id="2️⃣-冲突处理"><a href="#2️⃣-冲突处理" class="headerlink" title="2️⃣ 冲突处理"></a>2️⃣ 冲突处理</h3><ul>
+<li><strong>链表法</strong>（JDK7 &#x2F; 初期 JDK8）<ul>
+<li>哈希冲突的 key 被挂在同一个桶的链表上</li>
+<li>查询时需遍历链表 O(n)</li>
+</ul>
+</li>
+<li><strong>红黑树</strong>（JDK8+）<ul>
+<li>链表长度 &gt; 8，树化为红黑树</li>
+<li>查询、插入、删除 O(log n)</li>
+<li>减少高碰撞情况下的性能下降</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3️⃣-扩容机制"><a href="#3️⃣-扩容机制" class="headerlink" title="3️⃣ 扩容机制"></a>3️⃣ 扩容机制</h3><ul>
+<li><strong>默认容量</strong>：16</li>
+<li><strong>默认负载因子</strong>：0.75</li>
+<li><strong>触发条件</strong>：size &gt; capacity * loadFactor</li>
+<li><strong>扩容方式</strong>：容量翻倍，重新计算 hash 并迁移节点</li>
+</ul>
+<p>📌 面试加分点：扩容是 <strong>rehash</strong> 操作，成本较高 → 尽量在初始化时指定合适容量</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">HashMap&lt;Integer, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(<span class="number">32</span>, <span class="number">0.75f</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="4️⃣-插入逻辑（put）"><a href="#4️⃣-插入逻辑（put）" class="headerlink" title="4️⃣ 插入逻辑（put）"></a>4️⃣ 插入逻辑（put）</h3><ol>
+<li>计算 key 的 hash</li>
+<li>根据 hash 定位桶 index</li>
+<li>桶为空 → 新节点直接放入</li>
+<li>桶非空 → 遍历链表&#x2F;红黑树<ul>
+<li>key 相同 → 覆盖 value</li>
+<li>key 不同 → 添加到链表末尾或红黑树</li>
+</ul>
+</li>
+<li>超过阈值 → 树化</li>
+<li>超过负载 → 扩容</li>
+</ol>
+<hr>
+<h3 id="5️⃣-查询逻辑（get）"><a href="#5️⃣-查询逻辑（get）" class="headerlink" title="5️⃣ 查询逻辑（get）"></a>5️⃣ 查询逻辑（get）</h3><ol>
+<li>计算 key 的 hash</li>
+<li>定位桶 index</li>
+<li>桶为空 → 返回 null</li>
+<li>桶非空 → 遍历链表&#x2F;红黑树<ul>
+<li>hash 相同 → equals 比较 key</li>
+<li>找到返回 value，否则返回 null</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="6️⃣-JDK7-与-JDK8-区别"><a href="#6️⃣-JDK7-与-JDK8-区别" class="headerlink" title="6️⃣ JDK7 与 JDK8 区别"></a>6️⃣ JDK7 与 JDK8 区别</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>JDK7</th>
+<th>JDK8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据结构</td>
+<td>数组 + 链表</td>
+<td>数组 + 链表&#x2F;红黑树</td>
+</tr>
+<tr>
+<td>null key</td>
+<td>允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>扩容</td>
+<td>链表节点复制</td>
+<td>链表节点迁移（保持顺序）</td>
+</tr>
+<tr>
+<td>多线程写</td>
+<td>可能死循环</td>
+<td>仍不安全</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="7️⃣-线程安全问题"><a href="#7️⃣-线程安全问题" class="headerlink" title="7️⃣ 线程安全问题"></a>7️⃣ 线程安全问题</h3><ul>
+<li>HashMap 在多线程环境下扩容可能 <strong>链表成环</strong> → CPU 占用 100%</li>
+<li>多线程推荐：<ul>
+<li><code>ConcurrentHashMap</code>（分段锁 &#x2F; CAS + Node 链表&#x2F;红黑树）</li>
+<li>或者使用 <code>Collections.synchronizedMap()</code>（整体加锁，性能低）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="8️⃣-面试高频追问"><a href="#8️⃣-面试高频追问" class="headerlink" title="8️⃣ 面试高频追问"></a>8️⃣ 面试高频追问</h3><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HashMap 允许 null key 吗？</td>
+<td>允许，hash 为 0，存放在 0 号桶</td>
+</tr>
+<tr>
+<td>HashMap 为什么查询快？</td>
+<td>hash 定位桶，桶内链表&#x2F;红黑树 O(1)&#x2F;O(log n) 查找</td>
+</tr>
+<tr>
+<td>扩容机制有什么问题？</td>
+<td>重新 hash 代价高，扩容期间可能影响性能</td>
+</tr>
+<tr>
+<td>JDK8 链表为什么变红黑树？</td>
+<td>减少高碰撞桶的查找时间，由 O(n) 降到 O(log n)</td>
+</tr>
+<tr>
+<td>HashMap 多线程安全吗？</td>
+<td>不安全，可能死循环或覆盖，需要 ConcurrentHashMap</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="9️⃣-项目应用示例（WMS-系统）"><a href="#9️⃣-项目应用示例（WMS-系统）" class="headerlink" title="9️⃣ 项目应用示例（WMS 系统）"></a>9️⃣ 项目应用示例（WMS 系统）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 商品库存映射</span></span><br><span class="line">Map&lt;String, Integer&gt; stockMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(<span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 插入商品</span></span><br><span class="line">stockMap.put(<span class="string">&quot;ITEM001&quot;</span>, <span class="number">100</span>);</span><br><span class="line">stockMap.put(<span class="string">&quot;ITEM002&quot;</span>, <span class="number">50</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询库存</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">qty</span> <span class="operator">=</span> stockMap.get(<span class="string">&quot;ITEM001&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多线程库存更新（需要线程安全）</span></span><br><span class="line">Map&lt;String, Integer&gt; concurrentStockMap = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🔟-高分总结模板（可直接背诵）"><a href="#🔟-高分总结模板（可直接背诵）" class="headerlink" title="🔟 高分总结模板（可直接背诵）"></a>🔟 高分总结模板（可直接背诵）</h3><blockquote>
+<p>HashMap 是基于数组 + 链表&#x2F;红黑树实现的键值对集合，key 唯一，可为 null，value 可为 null。<br> JDK8 中，当链表长度超过 8 时会树化为红黑树，提高高碰撞情况下的查询效率。<br> 默认容量 16，负载因子 0.75，超过阈值触发扩容。<br> 查询通过 hash 定位桶，再遍历链表&#x2F;红黑树查找 key；<br> 多线程下不安全，推荐使用 ConcurrentHashMap 或同步包装类。</p>
+</blockquote>
+<h1 id="🎯-面试题：请你详细讲讲-ConcurrentHashMap-的底层原理、分段锁机制与-CAS-实现原理"><a href="#🎯-面试题：请你详细讲讲-ConcurrentHashMap-的底层原理、分段锁机制与-CAS-实现原理" class="headerlink" title="🎯 面试题：请你详细讲讲 ConcurrentHashMap 的底层原理、分段锁机制与 CAS 实现原理"></a>🎯 面试题：请你详细讲讲 ConcurrentHashMap 的底层原理、分段锁机制与 CAS 实现原理</h1><hr>
+<h2 id="一、面试官考察点-2"><a href="#一、面试官考察点-2" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><p>此题常用于考察候选人对：</p>
+<ul>
+<li>Java 并发编程（锁、CAS、原子性）的理解；</li>
+<li>HashMap 的线程安全改进方案；</li>
+<li>JDK7 与 JDK8 的并发容器优化；</li>
+<li>锁粒度设计（锁分离思想）；</li>
+<li>CAS + synchronized 混合并发控制的理解。</li>
+</ul>
+<hr>
+<h2 id="二、30-秒高分速答（简版）-2"><a href="#二、30-秒高分速答（简版）-2" class="headerlink" title="二、30 秒高分速答（简版）"></a>二、30 秒高分速答（简版）</h2><blockquote>
+<p>ConcurrentHashMap 是线程安全的 HashMap 实现。<br> 在 <strong>JDK 1.7</strong> 中，它采用 <strong>Segment 分段锁机制</strong>：将整个哈希表分成多个 Segment，每个 Segment 相当于一个小型 HashMap，用独立的 ReentrantLock 控制，支持多线程并发访问不同 Segment。<br> 在 <strong>JDK 1.8</strong> 中，彻底重构为 <strong>CAS + synchronized + Node 数组 + 红黑树</strong> 实现，通过 <strong>Node 层级锁 + 无锁操作（CAS）</strong> 提高并发性能。<br> JDK 1.8 不再使用分段锁，而是对每个桶（bin）进行更细粒度的锁控制。</p>
+</blockquote>
+<hr>
+<h2 id="三、JDK-1-7-与-JDK-1-8-的结构对比"><a href="#三、JDK-1-7-与-JDK-1-8-的结构对比" class="headerlink" title="三、JDK 1.7 与 JDK 1.8 的结构对比"></a>三、JDK 1.7 与 JDK 1.8 的结构对比</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>JDK 1.7</th>
+<th>JDK 1.8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>底层结构</td>
+<td>Segment 数组 + HashEntry 数组</td>
+<td>Node 数组 + 链表 + 红黑树</td>
+</tr>
+<tr>
+<td>锁机制</td>
+<td>分段锁（Segment 继承 ReentrantLock）</td>
+<td>CAS + synchronized（桶级锁）</td>
+</tr>
+<tr>
+<td>并发度</td>
+<td>由 Segment 数量决定（默认 16）</td>
+<td>理论上无限（每个桶都可并行）</td>
+</tr>
+<tr>
+<td>哈希算法</td>
+<td>二次哈希</td>
+<td>扰动函数（与 HashMap 一致）</td>
+</tr>
+<tr>
+<td>插入方式</td>
+<td>需要锁 Segment</td>
+<td>尝试 CAS 插入，无锁失败再加锁</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>较低（锁竞争多）</td>
+<td>更高（细粒度锁 + 无锁优化）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、JDK-1-7：Segment-分段锁机制原理"><a href="#四、JDK-1-7：Segment-分段锁机制原理" class="headerlink" title="四、JDK 1.7：Segment 分段锁机制原理"></a>四、JDK 1.7：Segment 分段锁机制原理</h2><h3 id="1️⃣-核心数据结构"><a href="#1️⃣-核心数据结构" class="headerlink" title="1️⃣ 核心数据结构"></a>1️⃣ 核心数据结构</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ConcurrentHashMap</span>&lt;K,V&gt; &#123;</span><br><span class="line">    <span class="keyword">final</span> Segment&lt;K,V&gt;[] segments;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Segment</span>&lt;K,V&gt; <span class="keyword">extends</span> <span class="title class_">ReentrantLock</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">volatile</span> HashEntry&lt;K,V&gt;[] table;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>整个 Map 被分成若干段（Segment）；</li>
+<li>每个 Segment 是一个独立的小型 HashMap；</li>
+<li>每个 Segment 内使用 ReentrantLock 保证线程安全；</li>
+<li>Segment 数量（默认 16）即并发度（ConcurrentLevel）。</li>
+</ul>
+<h3 id="2️⃣-put-过程"><a href="#2️⃣-put-过程" class="headerlink" title="2️⃣ put() 过程"></a>2️⃣ put() 过程</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ConcurrentHashMap.put(K key, V value)</span><br></pre></td></tr></table></figure>
+
+<p>流程：</p>
+<ol>
+<li>根据 key 的 hash 定位 Segment；</li>
+<li>获取该 Segment 的独占锁（ReentrantLock.lock()）；</li>
+<li>在 Segment 的 HashEntry 数组中插入节点；</li>
+<li>插入完成后释放锁。</li>
+</ol>
+<p>伪代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Segment&lt;K,V&gt; seg = segmentFor(hash);</span><br><span class="line">seg.lock();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    seg.put(key, value);</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    seg.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>📊 <strong>特点：</strong></p>
+<ul>
+<li>只有同一个 Segment 的线程才会竞争锁；</li>
+<li>不同 Segment 之间的线程可并发执行；</li>
+<li>并发度由 Segment 数量决定（默认 16）。</li>
+</ul>
+<hr>
+<h2 id="五、JDK-1-8：CAS-synchronized-实现原理"><a href="#五、JDK-1-8：CAS-synchronized-实现原理" class="headerlink" title="五、JDK 1.8：CAS + synchronized 实现原理"></a>五、JDK 1.8：CAS + synchronized 实现原理</h2><p>JDK 1.8 去掉了 Segment，整体结构更轻量。</p>
+<h3 id="1️⃣-数据结构"><a href="#1️⃣-数据结构" class="headerlink" title="1️⃣ 数据结构"></a>1️⃣ 数据结构</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ConcurrentHashMap</span>&lt;K,V&gt; &#123;</span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">volatile</span> Node&lt;K,V&gt;[] table;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span>&lt;K,V&gt; <span class="keyword">implements</span> <span class="title class_">Map</span>.Entry&lt;K,V&gt; &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">int</span> hash;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    <span class="keyword">volatile</span> V val;</span><br><span class="line">    <span class="keyword">volatile</span> Node&lt;K,V&gt; next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>与 HashMap 类似：数组 + 链表 + 红黑树；</li>
+<li>Node 的 val 与 next 都是 volatile 保证可见性；</li>
+<li>不使用全局锁，而是通过 CAS + synchronized 控制局部并发。</li>
+</ul>
+<hr>
+<h3 id="2️⃣-核心-put-流程（JDK1-8）"><a href="#2️⃣-核心-put-流程（JDK1-8）" class="headerlink" title="2️⃣ 核心 put() 流程（JDK1.8）"></a>2️⃣ 核心 put() 流程（JDK1.8）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">V <span class="title function_">putVal</span><span class="params">(K key, V value, <span class="type">boolean</span> onlyIfAbsent)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        Node&lt;K,V&gt;[] tab = table;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> (tab.length - <span class="number">1</span>) &amp; hash;</span><br><span class="line">        Node&lt;K,V&gt; f = tabAt(tab, i);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (f == <span class="literal">null</span>) &#123; <span class="comment">// ① 桶为空，无锁 CAS 插入</span></span><br><span class="line">            <span class="keyword">if</span> (casTabAt(tab, i, <span class="literal">null</span>, <span class="keyword">new</span> <span class="title class_">Node</span>&lt;&gt;(hash, key, value)))</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (f.hash == MOVED) &#123; <span class="comment">// ② 扩容中，帮助迁移</span></span><br><span class="line">            helpTransfer(tab, f);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// ③ 桶非空，进入 synchronized 锁定该桶</span></span><br><span class="line">            <span class="keyword">synchronized</span> (f) &#123;</span><br><span class="line">                <span class="comment">// 插入或更新节点</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>流程详解：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作说明</th>
+<th>是否加锁</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>①</td>
+<td>使用 <code>CAS</code> 尝试将新节点放入空桶</td>
+<td>否</td>
+</tr>
+<tr>
+<td>②</td>
+<td>若发现当前桶在扩容（hash&#x3D;MOVED）</td>
+<td>否（协助扩容）</td>
+</tr>
+<tr>
+<td>③</td>
+<td>若桶已存在节点，则 <code>synchronized(f)</code> 锁定该桶</td>
+<td>是（局部锁）</td>
+</tr>
+<tr>
+<td>④</td>
+<td>插入成功后检查是否需要树化或扩容</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<p><strong>说明：</strong></p>
+<ul>
+<li>CAS（Compare And Swap）保证原子性；</li>
+<li>synchronized 仅锁定当前桶的头节点；</li>
+<li>并发性能远高于 Segment 级锁。</li>
+</ul>
+<hr>
+<h2 id="六、CAS-原理讲解（核心）"><a href="#六、CAS-原理讲解（核心）" class="headerlink" title="六、CAS 原理讲解（核心）"></a>六、CAS 原理讲解（核心）</h2><h3 id="1️⃣-什么是-CAS？"><a href="#1️⃣-什么是-CAS？" class="headerlink" title="1️⃣ 什么是 CAS？"></a>1️⃣ 什么是 CAS？</h3><blockquote>
+<p>CAS（Compare-And-Swap）是一种无锁原子操作，<br> 它通过 <strong>硬件指令级支持（CPU 原语）</strong> 保证操作的原子性。</p>
+</blockquote>
+<p>CAS 有三个操作数：</p>
+<ul>
+<li>内存值（V）</li>
+<li>预期值（E）</li>
+<li>新值（N）</li>
+</ul>
+<p>当且仅当 <strong>V &#x3D;&#x3D; E</strong> 时，才将 V 修改为 N，否则不变。</p>
+<p>示意：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (V == E)</span><br><span class="line">    V = N;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    retry;</span><br></pre></td></tr></table></figure>
+
+<p>Java 中通过 <code>Unsafe.compareAndSwapXXX()</code> 实现。</p>
+<hr>
+<h3 id="2️⃣-ConcurrentHashMap-中-CAS-的应用场景"><a href="#2️⃣-ConcurrentHashMap-中-CAS-的应用场景" class="headerlink" title="2️⃣ ConcurrentHashMap 中 CAS 的应用场景"></a>2️⃣ ConcurrentHashMap 中 CAS 的应用场景</h3><ul>
+<li>初始化 table 数组；</li>
+<li>插入第一个节点；</li>
+<li>扩容时迁移数据；</li>
+<li>统计 size。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (casTabAt(tab, i, <span class="literal">null</span>, <span class="keyword">new</span> <span class="title class_">Node</span>&lt;&gt;(hash, key, value))) &#123;</span><br><span class="line">    <span class="keyword">break</span>; <span class="comment">// 成功插入，无锁完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>优点：</strong></p>
+<ul>
+<li>避免加锁；</li>
+<li>非阻塞，提高并发性能；</li>
+<li>保证操作原子性。</li>
+</ul>
+<hr>
+<h2 id="七、synchronized-在-ConcurrentHashMap-中的使用"><a href="#七、synchronized-在-ConcurrentHashMap-中的使用" class="headerlink" title="七、synchronized 在 ConcurrentHashMap 中的使用"></a>七、synchronized 在 ConcurrentHashMap 中的使用</h2><p>JDK 1.8 使用 <code>synchronized(f)</code> 锁定桶头节点：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (f) &#123;</span><br><span class="line">    <span class="comment">// 插入链表或红黑树</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>特点：</p>
+<ul>
+<li>锁粒度更小；</li>
+<li>synchronized 已被 JVM 优化（偏向锁、轻量级锁）；</li>
+<li>与 CAS 配合，锁竞争极低。</li>
+</ul>
+<hr>
+<h2 id="八、get-过程（无锁操作）"><a href="#八、get-过程（无锁操作）" class="headerlink" title="八、get() 过程（无锁操作）"></a>八、get() 过程（无锁操作）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(Object key)</span> &#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab;</span><br><span class="line">    Node&lt;K,V&gt; e, p;</span><br><span class="line">    <span class="type">int</span> n, eh; K ek;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) != <span class="literal">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">        (e = tabAt(tab, (n - <span class="number">1</span>) &amp; hash)) != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((eh = e.hash) == hash &amp;&amp;</span><br><span class="line">            ((ek = e.key) == key || (ek != <span class="literal">null</span> &amp;&amp; key.equals(ek))))</span><br><span class="line">            <span class="keyword">return</span> e.val;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (eh &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> (p = e.find(hash, key)) != <span class="literal">null</span> ? p.val : <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">while</span> ((e = e.next) != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                ((ek = e.key) == key || (ek != <span class="literal">null</span> &amp;&amp; key.equals(ek))))</span><br><span class="line">                <span class="keyword">return</span> e.val;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>读取操作全程无锁；</li>
+<li>依赖 <code>volatile</code> 保证可见性；</li>
+<li>性能极高。</li>
+</ul>
+<hr>
+<h2 id="九、扩容机制（transfer）"><a href="#九、扩容机制（transfer）" class="headerlink" title="九、扩容机制（transfer）"></a>九、扩容机制（transfer）</h2><p>ConcurrentHashMap 的扩容是多线程协作完成的。</p>
+<ul>
+<li>当一个线程发现容量不足时，触发扩容；</li>
+<li>其他线程会检测到扩容标识（hash &#x3D; MOVED），主动参与扩容；</li>
+<li>扩容完成后自动恢复正常操作。</li>
+</ul>
+<p>好处：</p>
+<ul>
+<li>避免单线程扩容瓶颈；</li>
+<li>减少暂停时间。</li>
+</ul>
+<hr>
+<h2 id="🔟-性能分析对比"><a href="#🔟-性能分析对比" class="headerlink" title="🔟 性能分析对比"></a>🔟 性能分析对比</h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>JDK7</th>
+<th>JDK8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>put</td>
+<td>需要锁住 Segment</td>
+<td>CAS + synchronized 桶级锁</td>
+</tr>
+<tr>
+<td>get</td>
+<td>无锁（volatile 读）</td>
+<td>无锁（volatile 读）</td>
+</tr>
+<tr>
+<td>并发度</td>
+<td>Segment 数量（默认16）</td>
+<td>理论上每个桶都可并行</td>
+</tr>
+<tr>
+<td>扩容</td>
+<td>单线程</td>
+<td>多线程协作</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>较低</td>
+<td>极高</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="十一、常见面试追问与高分回答"><a href="#十一、常见面试追问与高分回答" class="headerlink" title="十一、常见面试追问与高分回答"></a>十一、常见面试追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>面试追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ JDK8 为什么去掉 Segment？</strong></td>
+<td>Segment 粒度仍偏大，锁竞争多；JDK8 改为桶级锁 + CAS，无需分段锁，提高并发度。</td>
+</tr>
+<tr>
+<td><strong>2️⃣ ConcurrentHashMap 为什么不允许 key 或 value 为 null？</strong></td>
+<td>因为无法区分返回 null 是“键不存在”还是“键映射为 null”。</td>
+</tr>
+<tr>
+<td><strong>3️⃣ ConcurrentHashMap 是强一致性吗？</strong></td>
+<td>不是。它保证单次操作的原子性和可见性，但不保证复合操作（如 size++）的原子性。</td>
+</tr>
+<tr>
+<td><strong>4️⃣ get() 为什么不用加锁？</strong></td>
+<td>因为 Node 的 value 与 next 是 volatile，保证可见性与顺序性。</td>
+</tr>
+<tr>
+<td><strong>5️⃣ 如何计算 size？</strong></td>
+<td>通过 baseCount + counterCells 分段计数，并用 CAS 更新。</td>
+</tr>
+<tr>
+<td><strong>6️⃣ synchronized 会成为性能瓶颈吗？</strong></td>
+<td>不会，因为它只锁桶头节点，且多数操作用 CAS 完成，锁竞争极低。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="十二、项目实践（WMS-系统案例）"><a href="#十二、项目实践（WMS-系统案例）" class="headerlink" title="十二、项目实践（WMS 系统案例）"></a>十二、项目实践（WMS 系统案例）</h2><p>在我开发的 <strong>WMS 仓储管理系统</strong> 入库模块中：</p>
+<ul>
+<li>为了支持多线程并发处理入库单，<br> 使用了 <code>ConcurrentHashMap&lt;String, Goods&gt;</code> 存储 “货物编号 → 货物对象”。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ConcurrentHashMap&lt;String, Goods&gt; goodsMap = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">goodsMap.put(<span class="string">&quot;A1001&quot;</span>, <span class="keyword">new</span> <span class="title class_">Goods</span>(<span class="string">&quot;手机&quot;</span>, <span class="number">100</span>));</span><br><span class="line"><span class="type">Goods</span> <span class="variable">g</span> <span class="operator">=</span> goodsMap.get(<span class="string">&quot;A1001&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>多线程同时入库时，无需手动加锁；</li>
+<li>CAS + synchronized 保证线程安全；</li>
+<li>性能优于使用 synchronized Map。</li>
+</ul>
+<hr>
+<h2 id="十三、一分钟高分总结（可背诵）"><a href="#十三、一分钟高分总结（可背诵）" class="headerlink" title="十三、一分钟高分总结（可背诵）"></a>十三、一分钟高分总结（可背诵）</h2><blockquote>
+<p>在 JDK1.7 中，ConcurrentHashMap 采用 <strong>Segment 分段锁机制</strong>，<br> 每个 Segment 是一个小型 HashMap，通过 ReentrantLock 控制并发，默认并发度为 16。</p>
+<p>在 JDK1.8 中彻底重构为 <strong>Node + CAS + synchronized + 红黑树</strong> 实现，<br> 取消 Segment，改用 <strong>桶级锁 + CAS 无锁插入</strong>，极大提升并发性能。<br> 读操作完全无锁，写操作仅锁定桶级节点。<br> 通过多线程协作扩容、volatile 可见性与红黑树优化，实现高性能线程安全。<br> ConcurrentHashMap 不允许 null 键或值，是并发场景下最常用的 Map 实现。</p>
+</blockquote>
+<hr>
+<h2 id="十四、扩展话题（高阶追问）"><a href="#十四、扩展话题（高阶追问）" class="headerlink" title="十四、扩展话题（高阶追问）"></a>十四、扩展话题（高阶追问）</h2><ol>
+<li><strong>ConcurrentHashMap 与 Hashtable 的区别？</strong><ul>
+<li>Hashtable 使用全表锁（synchronized），性能低；</li>
+<li>ConcurrentHashMap 采用局部锁 + CAS，无锁读写，性能高。</li>
+</ul>
+</li>
+<li><strong>ConcurrentHashMap 与 synchronizedMap 的区别？</strong><ul>
+<li>synchronizedMap 是对整个 Map 加锁；</li>
+<li>ConcurrentHashMap 细粒度锁 + 无锁操作。</li>
+</ul>
+</li>
+<li><strong>ConcurrentHashMap 的 size() 是如何实现的？</strong><ul>
+<li>分段计数 + CAS；</li>
+<li>需要多次采样确保一致性。</li>
+</ul>
+</li>
+<li><strong>红黑树化的阈值是多少？</strong><ul>
+<li>当链表长度 &gt; 8 且数组容量 ≥ 64 时树化。</li>
+</ul>
+</li>
+</ol>
+<h1 id="🎯-面试题：请谈谈-hashCode-与-equals"><a href="#🎯-面试题：请谈谈-hashCode-与-equals" class="headerlink" title="🎯 面试题：请谈谈 hashCode 与 equals"></a>🎯 面试题：请谈谈 hashCode 与 equals</h1><hr>
+<h2 id="一、面试官考察点-3"><a href="#一、面试官考察点-3" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否理解 <strong>hashCode 与 equals 的作用及区别</strong>；</li>
+<li>是否了解 <strong>它们的契约</strong>；</li>
+<li>是否知道在 <strong>HashMap、HashSet 等集合中</strong>的应用；</li>
+<li>是否能分析 <strong>自定义对象存入集合的注意事项</strong>。</li>
+</ol>
+<hr>
+<h2 id="二、概念与区别"><a href="#二、概念与区别" class="headerlink" title="二、概念与区别"></a>二、概念与区别</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>定义</th>
+<th>对象类型</th>
+<th>比较逻辑</th>
+<th>返回类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>equals()</td>
+<td>判断两个对象内容是否相等</td>
+<td>引用类型</td>
+<td>逻辑相等（可自定义实现）</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>hashCode()</td>
+<td>返回对象哈希值，用于快速查找</td>
+<td>引用类型</td>
+<td>基于对象属性计算哈希码</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p><strong>核心区别</strong>：</p>
+<ol>
+<li><strong>比较维度不同</strong>：<ul>
+<li>equals() 比较对象内容（逻辑相等）</li>
+<li>hashCode() 返回整数哈希值，用于定位桶（快速查找）</li>
+</ul>
+</li>
+<li><strong>在集合中的作用</strong>：<ul>
+<li>HashMap &#x2F; HashSet 使用 hashCode() 定位桶</li>
+<li>equals() 用于解决 hash 冲突，判断逻辑相等</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="三、hashCode-与-equals-契约"><a href="#三、hashCode-与-equals-契约" class="headerlink" title="三、hashCode 与 equals 契约"></a>三、hashCode 与 equals 契约</h2><ol>
+<li><strong>equals() 契约</strong>：<ul>
+<li>自反性：<code>x.equals(x)</code> → true</li>
+<li>对称性：<code>x.equals(y)</code> ↔ <code>y.equals(x)</code></li>
+<li>传递性：<code>x.equals(y)</code> &amp;&amp; <code>y.equals(z)</code> → <code>x.equals(z)</code></li>
+<li>一致性：多次调用返回结果一致</li>
+<li>null 安全：<code>x.equals(null)</code> → false</li>
+</ul>
+</li>
+<li><strong>hashCode() 契约</strong>：<ul>
+<li>对象相等 → hashCode 相等</li>
+<li>hashCode 相等 → 对象不一定相等</li>
+<li>多次调用同一对象的 hashCode 在程序执行期间必须一致</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="四、集合中应用示例"><a href="#四、集合中应用示例" class="headerlink" title="四、集合中应用示例"></a>四、集合中应用示例</h2><h3 id="1️⃣-HashMap-HashSet"><a href="#1️⃣-HashMap-HashSet" class="headerlink" title="1️⃣ HashMap &#x2F; HashSet"></a>1️⃣ HashMap &#x2F; HashSet</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">this</span> == o) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(!(o <span class="keyword">instanceof</span> Person)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">p</span> <span class="operator">=</span> (Person)o;</span><br><span class="line">        <span class="keyword">return</span> age == p.age &amp;&amp; name.equals(p.name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.hash(name, age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line">Set&lt;Person&gt; set = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">set.add(<span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Tom&quot;</span>, <span class="number">20</span>));</span><br><span class="line">set.add(<span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Tom&quot;</span>, <span class="number">20</span>)); <span class="comment">// 不会重复</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>hashCode</strong>：快速定位桶</li>
+<li><strong>equals</strong>：判断逻辑相等，避免重复插入</li>
+</ul>
+<p>📌 面试加分点：<strong>重写 equals 必须重写 hashCode，否则 HashMap&#x2F;HashSet 会出现逻辑错误</strong></p>
+<hr>
+<h3 id="2️⃣-String-与常量池"><a href="#2️⃣-String-与常量池" class="headerlink" title="2️⃣ String 与常量池"></a>2️⃣ String 与常量池</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line">System.out.println(s1.equals(s2)); <span class="comment">// true</span></span><br><span class="line">System.out.println(s1.hashCode() == s2.hashCode()); <span class="comment">// true</span></span><br><span class="line">System.out.println(s1 == s2); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>equals() 判断内容</li>
+<li>hashCode() 保证 HashMap 查找一致</li>
+<li>&#x3D;&#x3D; 判断引用地址</li>
+</ul>
+<hr>
+<h2 id="五、hashCode-与-equals-重写原则"><a href="#五、hashCode-与-equals-重写原则" class="headerlink" title="五、hashCode 与 equals 重写原则"></a>五、hashCode 与 equals 重写原则</h2><ol>
+<li>重写 equals → 必须重写 hashCode</li>
+<li>使用 <strong>对象核心字段</strong> 计算 hashCode</li>
+<li>保持 hashCode 的稳定性</li>
+<li>避免哈希冲突尽量均匀分布</li>
+</ol>
+<hr>
+<h2 id="六、面试高频追问"><a href="#六、面试高频追问" class="headerlink" title="六、面试高频追问"></a>六、面试高频追问</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hashCode 为什么要与 equals 一致？</td>
+<td>HashMap&#x2F;HashSet 判断对象逻辑相等时先用 hashCode 定桶，再用 equals 判断</td>
+</tr>
+<tr>
+<td>hashCode 相等对象一定 equals 吗？</td>
+<td>不一定，hash 冲突可能不同对象 hashCode 相等</td>
+</tr>
+<tr>
+<td>为什么 String 可以直接作为 HashMap key？</td>
+<td>String 重写了 hashCode 和 equals，且不可变，保证安全</td>
+</tr>
+<tr>
+<td>equals 重写时要注意什么？</td>
+<td>保证自反、对称、传递、一致性，null 安全</td>
+</tr>
+<tr>
+<td>hashCode 怎么设计才好？</td>
+<td>使用关键字段，保证分布均匀、减少冲突，保持稳定性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、高分总结模板（可直接背诵）"><a href="#七、高分总结模板（可直接背诵）" class="headerlink" title="七、高分总结模板（可直接背诵）"></a>七、高分总结模板（可直接背诵）</h2><blockquote>
+<p>hashCode 用于返回对象哈希值，快速定位 HashMap&#x2F;HashSet 桶位置；<br> equals 判断对象逻辑相等，用于解决哈希冲突；<br> 契约要求：equals 相等 → hashCode 相等，hashCode 相等 ≠ equals 相等；<br> 重写 equals 必须重写 hashCode，保证集合中逻辑一致性；<br> 常见应用：HashMap、HashSet、String 作为 key、缓存系统。</p>
+</blockquote>
+<h1 id="🎯-面试题：什么是-Hash-冲突？发生冲突时-Java-是如何处理的？"><a href="#🎯-面试题：什么是-Hash-冲突？发生冲突时-Java-是如何处理的？" class="headerlink" title="🎯 面试题：什么是 Hash 冲突？发生冲突时 Java 是如何处理的？"></a>🎯 面试题：什么是 Hash 冲突？发生冲突时 Java 是如何处理的？</h1><hr>
+<h2 id="一、面试官考察点-4"><a href="#一、面试官考察点-4" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否理解 <strong>哈希表（Hash Table）</strong> 的基本工作原理；</li>
+<li>是否知道 <strong>hashCode() 与 equals() 的契约关系</strong>；</li>
+<li>是否能解释 <strong>HashMap 中的冲突解决机制（JDK 8 红黑树化）</strong>；</li>
+<li>能否分析 <strong>冲突带来的性能影响与优化手段</strong>。</li>
+</ol>
+<hr>
+<h2 id="二、30-秒高分速答（简版）-3"><a href="#二、30-秒高分速答（简版）-3" class="headerlink" title="二、30 秒高分速答（简版）"></a>二、30 秒高分速答（简版）</h2><blockquote>
+<p>当两个或多个不同的 key 经过 <code>hashCode()</code> 计算后得到相同的哈希值（或映射到同一个桶索引）时，就会发生 <strong>Hash 冲突</strong>（Hash Collision）。</p>
+<p>Java 中的典型解决方案是：</p>
+<ul>
+<li><strong>JDK 7 及之前：使用链地址法（拉链法）</strong>，即在同一个桶中用单向链表存储冲突元素；</li>
+<li><strong>JDK 8 之后：当链表长度超过阈值（默认 8）时转为红黑树结构</strong>，以提高查询效率；</li>
+</ul>
+<p>通过这种方式，HashMap 能在冲突发生时仍维持接近 O(1) 的查找性能。</p>
+</blockquote>
+<hr>
+<h2 id="三、哈希表工作原理回顾"><a href="#三、哈希表工作原理回顾" class="headerlink" title="三、哈希表工作原理回顾"></a>三、哈希表工作原理回顾</h2><p>哈希表的核心思想是：</p>
+<ol>
+<li>通过 <code>hashCode()</code> 计算对象的哈希值；</li>
+<li>根据哈希值与数组长度取模（如 <code>index = hash &amp; (n - 1)</code>）计算存储位置；</li>
+<li>将键值对放入该位置（桶&#x2F;bucket）；</li>
+<li>如果该位置已有其他元素，则产生 <strong>冲突（collision）</strong>。</li>
+</ol>
+<p><strong>示意图：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">哈希函数计算 ↓</span><br><span class="line">      +-------------------+</span><br><span class="line">Key → | hash() &amp; (n-1) → index | → bucket[index] → Node链表/树</span><br><span class="line">      +-------------------+</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、Hash-冲突的本质与原因"><a href="#四、Hash-冲突的本质与原因" class="headerlink" title="四、Hash 冲突的本质与原因"></a>四、Hash 冲突的本质与原因</h2><h3 id="1️⃣-定义："><a href="#1️⃣-定义：" class="headerlink" title="1️⃣ 定义："></a>1️⃣ 定义：</h3><p>当不同的 key 得到了相同的哈希索引时，称为“哈希冲突”。</p>
+<h3 id="2️⃣-原因："><a href="#2️⃣-原因：" class="headerlink" title="2️⃣ 原因："></a>2️⃣ 原因：</h3><ul>
+<li>不同对象的 <code>hashCode()</code> 值相同；</li>
+<li>数组长度有限，<code>hash % length</code> 产生相同索引；</li>
+<li>设计不良的 hash 函数（哈希分布不均）。</li>
+</ul>
+<h3 id="3️⃣-示例："><a href="#3️⃣-示例：" class="headerlink" title="3️⃣ 示例："></a>3️⃣ 示例：</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;FB&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;Ea&quot;</span>;</span><br><span class="line">System.out.println(a.hashCode()); <span class="comment">// 输出 2236</span></span><br><span class="line">System.out.println(b.hashCode()); <span class="comment">// 同样输出 2236</span></span><br></pre></td></tr></table></figure>
+
+<p>👉 即使字符串内容不同，hashCode 值仍可能相同。</p>
+<hr>
+<h2 id="五、Java-中的冲突解决策略"><a href="#五、Java-中的冲突解决策略" class="headerlink" title="五、Java 中的冲突解决策略"></a>五、Java 中的冲突解决策略</h2><p>Java HashMap 使用 <strong>“拉链法 + 红黑树化”</strong>：</p>
+<h3 id="1️⃣-拉链法（Separate-Chaining）"><a href="#1️⃣-拉链法（Separate-Chaining）" class="headerlink" title="1️⃣ 拉链法（Separate Chaining）"></a>1️⃣ 拉链法（Separate Chaining）</h3><p>每个桶（bucket）存储一个链表（JDK 7）或链表+树结构（JDK 8+）。</p>
+<ul>
+<li>当多个 key 哈希到同一个 index 时，依次链接到同一个链表；</li>
+<li>查找时需遍历链表或树。</li>
+</ul>
+<p><strong>示例（简化结构）</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>&lt;K,V&gt; &#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">int</span> hash;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>链表插入（JDK7方式）：</strong><br> 新节点插入到链表头部（头插法）。</p>
+<hr>
+<h3 id="2️⃣-红黑树化（JDK-8-之后）"><a href="#2️⃣-红黑树化（JDK-8-之后）" class="headerlink" title="2️⃣ 红黑树化（JDK 8 之后）"></a>2️⃣ 红黑树化（JDK 8 之后）</h3><p>当冲突节点数过多（链表长度 &gt; 8 且桶数组长度 ≥ 64）时，链表转换为红黑树。</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>查找时间复杂度从 O(n) → O(log n)；</li>
+<li>解决大规模冲突导致的性能下降问题。</li>
+</ul>
+<p><strong>源码片段（HashMap.java）：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>)</span><br><span class="line">    treeifyBin(tab, hash);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3️⃣-树退化机制（Treeify-Untreeify）"><a href="#3️⃣-树退化机制（Treeify-Untreeify）" class="headerlink" title="3️⃣ 树退化机制（Treeify &#x2F; Untreeify）"></a>3️⃣ 树退化机制（Treeify &#x2F; Untreeify）</h3><ul>
+<li>当红黑树节点减少至 6 以下时，重新退化为链表；</li>
+<li>目的：降低维护红黑树的开销。</li>
+</ul>
+<hr>
+<h2 id="六、Hash-冲突示例演示"><a href="#六、Hash-冲突示例演示" class="headerlink" title="六、Hash 冲突示例演示"></a>六、Hash 冲突示例演示</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;Integer, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">map.put(<span class="number">1</span>, <span class="string">&quot;A&quot;</span>);</span><br><span class="line">map.put(<span class="number">17</span>, <span class="string">&quot;B&quot;</span>); <span class="comment">// 若数组长度为16, 1和17的hash位置相同（冲突）</span></span><br><span class="line"></span><br><span class="line">System.out.println(map);</span><br></pre></td></tr></table></figure>
+
+<p>因为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 % 16 == 17 % 16 == 1</span><br></pre></td></tr></table></figure>
+
+<p>👉 二者映射到同一个桶中，形成冲突，通过链表连接。</p>
+<hr>
+<h2 id="七、hashCode-与-equals-的契约关系"><a href="#七、hashCode-与-equals-的契约关系" class="headerlink" title="七、hashCode() 与 equals() 的契约关系"></a>七、hashCode() 与 equals() 的契约关系</h2><blockquote>
+<p><strong>契约规则：</strong></p>
+<ul>
+<li>如果两个对象的 <code>equals()</code> 相等，则 <code>hashCode()</code> 必须相等；</li>
+<li>如果 <code>hashCode()</code> 不同，则 <code>equals()</code> 一定不相等；</li>
+<li>如果 <code>hashCode()</code> 相同，<code>equals()</code> 不一定相等。</li>
+</ul>
+</blockquote>
+<p><strong>作用：</strong><br> 避免误判，确保 HashMap 在比较 key 时逻辑正确。</p>
+<hr>
+<h2 id="八、性能分析"><a href="#八、性能分析" class="headerlink" title="八、性能分析"></a>八、性能分析</h2><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>冲突结构</th>
+<th>时间复杂度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无冲突</td>
+<td>无</td>
+<td>O(1)</td>
+<td>哈希分布均匀</td>
+</tr>
+<tr>
+<td>有冲突（链表）</td>
+<td>链表</td>
+<td>O(n)</td>
+<td>冲突越多越慢</td>
+</tr>
+<tr>
+<td>树化</td>
+<td>红黑树</td>
+<td>O(log n)</td>
+<td>平衡冲突性能</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、常见面试追问（及高分回答）"><a href="#九、常见面试追问（及高分回答）" class="headerlink" title="九、常见面试追问（及高分回答）"></a>九、常见面试追问（及高分回答）</h2><table>
+<thead>
+<tr>
+<th>面试追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ Hash 冲突怎么解决？</strong></td>
+<td>采用“拉链法”，JDK8 之后链表长度大于 8 时转红黑树。</td>
+</tr>
+<tr>
+<td><strong>2️⃣ 为什么转成红黑树而不是二叉树？</strong></td>
+<td>红黑树是自平衡树，插入删除保持 O(log n) 查询性能。</td>
+</tr>
+<tr>
+<td><strong>3️⃣ 如何减少 Hash 冲突？</strong></td>
+<td>优化 hashCode() 实现、使用合适容量（2 的幂次）、控制负载因子。</td>
+</tr>
+<tr>
+<td><strong>4️⃣ hashCode() 一样 equals() 不同会怎样？</strong></td>
+<td>会进入同一个桶，链表或树中再通过 equals() 精确比较。</td>
+</tr>
+<tr>
+<td><strong>5️⃣ hashCode() 不同 equals() 相同会怎样？</strong></td>
+<td>违反契约，HashMap 可能无法正确定位对象，出现逻辑错误。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔟-常见陷阱与规避"><a href="#🔟-常见陷阱与规避" class="headerlink" title="🔟 常见陷阱与规避"></a>🔟 常见陷阱与规避</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>重新定义类但未重写 hashCode()</td>
+<td>不同对象放入同一桶</td>
+<td>重写 equals() 必须同时重写 hashCode()</td>
+</tr>
+<tr>
+<td>链表过长性能下降</td>
+<td>O(n) 查询</td>
+<td>升级到 JDK 8+，利用树化优化</td>
+</tr>
+<tr>
+<td>不合理负载因子</td>
+<td>冲突过多</td>
+<td>默认 0.75，扩容时乘以 2</td>
+</tr>
+<tr>
+<td>hashCode 计算过于简单</td>
+<td>哈希分布集中</td>
+<td>使用扰动函数优化散列分布</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="十一、项目实践场景（WMS-系统）"><a href="#十一、项目实践场景（WMS-系统）" class="headerlink" title="十一、项目实践场景（WMS 系统）"></a>十一、项目实践场景（WMS 系统）</h2><p>在我开发的 <strong>WMS 仓储系统入库模块</strong> 中，我们使用 <code>ConcurrentHashMap</code> 来缓存仓库货位信息。</p>
+<p><strong>为减少 Hash 冲突：</strong></p>
+<ul>
+<li>自定义 key（包含仓库编号 + 货位编号），并重写 <code>hashCode()</code>；</li>
+<li>保证散列分布均匀；</li>
+<li>当冲突出现时利用 JDK8 的红黑树结构确保性能稳定。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Objects.hash(warehouseId, locationCode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>✅ 优点：</p>
+<ul>
+<li>减少 Hash 冲突；</li>
+<li>提升并发访问性能；</li>
+<li>保证数据定位准确。</li>
+</ul>
+<hr>
+<h2 id="十二、扩展话题（中高阶追问）"><a href="#十二、扩展话题（中高阶追问）" class="headerlink" title="十二、扩展话题（中高阶追问）"></a>十二、扩展话题（中高阶追问）</h2><ol>
+<li><p><strong>问：ConcurrentHashMap 如何避免冲突带来的锁竞争？</strong><br>→ 使用 <strong>分段锁（Segment）</strong> 或 JDK8 的 <strong>CAS + synchronized</strong> 机制，局部加锁、并发更高。</p>
+</li>
+<li><p><strong>问：HashMap 的扰动函数（hash spreading function）有什么作用？</strong><br>→ 减少高位 hash 的影响，保证哈希分布更均匀：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">hash</span><span class="params">(Object key)</span> &#123;</span><br><span class="line">    <span class="type">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="literal">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>问：为什么 HashMap 数组长度必须是 2 的幂？</strong><br>→ 便于通过 <code>(n - 1) &amp; hash</code> 快速定位桶索引，避免取模运算，提升效率。</p>
+</li>
+</ol>
+<hr>
+<h2 id="🧠-一分钟高分总结（可背诵）"><a href="#🧠-一分钟高分总结（可背诵）" class="headerlink" title="🧠 一分钟高分总结（可背诵）"></a>🧠 一分钟高分总结（可背诵）</h2><blockquote>
+<p>Hash 冲突指不同 key 计算出的哈希索引相同。<br>Java 采用“拉链法”解决冲突，即每个桶存放链表或红黑树结构。<br>JDK8 之后，当冲突链表长度超过 8 时会转为红黑树以提升性能。<br>为避免冲突，应合理设计 hashCode() 与 equals()，使用 2 的幂次容量，保持负载因子在 0.75 以下。<br>Hash 冲突虽不可避免，但可通过算法与数据结构优化将性能稳定维持在 O(1)。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Wsk</div><div class="post-copyright__author_desc">Believe in yourself</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://wsk0404.github.io/posts/86c7f0f3.html">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://wsk0404.github.io/posts/86c7f0f3.html')">集合与泛型</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div><div class="reward-link mode"><a class="reward-link-button" href="/wecaht/"><i class="anzhiyufont anzhiyu-icon-plant-fill"></i>运营模式与责任</a></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://wsk0404.github.io/posts/86c7f0f3.html"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=集合与泛型&amp;url=https://wsk0404.github.io/posts/86c7f0f3.html&amp;pic=https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=32c81b6c-1816-a337-3eac-75b42108d52c" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="rm.copyPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wsk0404.github.io" target="_blank">Wsk Blog</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>集合框架<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E6%B3%9B%E5%9E%8B/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>泛型<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=913fcd22-22b9-a6a0-8249-7c94e671686f" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/aa8deaab.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=57bb59c2-d4a5-d584-0a4a-430a7c09e00c" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">多线程与并发</div></div></a></div><div class="next-post pull-right"><a href="/posts/162c3636.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=913fcd22-22b9-a6a0-8249-7c94e671686f" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">IO 与序列化</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/zc998800/cdn/face/gif/m17.gif" ait="status"/></div></div><div class="author-info__description">路慢其修远兮 吾将上下而求索</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Wsk</h1><div class="author-info__desc">Believe in yourself</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/gukeyang" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/1542898061" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://s2.loli.net/2023/10/19/vNio4QGBSX9x5lO.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E6%B3%9B%E5%9E%8B%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">🎯 面试题：什么是泛型？有什么作用？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E6%84%8F%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">一、面试官考察意图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%AB%98%E5%88%86%E9%80%9F%E7%AD%94%EF%BC%88%E7%AE%80%E7%89%88%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">二、30 秒高分速答（简版）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B7%B1%E5%85%A5%E5%8E%9F%E7%90%86%E8%AE%B2%E8%A7%A3"><span class="toc-number">1.3.</span> <span class="toc-text">三、深入原理讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%B3%9B%E5%9E%8B%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">1️⃣ 泛型的本质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%EF%BC%9A%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4%E6%9C%BA%E5%88%B6%EF%BC%88Type-Erasure%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">2️⃣ 泛型的底层实现原理：类型擦除机制（Type Erasure）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%88%86%E7%B1%BB%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.4.</span> <span class="toc-text">四、泛型的分类与使用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-1%EF%B8%8F%E2%83%A3-%E6%B3%9B%E5%9E%8B%E7%B1%BB%EF%BC%88Generic-Class%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">✅ 1️⃣ 泛型类（Generic Class）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-2%EF%B8%8F%E2%83%A3-%E6%B3%9B%E5%9E%8B%E6%96%B9%E6%B3%95%EF%BC%88Generic-Method%EF%BC%89"><span class="toc-number">1.4.2.</span> <span class="toc-text">✅ 2️⃣ 泛型方法（Generic Method）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-3%EF%B8%8F%E2%83%A3-%E6%B3%9B%E5%9E%8B%E6%8E%A5%E5%8F%A3%EF%BC%88Generic-Interface%EF%BC%89"><span class="toc-number">1.4.3.</span> <span class="toc-text">✅ 3️⃣ 泛型接口（Generic Interface）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-4%EF%B8%8F%E2%83%A3-%E9%80%9A%E9%85%8D%E7%AC%A6%EF%BC%88Wildcard%EF%BC%89"><span class="toc-number">1.4.4.</span> <span class="toc-text">✅ 4️⃣ 通配符（Wildcard）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%9B%E5%9E%8B%E7%9A%84%E4%BD%9C%E7%94%A8%E4%B8%8E%E4%BC%98%E5%8A%BF"><span class="toc-number">1.5.</span> <span class="toc-text">五、泛型的作用与优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%88%E4%BB%A5-WMS-%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">六、项目中的实际应用（以 WMS 系统为例）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E8%A7%81%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">1.7.</span> <span class="toc-text">七、常见追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E6%80%A7%E8%83%BD%E4%B8%8E%E9%99%B7%E9%98%B1%E5%88%86%E6%9E%90-%E2%9A%A0%EF%B8%8F"><span class="toc-number">1.8.</span> <span class="toc-text">八、性能与陷阱分析 ⚠️</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8"><span class="toc-number">1.9.</span> <span class="toc-text">九、框架中的典型应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A0-%E5%8D%81%E3%80%81%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E8%83%8C%E8%AF%B5%E7%89%88%EF%BC%89"><span class="toc-number">1.10.</span> <span class="toc-text">🧠 十、高分总结（可背诵版）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E4%BD%A0%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B-Java-%E4%B8%AD%E7%9A%84%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%EF%BC%88Collection-Framework%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">🎯 面试题：请你介绍一下 Java 中的集合框架（Collection Framework）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9"><span class="toc-number">2.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%AB%98%E5%88%86%E9%80%9F%E7%AD%94%EF%BC%88%E7%AE%80%E7%89%88%EF%BC%89-1"><span class="toc-number">2.2.</span> <span class="toc-text">二、30 秒高分速答（简版）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E7%9A%84%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84%E5%9B%BE%EF%BC%88%E7%90%86%E8%A7%A3%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">三、集合框架的整体架构图（理解体系结构）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%90%84%E6%A0%B8%E5%BF%83%E9%9B%86%E5%90%88%E8%AF%A6%E8%A7%A3%E4%B8%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="toc-number">2.4.</span> <span class="toc-text">四、各核心集合详解与底层原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-List-%E2%80%94%E2%80%94-%E6%9C%89%E5%BA%8F%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D"><span class="toc-number">2.4.1.</span> <span class="toc-text">1️⃣ List —— 有序、可重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-Set-%E2%80%94%E2%80%94-%E6%97%A0%E5%BA%8F%E3%80%81%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D"><span class="toc-number">2.4.2.</span> <span class="toc-text">2️⃣ Set —— 无序、不可重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-Map-%E2%80%94%E2%80%94-%E9%94%AE%E5%80%BC%E5%AF%B9%E5%AD%98%E5%82%A8"><span class="toc-number">2.4.3.</span> <span class="toc-text">3️⃣ Map —— 键值对存储</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81HashMap-%E7%9A%84%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84%EF%BC%88%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">五、HashMap 的底层结构（面试必问）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%B9-JDK-1-7%EF%BC%9A"><span class="toc-number">2.5.1.</span> <span class="toc-text">🔹 JDK 1.7：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%B9-JDK-1-8%EF%BC%9A"><span class="toc-number">2.5.2.</span> <span class="toc-text">🔹 JDK 1.8：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E8%A7%81%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%EF%BC%88%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">六、常见时间复杂度（高频考点）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%9B%86%E5%90%88%EF%BC%88%E6%89%A9%E5%B1%95%EF%BC%89"><span class="toc-number">2.7.</span> <span class="toc-text">七、线程安全集合（扩展）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E4%B8%AD%E9%9B%86%E5%90%88%E7%9A%84%E9%80%89%E5%9E%8B%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%E6%A1%88%E4%BE%8B%EF%BC%89"><span class="toc-number">2.8.</span> <span class="toc-text">八、实际开发中集合的选型（WMS 系统案例）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E5%B8%B8%E8%A7%81%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">2.9.</span> <span class="toc-text">九、常见追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9F-%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">2.10.</span> <span class="toc-text">🔟 一分钟高分总结（可背诵）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E5%8D%81%E4%B8%80%E3%80%81%E6%89%A9%E5%B1%95%E6%80%9D%E8%80%83%EF%BC%88%E8%BF%9B%E9%98%B6%EF%BC%89"><span class="toc-number">2.11.</span> <span class="toc-text">⚙️ 十一、扩展思考（进阶）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E8%B0%88%E8%B0%88-HashMap-%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">🎯 面试题：请谈谈 HashMap 的底层原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-1"><span class="toc-number">3.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">3.2.</span> <span class="toc-text">二、核心概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84%E5%9B%BE%EF%BC%88JDK8%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">三、底层结构图（JDK8）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6"><span class="toc-number">3.4.</span> <span class="toc-text">四、关键机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="toc-number">3.4.1.</span> <span class="toc-text">1️⃣ 哈希函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E5%86%B2%E7%AA%81%E5%A4%84%E7%90%86"><span class="toc-number">3.4.2.</span> <span class="toc-text">2️⃣ 冲突处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E6%89%A9%E5%AE%B9%E6%9C%BA%E5%88%B6"><span class="toc-number">3.4.3.</span> <span class="toc-text">3️⃣ 扩容机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%B8%8F%E2%83%A3-%E6%8F%92%E5%85%A5%E9%80%BB%E8%BE%91%EF%BC%88put%EF%BC%89"><span class="toc-number">3.4.4.</span> <span class="toc-text">4️⃣ 插入逻辑（put）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%EF%B8%8F%E2%83%A3-%E6%9F%A5%E8%AF%A2%E9%80%BB%E8%BE%91%EF%BC%88get%EF%BC%89"><span class="toc-number">3.4.5.</span> <span class="toc-text">5️⃣ 查询逻辑（get）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%EF%B8%8F%E2%83%A3-JDK7-%E4%B8%8E-JDK8-%E5%8C%BA%E5%88%AB"><span class="toc-number">3.4.6.</span> <span class="toc-text">6️⃣ JDK7 与 JDK8 区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%EF%B8%8F%E2%83%A3-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-number">3.4.7.</span> <span class="toc-text">7️⃣ 线程安全问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%EF%B8%8F%E2%83%A3-%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%BF%BD%E9%97%AE"><span class="toc-number">3.4.8.</span> <span class="toc-text">8️⃣ 面试高频追问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%EF%B8%8F%E2%83%A3-%E9%A1%B9%E7%9B%AE%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">3.4.9.</span> <span class="toc-text">9️⃣ 项目应用示例（WMS 系统）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%9F-%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">3.4.10.</span> <span class="toc-text">🔟 高分总结模板（可直接背诵）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E4%BD%A0%E8%AF%A6%E7%BB%86%E8%AE%B2%E8%AE%B2-ConcurrentHashMap-%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E3%80%81%E5%88%86%E6%AE%B5%E9%94%81%E6%9C%BA%E5%88%B6%E4%B8%8E-CAS-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">🎯 面试题：请你详细讲讲 ConcurrentHashMap 的底层原理、分段锁机制与 CAS 实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-2"><span class="toc-number">4.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%AB%98%E5%88%86%E9%80%9F%E7%AD%94%EF%BC%88%E7%AE%80%E7%89%88%EF%BC%89-2"><span class="toc-number">4.2.</span> <span class="toc-text">二、30 秒高分速答（简版）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81JDK-1-7-%E4%B8%8E-JDK-1-8-%E7%9A%84%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94"><span class="toc-number">4.3.</span> <span class="toc-text">三、JDK 1.7 与 JDK 1.8 的结构对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JDK-1-7%EF%BC%9ASegment-%E5%88%86%E6%AE%B5%E9%94%81%E6%9C%BA%E5%88%B6%E5%8E%9F%E7%90%86"><span class="toc-number">4.4.</span> <span class="toc-text">四、JDK 1.7：Segment 分段锁机制原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">4.4.1.</span> <span class="toc-text">1️⃣ 核心数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-put-%E8%BF%87%E7%A8%8B"><span class="toc-number">4.4.2.</span> <span class="toc-text">2️⃣ put() 过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81JDK-1-8%EF%BC%9ACAS-synchronized-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">4.5.</span> <span class="toc-text">五、JDK 1.8：CAS + synchronized 实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">4.5.1.</span> <span class="toc-text">1️⃣ 数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E6%A0%B8%E5%BF%83-put-%E6%B5%81%E7%A8%8B%EF%BC%88JDK1-8%EF%BC%89"><span class="toc-number">4.5.2.</span> <span class="toc-text">2️⃣ 核心 put() 流程（JDK1.8）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81CAS-%E5%8E%9F%E7%90%86%E8%AE%B2%E8%A7%A3%EF%BC%88%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">六、CAS 原理讲解（核心）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E4%BB%80%E4%B9%88%E6%98%AF-CAS%EF%BC%9F"><span class="toc-number">4.6.1.</span> <span class="toc-text">1️⃣ 什么是 CAS？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-ConcurrentHashMap-%E4%B8%AD-CAS-%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.6.2.</span> <span class="toc-text">2️⃣ ConcurrentHashMap 中 CAS 的应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81synchronized-%E5%9C%A8-ConcurrentHashMap-%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">4.7.</span> <span class="toc-text">七、synchronized 在 ConcurrentHashMap 中的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81get-%E8%BF%87%E7%A8%8B%EF%BC%88%E6%97%A0%E9%94%81%E6%93%8D%E4%BD%9C%EF%BC%89"><span class="toc-number">4.8.</span> <span class="toc-text">八、get() 过程（无锁操作）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%89%A9%E5%AE%B9%E6%9C%BA%E5%88%B6%EF%BC%88transfer%EF%BC%89"><span class="toc-number">4.9.</span> <span class="toc-text">九、扩容机制（transfer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9F-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%AF%B9%E6%AF%94"><span class="toc-number">4.10.</span> <span class="toc-text">🔟 性能分析对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">4.11.</span> <span class="toc-text">十一、常见面试追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%E6%A1%88%E4%BE%8B%EF%BC%89"><span class="toc-number">4.12.</span> <span class="toc-text">十二、项目实践（WMS 系统案例）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">4.13.</span> <span class="toc-text">十三、一分钟高分总结（可背诵）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E5%9B%9B%E3%80%81%E6%89%A9%E5%B1%95%E8%AF%9D%E9%A2%98%EF%BC%88%E9%AB%98%E9%98%B6%E8%BF%BD%E9%97%AE%EF%BC%89"><span class="toc-number">4.14.</span> <span class="toc-text">十四、扩展话题（高阶追问）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E8%B0%88%E8%B0%88-hashCode-%E4%B8%8E-equals"><span class="toc-number">5.</span> <span class="toc-text">🎯 面试题：请谈谈 hashCode 与 equals</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-3"><span class="toc-number">5.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%8C%BA%E5%88%AB"><span class="toc-number">5.2.</span> <span class="toc-text">二、概念与区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81hashCode-%E4%B8%8E-equals-%E5%A5%91%E7%BA%A6"><span class="toc-number">5.3.</span> <span class="toc-text">三、hashCode 与 equals 契约</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%9B%86%E5%90%88%E4%B8%AD%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.4.</span> <span class="toc-text">四、集合中应用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-HashMap-HashSet"><span class="toc-number">5.4.1.</span> <span class="toc-text">1️⃣ HashMap &#x2F; HashSet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-String-%E4%B8%8E%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">5.4.2.</span> <span class="toc-text">2️⃣ String 与常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81hashCode-%E4%B8%8E-equals-%E9%87%8D%E5%86%99%E5%8E%9F%E5%88%99"><span class="toc-number">5.5.</span> <span class="toc-text">五、hashCode 与 equals 重写原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%BF%BD%E9%97%AE"><span class="toc-number">5.6.</span> <span class="toc-text">六、面试高频追问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">5.7.</span> <span class="toc-text">七、高分总结模板（可直接背诵）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF-Hash-%E5%86%B2%E7%AA%81%EF%BC%9F%E5%8F%91%E7%94%9F%E5%86%B2%E7%AA%81%E6%97%B6-Java-%E6%98%AF%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E7%9A%84%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">🎯 面试题：什么是 Hash 冲突？发生冲突时 Java 是如何处理的？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-4"><span class="toc-number">6.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%AB%98%E5%88%86%E9%80%9F%E7%AD%94%EF%BC%88%E7%AE%80%E7%89%88%EF%BC%89-3"><span class="toc-number">6.2.</span> <span class="toc-text">二、30 秒高分速答（简版）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%9E%E9%A1%BE"><span class="toc-number">6.3.</span> <span class="toc-text">三、哈希表工作原理回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Hash-%E5%86%B2%E7%AA%81%E7%9A%84%E6%9C%AC%E8%B4%A8%E4%B8%8E%E5%8E%9F%E5%9B%A0"><span class="toc-number">6.4.</span> <span class="toc-text">四、Hash 冲突的本质与原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%AE%9A%E4%B9%89%EF%BC%9A"><span class="toc-number">6.4.1.</span> <span class="toc-text">1️⃣ 定义：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="toc-number">6.4.2.</span> <span class="toc-text">2️⃣ 原因：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="toc-number">6.4.3.</span> <span class="toc-text">3️⃣ 示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81Java-%E4%B8%AD%E7%9A%84%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E7%AD%96%E7%95%A5"><span class="toc-number">6.5.</span> <span class="toc-text">五、Java 中的冲突解决策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%8B%89%E9%93%BE%E6%B3%95%EF%BC%88Separate-Chaining%EF%BC%89"><span class="toc-number">6.5.1.</span> <span class="toc-text">1️⃣ 拉链法（Separate Chaining）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E7%BA%A2%E9%BB%91%E6%A0%91%E5%8C%96%EF%BC%88JDK-8-%E4%B9%8B%E5%90%8E%EF%BC%89"><span class="toc-number">6.5.2.</span> <span class="toc-text">2️⃣ 红黑树化（JDK 8 之后）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E6%A0%91%E9%80%80%E5%8C%96%E6%9C%BA%E5%88%B6%EF%BC%88Treeify-Untreeify%EF%BC%89"><span class="toc-number">6.5.3.</span> <span class="toc-text">3️⃣ 树退化机制（Treeify &#x2F; Untreeify）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81Hash-%E5%86%B2%E7%AA%81%E7%A4%BA%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="toc-number">6.6.</span> <span class="toc-text">六、Hash 冲突示例演示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81hashCode-%E4%B8%8E-equals-%E7%9A%84%E5%A5%91%E7%BA%A6%E5%85%B3%E7%B3%BB"><span class="toc-number">6.7.</span> <span class="toc-text">七、hashCode() 与 equals() 的契约关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">6.8.</span> <span class="toc-text">八、性能分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%EF%BC%88%E5%8F%8A%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94%EF%BC%89"><span class="toc-number">6.9.</span> <span class="toc-text">九、常见面试追问（及高分回答）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9F-%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E4%B8%8E%E8%A7%84%E9%81%BF"><span class="toc-number">6.10.</span> <span class="toc-text">🔟 常见陷阱与规避</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%E5%9C%BA%E6%99%AF%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">6.11.</span> <span class="toc-text">十一、项目实践场景（WMS 系统）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E6%89%A9%E5%B1%95%E8%AF%9D%E9%A2%98%EF%BC%88%E4%B8%AD%E9%AB%98%E9%98%B6%E8%BF%BD%E9%97%AE%EF%BC%89"><span class="toc-number">6.12.</span> <span class="toc-text">十二、扩展话题（中高阶追问）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A0-%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">6.13.</span> <span class="toc-text">🧠 一分钟高分总结（可背诵）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/162c3636.html" title="IO 与序列化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=913fcd22-22b9-a6a0-8249-7c94e671686f" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IO 与序列化"/></a><div class="content"><a class="title" href="/posts/162c3636.html" title="IO 与序列化">IO 与序列化</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/86c7f0f3.html" title="集合与泛型"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=32c81b6c-1816-a337-3eac-75b42108d52c" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="集合与泛型"/></a><div class="content"><a class="title" href="/posts/86c7f0f3.html" title="集合与泛型">集合与泛型</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/aa8deaab.html" title="多线程与并发"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=57bb59c2-d4a5-d584-0a4a-430a7c09e00c" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="多线程与并发"/></a><div class="content"><a class="title" href="/posts/aa8deaab.html" title="多线程与并发">多线程与并发</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/f7ede91d.html" title="Java基础"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/YUHOf5MZEItlGd3.jpg?_r_=cf887ce7-3e1e-3edf-d149-62b6db91df85" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java基础"/></a><div class="content"><a class="title" href="/posts/f7ede91d.html" title="Java基础">Java基础</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/c45230cb.html" title="mysql面试题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=028a5fb8-2521-e303-58ff-fa35d782afde" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mysql面试题"/></a><div class="content"><a class="title" href="/posts/c45230cb.html" title="mysql面试题">mysql面试题</a><time datetime="2025-10-27T03:31:36.000Z" title="发表于 2025-10-27 11:31:36">2025-10-27</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-上班摸鱼中.svg" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title="博客框架为Hexo_v5.4.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a class="github-badge" target="_blank" href="https://blog.anheyu.com/" style="margin-inline:5px" data-title="本站使用AnZhiYu主题" title="本站使用AnZhiYu主题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.9/img/Theme-AnZhiYu-2E67D3.svg" alt="本站使用AnZhiYu主题"/></a><a class="github-badge" target="_blank" href="https://www.dogecloud.com/" style="margin-inline:5px" data-title="本站使用多吉云为静态资源提供CDN加速" title="本站使用多吉云为静态资源提供CDN加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/CDN-多吉云-3693F3.svg" alt="本站使用多吉云为静态资源提供CDN加速"/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title="本站项目由Github托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Source-Github.svg" alt="本站项目由Github托管"/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg" alt="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"/></a></p></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Wsk" target="_blank">Wsk</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.png" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/IO/" style="font-size: 0.88rem;">IO<sup>1</sup></a><a href="/tags/JVM/" style="font-size: 0.88rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 0.88rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 0.88rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 0.88rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 0.88rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 0.88rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 0.88rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 0.88rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 0.88rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 0.88rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 0.88rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 0.88rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 0.88rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="chat-btn" type="button" title="聊天"><i class="anzhiyufont anzhiyu-icon-comment-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><a id="switch-commentBarrage" href="javascript:anzhiyu.switchCommentBarrage();" title="开关弹幕"><i class="anzhiyufont anzhiyu-icon-danmu"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8152976493&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.4/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2023 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2020 By 安知鱼 V1.6.8",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Wsk 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("04/01/2023 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      img.src = "";
+      img.title = "";
+      img.alt = "";
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+      appKey: 'TjKeHNK7GJrGTYuKYzGzh8yg',
+      avatar: 'mp',
+      serverURLs: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_亲亲":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再见":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_发怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_发财":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可爱":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_呕吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_坏笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尴尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_惊吓":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.cbd.int/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) anzhiyu.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script src="https://cdn.cbd.int/blueimp-md5@2.19.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=mp'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://4GK2IcRZ.api.lncldglobal.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+        "X-LC-Key": 'TjKeHNK7GJrGTYuKYzGzh8yg',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script>var visitorMail = "visitor@anheyu.com";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="//code.tidio.co/4nifo6zdbrmyjsngh2yzxwbnlhrvshrf.js" async="async"></script><script>(() => {
+  const isChatBtn = true
+  const isChatHideShow = true
+
+  if (isChatBtn) {
+    let isShow = false
+    const close = () => {
+      window.tidioChatApi.hide()
+      isShow = false
+    }
+    
+    const open = () => {
+      window.tidioChatApi.open()
+      window.tidioChatApi.show()
+      isShow = true
+    }
+
+    const onTidioChatApiReady = () => {
+      window.tidioChatApi.hide()
+      window.tidioChatApi.on("close", close)
+    }
+    if (window.tidioChatApi) {
+      window.tidioChatApi.on("ready", onTidioChatApiReady)
+    } else {
+      document.addEventListener("tidioChat-ready", onTidioChatApiReady)
+    }
+
+    window.chatBtnFn = () => {
+      if (!window.tidioChatApi) return
+      isShow ? close() : open()
+    }
+  } else if (isChatHideShow) {
+    window.chatBtn = {
+      hide: () => {
+        window.tidioChatApi && window.tidioChatApi.hide()
+      },
+      show: () => {
+        window.tidioChatApi && window.tidioChatApi.show()
+      }
+    }
+  }
+})()</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

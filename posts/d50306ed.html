@@ -1,0 +1,1856 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>JVM 与内存管理 | Wsk Blog</title><meta name="keywords" content="JVM,JVM调优"><meta name="author" content="Wsk,2047891093@qq.com"><meta name="copyright" content="Wsk"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="JVM 与内存管理"><meta name="application-name" content="JVM 与内存管理"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="JVM 与内存管理"><meta property="og:url" content="https://wsk0404.github.io/posts/d50306ed.html"><meta property="og:site_name" content="Wsk Blog"><meta property="og:description" content="🎯 面试题：请谈谈 Java 四大引用 一、面试官考察点 是否理解 强引用、软引用、弱引用、虚引用 的概念； 是否了解 GC 行为及回收策略； 是否能结合 缓存和内存优化说明使用场景； 是否了解 ReferenceQueue 与虚引用配合使用。   二、四大引用概念   引用类型 类 GC 回收行"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=11e9dc92-d821-4c1c-326a-707dc6e7b22a"><meta property="article:author" content="Wsk"><meta property="article:tag" content="博客,笔记,学习"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=11e9dc92-d821-4c1c-326a-707dc6e7b22a"><meta name="description" content="🎯 面试题：请谈谈 Java 四大引用 一、面试官考察点 是否理解 强引用、软引用、弱引用、虚引用 的概念； 是否了解 GC 行为及回收策略； 是否能结合 缓存和内存优化说明使用场景； 是否了解 ReferenceQueue 与虚引用配合使用。   二、四大引用概念   引用类型 类 GC 回收行"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://wsk0404.github.io/posts/d50306ed"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2023/09/03/125766904/ee23df8517f3c3e3efc4145658269c06_5714860933110284659.png"},
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:{"enable":true,"maxBarrage":1,"barrageTime":4000,"accessToken":"","mailMd5":"3932F24FA213E964B6B1B0FD091F88CE"},
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: {"apiurl":"https://friends.anheyu.com/"},
+  navMusic: true,
+  mainTone: {"mode":"both","api":"https://img2color-go.vercel.app/api?img=","cover_change":true},
+  authorStatus: {"skills":["🤖️ 数码科技爱好者","🔍 分享与热心帮助","🔨 设计开发一条龙","🏃 脚踏实地行动派"]},
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    simplehomepage: false,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":true,"limitCount":50,"languages":{"author":"作者: Wsk","link":"链接: ","source":"来源: Wsk Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Wsk Blog',
+  title: 'JVM 与内存管理',
+  postAI: '',
+  pageFillDescription: '🎯 面试题：请谈谈 Java 四大引用, 一、面试官考察点, 二、四大引用概念, 三、底层原理与行为, 1️⃣ 强引用（Strong Reference）, 2️⃣ 软引用（Soft Reference）, 3️⃣ 弱引用（Weak Reference）, 4️⃣ 虚引用（Phantom Reference）, 四、典型使用场景, 五、面试高频追问, 六、项目应用示例（WMS 系统）, 七、高分总结模板（可直接背诵）, 🎯 面试题：请谈谈你对 JVM 内存模型的理解, 一、面试官考察点, 二、30 秒高分速答（面试开场白）, 三、JVM 内存结构, 四、线程与内存访问模型, 五、JMM（Java Memory Model）概念, 六、happens-before 原则（核心面试点）, 七、内存模型与锁的关系, 八、JVM 内存模型在项目中的应用（WMS 系统示例）, 九、常见面试追问与高分回答, 🔟 一分钟高分总结（可直接背诵）, 🧠 扩展问题（中高级追问）, 🎯 面试题：请谈谈 GC（Garbage Collection垃圾回收）, 一、面试官考察点, 二、30 秒高分速答模板（开场白）, 三、JVM 堆内存结构与 GC 关联, 四、垃圾收集算法, 1️⃣ 标记-清除（Mark-Sweep）, 2️⃣ 复制算法（Copying）, 3️⃣ 标记-整理（Mark-Compact）, 4️⃣ 分代收集（Generational GC）, 五、常见 GC 类型, 六、GC 调优参数（面试常问）, 七、GC 的线程与 Stop-The-World（STW）, 八、常见面试追问与高分回答, 九、项目实战应用（WMS 系统）, 🔟 一分钟高分总结（可直接背诵）, 🧠 扩展问题（面试深挖）, 堆和栈的区别, 1 管理者与分配方式, 2 生命周期与作用域, 3 使用内容, 4 性能, 5 常见问题, 🎯 面试题：请谈谈你对 JVM 调优的理解, 一、面试官考察点, 二、30 秒高分速答模板（开场白）, 三、JVM 调优主要方向, 1️⃣ 内存调优, 2️⃣ 垃圾回收调优, 3️⃣ 并发与线程优化, 4️⃣ JVM 参数优化示例, 5️⃣ GC 日志分析思路（面试加分）, 6️⃣ 项目实战案例（WMS 系统）, 7️⃣ 面试高频追问与高分回答, 8️⃣ 一分钟高分总结（可直接背诵）, 9️⃣ 高级延伸问题（面试加深挖掘）, 🎯 面试题：Java 中常用的 JVM 调优参数有哪些？请说明用途及应用场景, 一、面试官考察点, 二、JVM 调优参数分类, 1️⃣ 内存参数, 2️⃣ GC 参数, 3️⃣ 线程与栈参数, 4️⃣ 监控与诊断参数, 5️⃣ JIT 编译与性能参数, 三、调优思路（面试核心）, 四、项目实战示例（WMS 系统）, 五、面试高频追问与高分回答, 六、一分钟高分总结（可直接背诵）, 🎯 面试题：Java JVM 调优工具有哪些？请说明用途和使用场景, 一、面试官考察点, 二、JVM 调优工具分类, 1️⃣ JVM 自带命令行工具, 2️⃣ 图形化监控工具, 3️⃣ 第三方分析工具, 三、项目实战案例（WMS 系统）, 四、调优思路总结, 五、面试高频追问与高分回答, 六、一分钟高分总结（可直接背诵）面试题请谈谈四大引用一面试官考察点是否理解强引用软引用弱引用虚引用的概念是否了解行为及回收策略是否能结合缓存和内存优化说明使用场景是否了解与虚引用配合使用二四大引用概念引用类型类回收行为使用场景强引用普通对象引用永不回收只要引用存在常规对象使用软引用内存不足时回收缓存内存敏感对象弱引用时立即回收弱引用的如虚引用无法直接获取对象回收时放入对象回收前做额外清理如直接内存管理三底层原理与行为强引用默认引用类型只要对象有强引用存在不会回收常规对象使用方式软引用获取对象内存不足时才会回收适合缓存应用保证尽可能保留软引用对象减少弱引用只要执行就会回收常用于使用弱引用被回收后自动删除不影响对象使用但不会阻止虚引用无法通过获取对象主要用于对象被回收前做额外清理通常配合使用应用场景直接内存释放对象池资源清理四典型使用场景引用类型场景示例强引用日常对象使用软引用图片缓存内存敏感缓存系统弱引用内部虚引用对象回收前清理五面试高频追问追问高分回答强引用会被回收吗不会除非引用被置或超出作用域软引用和弱引用区别软引用在内存不足时才回收弱引用一旦就回收虚引用能获取对象吗不能永远返回只用于监控回收和弱引用的关系的使用弱引用强引用避免对象泄漏缓存系统怎么用软引用将缓存对象用包裹当内存不足时自动回收避免六项目应用示例系统场景商品图片缓存缓存图片获取图片重新加载避免大量图片占用堆内存内存不足时会回收软引用对象提高系统稳定性七高分总结模板可直接背诵四大引用包括强引用软引用弱引用和虚引用强引用是默认引用不会回收软引用内存不足时回收适合缓存弱引用随回收常用于和内部虚引用无法获取对象主要用于对象回收前清理配合使用在实际开发中通过合理使用四种引用可以优化内存管理和缓存策略面试题请谈谈你对内存模型的理解一面试官考察点是否熟悉内存结构堆栈方法区等是否理解线程间通信和可见性问题是否掌握的三大特性原子性可见性有序性是否了解等内存语义是否能结合多线程开发场景说明应用二秒高分速答面试开场白内存模型是程序运行时的数据存储规范它定义了各类内存区域及其访问规则内存结构分为程序计数器栈堆方法区含元空间本地方法栈和直接内存是虚拟机规范用来解决多线程下可见性原子性和有序性问题通过等关键字以及原则保证线程安全三内存结构内存区域是否线程共享主要作用面试要点程序计数器否当前线程执行字节码指令地址线程私有指令调度指针栈否保存局部变量方法调用信息每个线程独立执行完方法出栈本地方法栈否调用方法与调用相关堆是对象实例与数组存储管理线程共享重点考点方法区是类信息静态变量常量后元空间在本地内存直接内存是或系统调用非管理内存可能导致四线程与内存访问模型线程私有区域程序计数器栈局部变量表线程共享区域堆方法区直接内存访问规则线程可以直接访问共享变量但可能产生可见性问题栈内变量线程安全不存在共享竞争对象字段位于堆中多线程访问需同步五概念是一套规范定义了内存访问规则与线程交互行为核心目标是原子性操作不可分割并非原子需或保证可见性线程修改对其他线程可见可以保证立即刷新到主内存有序性禁止指令重排导致逻辑错误定义原则六原则核心面试点操作含义程序顺序规则同一线程内按代码顺序执行前操作后操作锁规则对同一锁加锁的操作之前的操作解锁操作规则写操作读操作线程启动规则之前的操作新线程开始运行线程终止规则线程结束线程返回传递规则如果则面试追问能保证原子性吗答不能只保证可见性和有序性七内存模型与锁的关系机制保证内容说明原子性可见性级别锁实现包含锁升级机制原子性可见性可中断公平层面实现基于可见性有序性缓存刷回主存禁止指令重排八内存模型在项目中的应用系统示例库存计数器并发更新可见性保证但非原子如果需要原子性使用或修饰方法入库任务线程池共享对象利用并发容器保证多线程读写安全符合规范订单状态同步确保状态修改在多线程环境下可见且原子九常见面试追问与高分回答追问高分回答堆和栈的区别栈线程私有存储局部变量堆线程共享对象实例存储受管理什么是指令重排或编译器为了优化执行顺序改变指令顺序不改变单线程结果但可能影响多线程保证了什么原子性可见性禁止指令重排的使用场景状态标记如停止线程单例模式双重检查锁保证多线程可见性内存屏障在中作用用于禁止指令重排保证写入的可见性一分钟高分总结可直接背诵内存模型定义了程序运行时的内存区域包括堆栈方法区程序计数器等规范用于解决多线程下的可见性原子性和有序性问题通过等关键字以及原则实现线程安全在我开发的系统中我通过并发容器线程安全锁和变量确保入库出库和库存更新操作在高并发场景下安全且高效扩展问题中高级追问堆内存和方法区在中的回收机制有什么区别指令重排和内存屏障具体是如何实现的在缓存一致性协议中的作用和内存语义差异为什么字段在多线程下也是安全的非常好王帅锴这道题是面试中核心的内存管理与性能优化考点尤其是高级后端岗位和大数据分布式场景面试必考题面试官不仅想考你是否知道存在更关注你是否理解的原理算法各代分区调优方式及在项目中的应用下面我将以正式面试风格为你详细梳理知识面试题请谈谈垃圾回收一面试官考察点是否理解内存分区及垃圾收集机制是否掌握算法及各代回收策略是否能区分是否了解对性能的影响及调优手段是否能结合实际项目分析问题二秒高分速答模板开场白内存管理采用自动垃圾回收机制程序员无需手动释放对象内存的核心目标是回收无引用的对象避免内存泄漏与内存溢出将堆内存划分为年轻代老年代永久代元空间根据对象存活时间长短采用分代收集策略同时使用不同算法如标记清除复制标记整理提高回收效率三堆内存结构与关联内存区域是否管理特点年轻代存活时间短的对象分老年代长期存活对象方法区元空间类元信息静态变量永久代在前后改为本地内存元空间栈本地方法栈程序计数器不属于管理四垃圾收集算法标记清除过程标记所有存活对象清除未标记对象缺点产生内存碎片适用老年代回收复制算法过程将存活对象复制到另一块内存原内存全部清空优点不产生碎片速度快缺点需要额外空间区适用年轻代标记整理过程标记存活对象将存活对象向一端移动清理空闲空间优点解决碎片问题缺点比复制慢适用老年代分代收集理念大多数对象生命周期短优化年轻代回收策略年轻代复制算法老年代标记整理或标记清除好处高频回收年轻代提高效率减少次数降低停顿五常见类型类型触发条件影响范围区满回收年轻代对象速度快时间短老年代或元空间满回收整个堆速度慢时间长老年代回收并发回收停顿短适合低延迟系统堆碎片化或满分区回收最小化默认超大堆级别低延迟垃圾收集器停顿六调优参数面试常问参数作用示例初始堆大小最大堆大小年轻代大小比例使用打印日志面试追问年轻代回收为什么快答年轻代对象存活周期短多数对象很快死亡使用复制算法避免碎片化回收速度快七的线程与垃圾回收期间所有应用线程暂停执行影响时间短级别时间长可能秒级面试点分代收集尽量减少并发收集器减少停顿时间八常见面试追问与高分回答问题高分回答新生代老年代对象如何分配默认新对象进入长时间存活对象晋升老年代什么是内存泄漏对象不再使用但仍有引用无法回收如何避免调整堆大小优化对象生命周期使用并发收集器如何工作堆划分成多个回收活动最少的区域支持并发标记和整理缺点内存碎片化可能触发九项目实战应用系统场景高并发批量入库任务高并发产生大量临时对象区频繁优化措施调整年轻代大小使用减少停顿线程池重用对象减少短生命周期对象创建一分钟高分总结可直接背诵使用自动垃圾回收机制管理堆内存堆分为年轻代老年代和方法区采用分代收集策略年轻代使用复制算法老年代使用标记整理或标记清除类型包括等在高并发场景下应通过合理堆内存设置分代收集器选择和对象复用减少停顿提高系统性能扩展问题面试深挖对象分配策略和的停顿时间分析与内存整理机制如何排查内存泄漏与与的关系如果你需要我可以帮你整理内存管理全面面试指南含各代收集器原理调优实战案例适合系统复盘面试题你希望我帮你整理吗堆和栈的区别管理者与分配方式栈管理由编译器运行时自动管理通过栈指针等分配连续内存按帧分配分配回收仅需移动栈指针开销极低堆管理由程序员或垃圾回收器负责分配不连续内存管理器维护空闲链表空闲树位图分配需要查找合适区块性能开销更大且有碎片可能生命周期与作用域栈局部变量在其作用域函数代码块内存在函数返回后自动销毁生命周期短且可预测堆动态分配生命周期由程序控制显式释放或等待可以跨函数跨线程存在直到被释放使用内容栈函数调用信息局部变量返回地址保存寄存器部分语言的临时值堆动态对象动态数组大尺寸缓冲区需要在多个作用域线程间共享的数据性能访问速度栈更快内存连续缓存局部性好堆访问相对慢且分配释放开销高内存碎片堆会产生碎片栈不会栈是线性分配并发栈为线程私有天然线程安全堆为共享需同步或采用线程安全的分配策略常见问题栈溢出递归深度过大或局部变量过大例如局部大数组会触发内存泄漏悬挂指针堆内存未释放或释放后仍被访问停顿某些实现会导致暂停影响延迟敏感应用面试题请谈谈你对调优的理解一面试官考察点是否熟悉内存结构和垃圾回收机制是否了解常用调优参数堆年轻代垃圾回收器等是否能结合业务场景分析性能瓶颈是否掌握日志分析方法及调优策略是否有实际项目经验进行性能优化二秒高分速答模板开场白调优主要从内存优化垃圾回收调优线程与并发参数配置等方面入手目标是提升应用性能并避免停顿内存方面需要合理配置堆大小年轻代和老年代比例调优方面需要选择合适的收集器如并分析日志并发方面需要调整线程池大小减少锁竞争同时要结合性能监控工具进行分析三调优主要方向内存调优区域调优目标典型参数堆控制内存大小减少年轻代提高效率老年代减少元空间避免类加载静态变量溢出栈防止面试追问年轻代比例调大对系统有什么影响答对象晋升老年代慢减少次数但占用堆空间可能导致老年代更快满垃圾回收调优目标方法说明减少停顿使用并发分代收集器提高吞吐量多线程回收年轻代老年代避免内存碎片分代策略堆压缩老年代使用标记整理调整日志打印分析面试追问如何分析的原因答通过日志查看老年代占用率后对象晋升速率或回收延迟然后优化对象创建策略或调整参数并发与线程优化目标方法减少锁竞争使用并发容器控制线程数量线程池配置核心线程数最大线程数队列大小避免上下文切换合理分配核数线程池大小匹配业务面试追问为什么线程池大小过大会影响答线程过多会频繁创建对象导致区迅速填满触发频繁参数优化示例堆大小年轻代大小使用最大停顿时间日志字符串去重场景解释堆初始值最大值避免频繁堆扩展年轻代大小根据对象创建频率调优控制停顿在以内日志用于性能分析日志分析思路面试加分查看与次数及耗时计算存活对象晋升速率分析的触发点根据业务特性优化对象创建缓存和堆结构结合工具项目实战案例系统场景高并发入库任务导致老年代频繁问题分析大量临时对象在区快速生成对象晋升老年代频繁停顿秒影响入库吞吐量优化策略调整堆大小使用减少短生命周期对象对象池复用避免临时对象大量创建监控定期查看日志分析内存压力面试高频追问与高分回答追问高分回答和区别回收年轻代对象晋升老年代回收整个堆停顿时间长如何判断系统是否频繁通过日志分析或使用查看次数和停顿时间调优原则减少停顿时间提高吞吐量降低内存碎片匹配业务特性和区别支持分区回收停顿可控停顿短但存在内存碎片问题为什么要控制对象创建速率避免区频繁减少发生一分钟高分总结可直接背诵调优主要包括内存优化垃圾回收调优线程优化内存优化合理配置堆大小年轻代比例控制对象生命周期调优选择合适收集器分析日志优化停顿线程优化线程池合理配置减少锁竞争与对象创建在我开发的系统中通过对象复用和线程池优化实现了入库任务高并发下的稳定运行停顿控制在内高级延伸问题面试加深挖掘区频繁如何调优的分区机制与回收策略老年代内存碎片问题如何解决大对象如以上数组如何分配与的关系及优化方法如何定位内存泄漏和堆溢出问题面试题中常用的调优参数有哪些请说明用途及应用场景一面试官考察点是否熟悉堆方法区线程栈等内存结构是否能区分不同收集器与参数设置是否了解参数调整对性能吞吐量和停顿时间的影响是否能结合项目实例进行调优分析是否理解调优思路而非单纯背参数二调优参数分类调优参数主要分为内存参数参数性能监控参数调试参数编译相关参数内存参数参数说明示例面试思路堆初始大小避免频繁堆扩展提升启动性能堆最大大小限制应用最大内存防止年轻代大小调整区比例提高效率与比例优化对象复制和晋升老年代速度年轻代与老年代比例调整新生代占堆比率对象晋升老年代阈值避免对象过早晋升老年代参数参数说明示例面试思路单线程小堆或单核环境并行高吞吐量场景并发回收低停顿应用大堆低停顿应用默认最大停顿时间调优停顿控制打印详细日志分析行为日志输出用于后续分析线程与栈参数参数说明示例每个线程栈大小并行使用的线程数并发线程数监控与诊断参数参数说明示例打印应用停顿时间打印应用并发执行时间时生成堆转储对位压缩对象指针编译与性能参数参数说明示例分层编译方法编译阈值输出编译信息三调优思路面试核心分析业务特性对象创建速率高增大区减少对象存活时间长调整老年代大小和晋升阈值选择合适小堆单线程应用高吞吐量低停顿大堆或超大堆或低延迟堆大小调优堆大小年轻代老年代初始堆最大堆避免频繁扩展日志分析与验证打印日志分析次数和停顿时间调整对象创建策略或缓存线程与栈优化控制线程池大小避免过多线程导致区快速填满调整栈大小避免四项目实战示例系统场景高并发入库任务导致停顿严重调优方案堆大小固定年轻代占堆一半使用控制停顿结合日志分析次数对短生命周期对象使用对象池复用减少区压力优化线程池大小减少线程上下文切换五面试高频追问与高分回答追问高分回答和有何作用堆初始大小避免扩展堆最大大小限制调整策略新生代对象多增大对象生命周期长减小如何选择根据堆大小吞吐量要求和停顿容忍度选择如何使用结合设置目标最大停顿调整回收如何分析日志查看次数耗时晋升对象数量停顿时间并根据业务特性调整堆参数六一分钟高分总结可直接背诵调优主要包括内存调优调优线程栈优化和日志分析内存调优调优选择收集器控制停顿打印日志分析线程栈调优线程池配置调优原则分析业务特性选择合适设置合理堆参数日志验证持续优化非常好王帅锴这道题是高级面试中常问的题目尤其涉及性能优化调优和内存分析的岗位面试官想考察你是否熟悉性能诊断工具监控工具以及分析思路能否结合实际场景定位问题下面我以正式面试风格为你系统梳理面试题调优工具有哪些请说明用途和使用场景一面试官考察点是否熟悉提供的调优和监控工具是否了解工具用途适用场景和分析方法是否能结合业务场景进行内存线程性能调优是否能在面试中给出实际使用经验和调优案例二调优工具分类调优工具主要分为三类自带命令行工具命令行日志分析图形化监控工具第三方分析工具自带命令行工具工具说明面试高频用法查看当前进程定位性能统计查看次数堆内存使用时长内存映射和堆信息导出堆转储分析对象分布线程快照分析死锁线程阻塞堆栈信息统一管理命令信息线程信息堆信息执行诊断命令配置参数查询查看启动参数系统属性面试追问你如何分析的原因答使用观察区占用率并结合导出堆快照分析对象分布图形化监控工具工具说明场景自带工具监控堆内存线程使用率实时监控线程堆类加载等提供集成长期性能分析低开销监控面试追问可以做哪些调优工作答分析堆内存占用趋势发现内存泄漏线程阻塞分析可视化火焰图分析方法热点第三方分析工具工具功能面试价值堆转储分析内存泄漏分析对象占用分析插件高级分析分析可视化热更新诊断线程堆方法调用监控在线系统高级性能分析内存线程企业常用面试追问内存泄漏排查流程答导出堆转储使用分析找到对象持有链分析哪些对象生命周期异常优化代码或对象管理策略三项目实战案例系统场景高并发入库任务导致老年代频繁分析工具及方法定位进程查看日志导出堆快照分析堆占用分析对象占用量发现大量临时对象未及时释放优化对象池复用监控线程分析入库线程阻塞和死锁可视化监控使用查看实时堆内存次数和线程状态四调优思路总结内存使用分析分析日志线程分析性能瓶颈排查堆锁竞争持续监控五面试高频追问与高分回答追问高分回答如何快速定位死锁使用导出线程栈搜索状态和锁对象持有链内存泄漏排查流程导出堆分析查找异常长生命周期对象修复引用管理日志分析指标次数时间区占用率晋升对象数量用于调优的优势可在线监控生产系统支持线程对象大小方法调用分析无需停机六一分钟高分总结可直接背诵调优工具包括命令行工具图形化监控工具和第三方分析工具使用工具分析内存占用行为线程状态和消耗是调优的重要环节在我开发的系统中通过和分析堆对象占用结合监控优化对象复用和线程池大小有效降低停顿提升系统吞吐量',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-11-03 21:55:29',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Wsk Blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" alt="微信" src="/./img/wechat.jpg"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/./img/alipay.jpg"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/IO/" style="font-size: 1.05rem;">IO<sup>1</sup></a><a href="/tags/JVM/" style="font-size: 1.05rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 1.05rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 1.05rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 1.05rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.05rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 1.05rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.05rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 1.05rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.05rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 1.05rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 1.05rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 1.05rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 1.05rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">十一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="anzhiyu.switchCommentBarrage()" title="热评开关"><a class="commentBarrage"><i class="anzhiyufont anzhiyu-icon-message"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/JVM/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>JVM</span></a><a class="article-meta__tags" href="/tags/JVM%E8%B0%83%E4%BC%98/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>JVM调优</span></a></span></div></div><h1 class="post-title" itemprop="name headline">JVM 与内存管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-10-24T15:31:36.000Z" title="发表于 2025-10-24 23:31:36">2025-10-24</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-11-03T13:55:29.725Z" title="更新于 2025-11-03 21:55:29">2025-11-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="JVM 与内存管理"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为新乡"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>新乡</span><span class="post-meta-separator"></span><span class="post-meta-commentcount"><i class="anzhiyufont anzhiyu-icon-comments post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/d50306ed.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/posts/d50306ed.html" itemprop="commentCount"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></a></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=11e9dc92-d821-4c1c-326a-707dc6e7b22a"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://wsk0404.github.io/posts/d50306ed.html"><header><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a><a href="/tags/JVM/" tabindex="-1" itemprop="url">JVM</a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" tabindex="-1" itemprop="url">JVM调优</a><h1 id="CrawlerTitle" itemprop="name headline">JVM 与内存管理</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Wsk</span><time itemprop="dateCreated datePublished" datetime="2025-10-24T15:31:36.000Z" title="发表于 2025-10-24 23:31:36">2025-10-24</time><time itemprop="dateCreated datePublished" datetime="2025-11-03T13:55:29.725Z" title="更新于 2025-11-03 21:55:29">2025-11-03</time></header><h1 id="🎯-面试题：请谈谈-Java-四大引用"><a href="#🎯-面试题：请谈谈-Java-四大引用" class="headerlink" title="🎯 面试题：请谈谈 Java 四大引用"></a>🎯 面试题：请谈谈 Java 四大引用</h1><hr>
+<h2 id="一、面试官考察点"><a href="#一、面试官考察点" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否理解 <strong>强引用、软引用、弱引用、虚引用</strong> 的概念；</li>
+<li>是否了解 <strong>GC 行为及回收策略</strong>；</li>
+<li>是否能结合 <strong>缓存和内存优化</strong>说明使用场景；</li>
+<li>是否了解 <strong>ReferenceQueue 与虚引用配合使用</strong>。</li>
+</ol>
+<hr>
+<h2 id="二、四大引用概念"><a href="#二、四大引用概念" class="headerlink" title="二、四大引用概念"></a>二、四大引用概念</h2><table>
+<thead>
+<tr>
+<th>引用类型</th>
+<th>类</th>
+<th>GC 回收行为</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>强引用（Strong Reference）</td>
+<td>普通对象引用</td>
+<td>永不回收，只要引用存在</td>
+<td>常规对象使用</td>
+</tr>
+<tr>
+<td>软引用（Soft Reference）</td>
+<td><code>SoftReference&lt;T&gt;</code></td>
+<td>内存不足时回收</td>
+<td>缓存，内存敏感对象</td>
+</tr>
+<tr>
+<td>弱引用（Weak Reference）</td>
+<td><code>WeakReference&lt;T&gt;</code></td>
+<td>GC 时立即回收</td>
+<td>Key 弱引用的 Map（如 WeakHashMap）</td>
+</tr>
+<tr>
+<td>虚引用（Phantom Reference）</td>
+<td><code>PhantomReference&lt;T&gt;</code></td>
+<td>无法直接获取对象，GC 回收时放入 ReferenceQueue</td>
+<td>对象回收前做额外清理（如直接内存管理）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、底层原理与行为"><a href="#三、底层原理与行为" class="headerlink" title="三、底层原理与行为"></a>三、底层原理与行为</h2><h3 id="1️⃣-强引用（Strong-Reference）"><a href="#1️⃣-强引用（Strong-Reference）" class="headerlink" title="1️⃣ 强引用（Strong Reference）"></a>1️⃣ 强引用（Strong Reference）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>默认引用类型</li>
+<li><strong>只要对象有强引用存在，GC 不会回收</strong></li>
+<li>常规对象使用方式</li>
+</ul>
+<hr>
+<h3 id="2️⃣-软引用（Soft-Reference）"><a href="#2️⃣-软引用（Soft-Reference）" class="headerlink" title="2️⃣ 软引用（Soft Reference）"></a>2️⃣ 软引用（Soft Reference）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">SoftReference&lt;<span class="type">byte</span>[]&gt; softRef = <span class="keyword">new</span> <span class="title class_">SoftReference</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">10</span>]);</span><br><span class="line"><span class="type">byte</span>[] data = softRef.get(); <span class="comment">// 获取对象</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>内存不足时 JVM 才会回收</strong></li>
+<li>适合 <strong>缓存应用</strong></li>
+<li>JVM 保证尽可能保留软引用对象，减少 OOM</li>
+</ul>
+<hr>
+<h3 id="3️⃣-弱引用（Weak-Reference）"><a href="#3️⃣-弱引用（Weak-Reference）" class="headerlink" title="3️⃣ 弱引用（Weak Reference）"></a>3️⃣ 弱引用（Weak Reference）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">WeakReference&lt;Object&gt; weakRef = <span class="keyword">new</span> <span class="title class_">WeakReference</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Object</span>());</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>只要 GC 执行，就会回收</strong></li>
+<li>常用于 <strong>WeakHashMap</strong>：key 使用弱引用，value 被回收后自动删除</li>
+<li>不影响对象使用，但不会阻止 GC</li>
+</ul>
+<hr>
+<h3 id="4️⃣-虚引用（Phantom-Reference）"><a href="#4️⃣-虚引用（Phantom-Reference）" class="headerlink" title="4️⃣ 虚引用（Phantom Reference）"></a>4️⃣ 虚引用（Phantom Reference）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">PhantomReference&lt;Object&gt; phantomRef = <span class="keyword">new</span> <span class="title class_">PhantomReference</span>&lt;&gt;(obj, referenceQueue);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>无法通过 get() 获取对象</strong></li>
+<li>主要用于 <strong>对象被回收前做额外清理</strong></li>
+<li>通常配合 <strong>ReferenceQueue</strong> 使用</li>
+<li>应用场景：<ul>
+<li>NIO 直接内存释放</li>
+<li>对象池资源清理</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、典型使用场景"><a href="#四、典型使用场景" class="headerlink" title="四、典型使用场景"></a>四、典型使用场景</h2><table>
+<thead>
+<tr>
+<th>引用类型</th>
+<th>场景示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>强引用</td>
+<td>日常对象使用</td>
+</tr>
+<tr>
+<td>软引用</td>
+<td>图片缓存、内存敏感缓存系统</td>
+</tr>
+<tr>
+<td>弱引用</td>
+<td>WeakHashMap、ThreadLocal 内部 key</td>
+</tr>
+<tr>
+<td>虚引用</td>
+<td>对象回收前清理（DirectByteBuffer）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、面试高频追问"><a href="#五、面试高频追问" class="headerlink" title="五、面试高频追问"></a>五、面试高频追问</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>强引用会被 GC 回收吗？</td>
+<td>不会，除非引用被置 null 或超出作用域</td>
+</tr>
+<tr>
+<td>软引用和弱引用区别？</td>
+<td>软引用在内存不足时才回收，弱引用一旦 GC 就回收</td>
+</tr>
+<tr>
+<td>虚引用能获取对象吗？</td>
+<td>不能，get() 永远返回 null，只用于监控回收</td>
+</tr>
+<tr>
+<td>ThreadLocal 和弱引用的关系？</td>
+<td>ThreadLocalMap 的 key 使用弱引用，value 强引用，避免 ThreadLocal 对象泄漏</td>
+</tr>
+<tr>
+<td>缓存系统怎么用软引用？</td>
+<td>将缓存对象用 SoftReference 包裹，当内存不足时自动回收，避免 OOM</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、项目应用示例（WMS-系统）"><a href="#六、项目应用示例（WMS-系统）" class="headerlink" title="六、项目应用示例（WMS 系统）"></a>六、项目应用示例（WMS 系统）</h2><p><strong>场景</strong>：商品图片缓存</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, SoftReference&lt;Image&gt;&gt; imageCache = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 缓存图片</span></span><br><span class="line">imageCache.put(itemId, <span class="keyword">new</span> <span class="title class_">SoftReference</span>&lt;&gt;(image));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取图片</span></span><br><span class="line">SoftReference&lt;Image&gt; ref = imageCache.get(itemId);</span><br><span class="line"><span class="type">Image</span> <span class="variable">img</span> <span class="operator">=</span> ref != <span class="literal">null</span> ? ref.get() : <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">if</span> (img == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 重新加载</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>避免大量图片占用堆内存</li>
+<li>内存不足时 JVM 会回收软引用对象</li>
+<li>提高系统稳定性</li>
+</ul>
+<hr>
+<h2 id="七、高分总结模板（可直接背诵）"><a href="#七、高分总结模板（可直接背诵）" class="headerlink" title="七、高分总结模板（可直接背诵）"></a>七、高分总结模板（可直接背诵）</h2><blockquote>
+<p>Java 四大引用包括强引用、软引用、弱引用和虚引用。<br> 强引用是默认引用，GC 不会回收；<br> 软引用内存不足时回收，适合缓存；<br> 弱引用随 GC 回收，常用于 WeakHashMap 和 ThreadLocal 内部 key；<br> 虚引用无法获取对象，主要用于对象回收前清理，配合 ReferenceQueue 使用。<br> 在实际开发中，通过合理使用四种引用，可以优化内存管理和缓存策略。</p>
+</blockquote>
+<h1 id="🎯-面试题：请谈谈你对-JVM-内存模型的理解"><a href="#🎯-面试题：请谈谈你对-JVM-内存模型的理解" class="headerlink" title="🎯 面试题：请谈谈你对 JVM 内存模型的理解"></a>🎯 面试题：请谈谈你对 JVM 内存模型的理解</h1><hr>
+<h2 id="一、面试官考察点-1"><a href="#一、面试官考察点-1" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否熟悉 JVM 内存结构（堆、栈、方法区等）；</li>
+<li>是否理解线程间通信和可见性问题；</li>
+<li>是否掌握 JMM 的三大特性：原子性、可见性、有序性；</li>
+<li>是否了解 <code>volatile</code>、<code>synchronized</code>、<code>final</code> 等内存语义；</li>
+<li>是否能结合多线程开发场景说明应用。</li>
+</ol>
+<hr>
+<h2 id="二、30-秒高分速答（面试开场白）"><a href="#二、30-秒高分速答（面试开场白）" class="headerlink" title="二、30 秒高分速答（面试开场白）"></a>二、30 秒高分速答（面试开场白）</h2><blockquote>
+<p>JVM 内存模型是 Java 程序运行时的数据存储规范，它定义了各类内存区域及其访问规则。<br> 内存结构分为：<strong>程序计数器、Java 栈、堆、方法区（含元空间）、本地方法栈和直接内存</strong>。</p>
+<p>JMM（Java Memory Model）是虚拟机规范，用来解决多线程下<strong>可见性、原子性和有序性</strong>问题，<br> 通过 <code>volatile</code>、<code>synchronized</code>、<code>final</code> 等关键字，以及 <strong>happens-before 原则</strong>，保证线程安全。</p>
+</blockquote>
+<hr>
+<h2 id="三、JVM-内存结构"><a href="#三、JVM-内存结构" class="headerlink" title="三、JVM 内存结构"></a>三、JVM 内存结构</h2><table>
+<thead>
+<tr>
+<th>内存区域</th>
+<th>是否线程共享</th>
+<th>主要作用</th>
+<th>面试要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>程序计数器</strong></td>
+<td>否</td>
+<td>当前线程执行字节码指令地址</td>
+<td>线程私有，指令调度指针</td>
+</tr>
+<tr>
+<td><strong>Java 栈（Stack）</strong></td>
+<td>否</td>
+<td>保存局部变量、方法调用信息</td>
+<td>每个线程独立，执行完方法出栈</td>
+</tr>
+<tr>
+<td><strong>本地方法栈</strong></td>
+<td>否</td>
+<td>调用 Native 方法</td>
+<td>与 JNI 调用相关</td>
+</tr>
+<tr>
+<td><strong>堆（Heap）</strong></td>
+<td>是</td>
+<td>对象实例与数组存储</td>
+<td>GC 管理，线程共享，重点考点</td>
+</tr>
+<tr>
+<td><strong>方法区（MetaSpace）</strong></td>
+<td>是</td>
+<td>类信息、静态变量、常量</td>
+<td>JDK 8 后元空间在本地内存</td>
+</tr>
+<tr>
+<td><strong>直接内存</strong></td>
+<td>是</td>
+<td>NIO Buffer 或系统调用</td>
+<td>非 JVM 管理内存，可能导致 OOM</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、线程与内存访问模型"><a href="#四、线程与内存访问模型" class="headerlink" title="四、线程与内存访问模型"></a>四、线程与内存访问模型</h2><ul>
+<li><strong>线程私有区域</strong>：程序计数器、Java 栈、局部变量表</li>
+<li><strong>线程共享区域</strong>：堆、方法区、直接内存</li>
+<li><strong>访问规则</strong>：<ol>
+<li>线程可以直接访问共享变量，但可能产生<strong>可见性问题</strong>；</li>
+<li>栈内变量线程安全，不存在共享竞争；</li>
+<li>对象字段位于堆中，多线程访问需同步。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="五、JMM（Java-Memory-Model）概念"><a href="#五、JMM（Java-Memory-Model）概念" class="headerlink" title="五、JMM（Java Memory Model）概念"></a>五、JMM（Java Memory Model）概念</h2><p>JMM 是一套规范，定义了 <strong>Java 内存访问规则与线程交互行为</strong>，核心目标是：</p>
+<ol>
+<li><strong>原子性</strong>：操作不可分割<ul>
+<li><code>++i</code> 并非原子，需 <code>synchronized</code> 或 <code>AtomicInteger</code> 保证</li>
+</ul>
+</li>
+<li><strong>可见性</strong>：线程修改对其他线程可见<ul>
+<li><code>volatile</code> 可以保证立即刷新到主内存</li>
+</ul>
+</li>
+<li><strong>有序性</strong>：禁止指令重排导致逻辑错误<ul>
+<li>JMM 定义 happens-before 原则</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="六、happens-before-原则（核心面试点）"><a href="#六、happens-before-原则（核心面试点）" class="headerlink" title="六、happens-before 原则（核心面试点）"></a>六、happens-before 原则（核心面试点）</h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>程序顺序规则</td>
+<td>同一线程内按代码顺序执行，前操作 happens-before 后操作</td>
+</tr>
+<tr>
+<td>锁规则</td>
+<td>对同一锁加锁的操作之前的操作 happens-before 解锁操作</td>
+</tr>
+<tr>
+<td>volatile 规则</td>
+<td>写操作 happens-before 读操作</td>
+</tr>
+<tr>
+<td>线程启动规则</td>
+<td>Thread.start() 之前的操作 happens-before 新线程开始运行</td>
+</tr>
+<tr>
+<td>线程终止规则</td>
+<td>线程结束 happens-before 线程 join() 返回</td>
+</tr>
+<tr>
+<td>传递规则</td>
+<td>如果 A → B，B → C，则 A → C</td>
+</tr>
+</tbody></table>
+<p>📘 <strong>面试追问：</strong></p>
+<blockquote>
+<p>volatile 能保证原子性吗？<br> <strong>答：不能，只保证可见性和有序性</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="七、内存模型与锁的关系"><a href="#七、内存模型与锁的关系" class="headerlink" title="七、内存模型与锁的关系"></a>七、内存模型与锁的关系</h2><table>
+<thead>
+<tr>
+<th>机制</th>
+<th>保证内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>synchronized</strong></td>
+<td>原子性 + 可见性</td>
+<td>JVM 级别锁，Monitor 实现，包含锁升级机制</td>
+</tr>
+<tr>
+<td><strong>ReentrantLock</strong></td>
+<td>原子性 + 可见性（可中断&#x2F;公平）</td>
+<td>JDK 层面实现，基于 AQS</td>
+</tr>
+<tr>
+<td><strong>volatile</strong></td>
+<td>可见性 + 有序性</td>
+<td>CPU 缓存刷回主存，禁止指令重排</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、JVM-内存模型在项目中的应用（WMS-系统示例）"><a href="#八、JVM-内存模型在项目中的应用（WMS-系统示例）" class="headerlink" title="八、JVM 内存模型在项目中的应用（WMS 系统示例）"></a>八、JVM 内存模型在项目中的应用（WMS 系统示例）</h2><ol>
+<li><strong>库存计数器并发更新</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">int</span> stock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addStock</span><span class="params">(<span class="type">int</span> count)</span> &#123;</span><br><span class="line">    stock += count; <span class="comment">// 可见性保证，但非原子</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果需要原子性：使用 <code>AtomicInteger</code> 或 <code>synchronized</code> 修饰方法</li>
+</ul>
+<ol>
+<li><strong>入库任务线程池共享对象</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Integer&gt; inventory = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>利用并发容器保证多线程读写安全，符合 JMM 规范</li>
+</ul>
+<ol>
+<li><strong>订单状态同步</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(<span class="built_in">this</span>) &#123;</span><br><span class="line">    order.setStatus(<span class="string">&quot;INBOUND&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>确保状态修改在多线程环境下可见且原子</li>
+</ul>
+<hr>
+<h2 id="九、常见面试追问与高分回答"><a href="#九、常见面试追问与高分回答" class="headerlink" title="九、常见面试追问与高分回答"></a>九、常见面试追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JVM 堆和栈的区别？</td>
+<td>栈：线程私有，存储局部变量；堆：线程共享，对象实例存储，受 GC 管理</td>
+</tr>
+<tr>
+<td>什么是指令重排？</td>
+<td>CPU 或编译器为了优化执行顺序改变指令顺序，不改变单线程结果，但可能影响多线程</td>
+</tr>
+<tr>
+<td>synchronized 保证了什么？</td>
+<td>原子性 + 可见性 + 禁止指令重排</td>
+</tr>
+<tr>
+<td>volatile 的使用场景？</td>
+<td>状态标记（如停止线程）、单例模式双重检查锁、保证多线程可见性</td>
+</tr>
+<tr>
+<td>内存屏障在 JMM 中作用？</td>
+<td>用于禁止指令重排，保证 volatile 写入的可见性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔟-一分钟高分总结（可直接背诵）"><a href="#🔟-一分钟高分总结（可直接背诵）" class="headerlink" title="🔟 一分钟高分总结（可直接背诵）"></a>🔟 一分钟高分总结（可直接背诵）</h2><blockquote>
+<p>JVM 内存模型定义了 Java 程序运行时的内存区域，包括堆、栈、方法区、程序计数器等。<br> JMM 规范用于解决多线程下的可见性、原子性和有序性问题，通过 <strong>volatile、synchronized、final</strong> 等关键字，以及 <strong>happens-before 原则</strong> 实现线程安全。<br> 在我开发的 WMS 系统中，我通过并发容器、线程安全锁和 volatile 变量，确保入库、出库和库存更新操作在高并发场景下安全且高效。</p>
+</blockquote>
+<hr>
+<h2 id="🧠-扩展问题（中高级追问）"><a href="#🧠-扩展问题（中高级追问）" class="headerlink" title="🧠 扩展问题（中高级追问）"></a>🧠 扩展问题（中高级追问）</h2><ol>
+<li>堆内存和方法区在 GC 中的回收机制有什么区别？</li>
+<li>指令重排和内存屏障具体是如何实现的？</li>
+<li>volatile 在 CPU 缓存一致性协议中的作用？</li>
+<li>synchronized 和 ReentrantLock 内存语义差异？</li>
+<li>为什么 final 字段在多线程下也是安全的？</li>
+</ol>
+<p>非常好 ✅ 王帅锴，这道题是 <strong>Java 面试中核心的内存管理与性能优化考点</strong>，尤其是高级后端岗位和大数据、分布式场景面试必考题。<br> 面试官不仅想考你是否知道 GC 存在，更关注你是否理解 <strong>GC 的原理、算法、各代分区、调优方式及在项目中的应用</strong>。</p>
+<p>下面我将以 <strong>正式面试风格</strong>为你详细梳理 GC 知识。</p>
+<hr>
+<h1 id="🎯-面试题：请谈谈-GC（Garbage-Collection，垃圾回收）"><a href="#🎯-面试题：请谈谈-GC（Garbage-Collection，垃圾回收）" class="headerlink" title="🎯 面试题：请谈谈 GC（Garbage Collection，垃圾回收）"></a>🎯 面试题：请谈谈 GC（Garbage Collection，垃圾回收）</h1><hr>
+<h2 id="一、面试官考察点-2"><a href="#一、面试官考察点-2" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否理解 JVM 内存分区及垃圾收集机制；</li>
+<li>是否掌握 GC 算法及各代回收策略；</li>
+<li>是否能区分 Minor GC、Major GC、Full GC；</li>
+<li>是否了解 GC 对性能的影响及调优手段；</li>
+<li>是否能结合实际项目分析 GC 问题。</li>
+</ol>
+<hr>
+<h2 id="二、30-秒高分速答模板（开场白）"><a href="#二、30-秒高分速答模板（开场白）" class="headerlink" title="二、30 秒高分速答模板（开场白）"></a>二、30 秒高分速答模板（开场白）</h2><blockquote>
+<p>Java 内存管理采用 <strong>自动垃圾回收机制（GC）</strong>，程序员无需手动释放对象内存。<br> GC 的核心目标是 <strong>回收无引用的对象</strong>，避免内存泄漏与内存溢出。<br> JVM 将堆内存划分为 <strong>年轻代（Young Generation）、老年代（Old Generation）、永久代&#x2F;元空间（MetaSpace）</strong>。<br> 根据对象存活时间长短，采用 <strong>分代收集策略</strong>，同时使用不同算法（如标记-清除、复制、标记-整理）提高回收效率。</p>
+</blockquote>
+<hr>
+<h2 id="三、JVM-堆内存结构与-GC-关联"><a href="#三、JVM-堆内存结构与-GC-关联" class="headerlink" title="三、JVM 堆内存结构与 GC 关联"></a>三、JVM 堆内存结构与 GC 关联</h2><table>
+<thead>
+<tr>
+<th>内存区域</th>
+<th>是否 GC 管理</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>年轻代（Young Gen）</strong></td>
+<td>✅</td>
+<td>存活时间短的对象，分 Eden + Survivor0 + Survivor1，Minor GC</td>
+</tr>
+<tr>
+<td><strong>老年代（Old&#x2F; Tenured）</strong></td>
+<td>✅</td>
+<td>长期存活对象，Full GC &#x2F; Major GC</td>
+</tr>
+<tr>
+<td><strong>方法区&#x2F;元空间（MetaSpace）</strong></td>
+<td>✅</td>
+<td>类元信息、静态变量，永久代在 JDK8 前，JDK8 后改为本地内存元空间</td>
+</tr>
+<tr>
+<td><strong>栈、本地方法栈、程序计数器</strong></td>
+<td>❌</td>
+<td>不属于 GC 管理</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、垃圾收集算法"><a href="#四、垃圾收集算法" class="headerlink" title="四、垃圾收集算法"></a>四、垃圾收集算法</h2><h3 id="1️⃣-标记-清除（Mark-Sweep）"><a href="#1️⃣-标记-清除（Mark-Sweep）" class="headerlink" title="1️⃣ 标记-清除（Mark-Sweep）"></a>1️⃣ 标记-清除（Mark-Sweep）</h3><ul>
+<li><strong>过程</strong>：<ol>
+<li>标记所有存活对象；</li>
+<li>清除未标记对象；</li>
+</ol>
+</li>
+<li><strong>缺点</strong>：产生内存碎片；</li>
+<li><strong>适用</strong>：老年代回收。</li>
+</ul>
+<h3 id="2️⃣-复制算法（Copying）"><a href="#2️⃣-复制算法（Copying）" class="headerlink" title="2️⃣ 复制算法（Copying）"></a>2️⃣ 复制算法（Copying）</h3><ul>
+<li><strong>过程</strong>：<ul>
+<li>将存活对象复制到另一块内存，原内存全部清空；</li>
+</ul>
+</li>
+<li><strong>优点</strong>：不产生碎片，速度快；</li>
+<li><strong>缺点</strong>：需要额外空间（Eden → Survivor 区）；</li>
+<li><strong>适用</strong>：年轻代 Minor GC。</li>
+</ul>
+<h3 id="3️⃣-标记-整理（Mark-Compact）"><a href="#3️⃣-标记-整理（Mark-Compact）" class="headerlink" title="3️⃣ 标记-整理（Mark-Compact）"></a>3️⃣ 标记-整理（Mark-Compact）</h3><ul>
+<li><strong>过程</strong>：<ol>
+<li>标记存活对象；</li>
+<li>将存活对象向一端移动；</li>
+<li>清理空闲空间；</li>
+</ol>
+</li>
+<li><strong>优点</strong>：解决碎片问题；</li>
+<li><strong>缺点</strong>：比复制慢；</li>
+<li><strong>适用</strong>：老年代 Full GC。</li>
+</ul>
+<h3 id="4️⃣-分代收集（Generational-GC）"><a href="#4️⃣-分代收集（Generational-GC）" class="headerlink" title="4️⃣ 分代收集（Generational GC）"></a>4️⃣ 分代收集（Generational GC）</h3><ul>
+<li><strong>理念</strong>：大多数对象生命周期短 → 优化年轻代回收；</li>
+<li><strong>策略</strong>：<ul>
+<li>年轻代：Minor GC → 复制算法</li>
+<li>老年代：Major&#x2F;Full GC → 标记-整理或标记-清除</li>
+</ul>
+</li>
+<li><strong>好处</strong>：<ul>
+<li>高频回收年轻代，提高效率；</li>
+<li>减少 Full GC 次数，降低停顿。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="五、常见-GC-类型"><a href="#五、常见-GC-类型" class="headerlink" title="五、常见 GC 类型"></a>五、常见 GC 类型</h2><table>
+<thead>
+<tr>
+<th>GC 类型</th>
+<th>触发条件</th>
+<th>影响范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Minor GC</td>
+<td>Eden 区满</td>
+<td>回收年轻代对象，速度快，STW（Stop-The-World）时间短</td>
+</tr>
+<tr>
+<td>Major GC &#x2F; Full GC</td>
+<td>老年代或元空间满</td>
+<td>回收整个堆，速度慢，STW 时间长</td>
+</tr>
+<tr>
+<td>CMS（Concurrent Mark-Sweep）</td>
+<td>老年代回收</td>
+<td>并发回收，停顿短，适合低延迟系统</td>
+</tr>
+<tr>
+<td>G1 GC</td>
+<td>堆碎片化或满</td>
+<td>分区回收，STW 最小化，JDK9 默认</td>
+</tr>
+<tr>
+<td>ZGC &#x2F; Shenandoah</td>
+<td>超大堆（TB 级别）</td>
+<td>低延迟垃圾收集器，停顿 &lt; 10ms</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、GC-调优参数（面试常问）"><a href="#六、GC-调优参数（面试常问）" class="headerlink" title="六、GC 调优参数（面试常问）"></a>六、GC 调优参数（面试常问）</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-Xms</td>
+<td>初始堆大小</td>
+<td>-Xms512m</td>
+</tr>
+<tr>
+<td>-Xmx</td>
+<td>最大堆大小</td>
+<td>-Xmx2g</td>
+</tr>
+<tr>
+<td>-Xmn</td>
+<td>年轻代大小</td>
+<td>-Xmn256m</td>
+</tr>
+<tr>
+<td>-XX:SurvivorRatio</td>
+<td>Eden&#x2F;Survivor 比例</td>
+<td>-XX:SurvivorRatio&#x3D;8</td>
+</tr>
+<tr>
+<td>-XX:+UseG1GC</td>
+<td>使用 G1 GC</td>
+<td>-XX:+UseG1GC</td>
+</tr>
+<tr>
+<td>-XX:+PrintGCDetails</td>
+<td>打印 GC 日志</td>
+<td>-XX:+PrintGCDetails</td>
+</tr>
+<tr>
+<td>-XX:+UseConcMarkSweepGC</td>
+<td>CMS GC</td>
+<td>-XX:+UseConcMarkSweepGC</td>
+</tr>
+</tbody></table>
+<p>📘 <strong>面试追问</strong>：</p>
+<blockquote>
+<p>年轻代回收为什么快？<br> <strong>答</strong>：年轻代对象存活周期短，多数对象很快死亡，使用复制算法，避免碎片化，回收速度快。</p>
+</blockquote>
+<hr>
+<h2 id="七、GC-的线程与-Stop-The-World（STW）"><a href="#七、GC-的线程与-Stop-The-World（STW）" class="headerlink" title="七、GC 的线程与 Stop-The-World（STW）"></a>七、GC 的线程与 Stop-The-World（STW）</h2><ul>
+<li><strong>STW</strong>：垃圾回收期间，所有应用线程暂停执行；</li>
+<li><strong>影响</strong>：<ul>
+<li>Minor GC STW 时间短（ms 级别）</li>
+<li>Full GC STW 时间长（可能秒级）</li>
+</ul>
+</li>
+<li><strong>面试点</strong>：<ul>
+<li>分代收集尽量减少 Full GC；</li>
+<li>并发收集器（CMS、G1）减少停顿时间。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="八、常见面试追问与高分回答"><a href="#八、常见面试追问与高分回答" class="headerlink" title="八、常见面试追问与高分回答"></a>八、常见面试追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>新生代&#x2F;老年代对象如何分配？</td>
+<td>默认新对象进入 Eden；长时间存活对象晋升老年代</td>
+</tr>
+<tr>
+<td>什么是内存泄漏？</td>
+<td>对象不再使用但仍有引用，GC 无法回收</td>
+</tr>
+<tr>
+<td>如何避免 Full GC？</td>
+<td>调整堆大小、优化对象生命周期、使用并发收集器</td>
+</tr>
+<tr>
+<td>G1 GC 如何工作？</td>
+<td>堆划分成多个 Region，回收活动最少的区域，支持并发标记和整理</td>
+</tr>
+<tr>
+<td>CMS GC 缺点？</td>
+<td>内存碎片化，可能触发 Full GC</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、项目实战应用（WMS-系统）"><a href="#九、项目实战应用（WMS-系统）" class="headerlink" title="九、项目实战应用（WMS 系统）"></a>九、项目实战应用（WMS 系统）</h2><p><strong>场景：高并发批量入库任务</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">ThreadPoolExecutor</span> <span class="variable">pool</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(</span><br><span class="line">    <span class="number">10</span>, <span class="number">50</span>, <span class="number">60</span>, TimeUnit.SECONDS,</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">LinkedBlockingQueue</span>&lt;&gt;(<span class="number">1000</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (StorageTask task : taskList) &#123;</span><br><span class="line">    pool.submit(() -&gt; processInboundTask(task));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>高并发产生大量临时对象 → Eden 区频繁 Minor GC</li>
+<li>优化措施：<ol>
+<li>调整年轻代大小（-Xmn）</li>
+<li>使用 G1 GC 减少 Full GC 停顿</li>
+<li>线程池重用对象，减少短生命周期对象创建</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="🔟-一分钟高分总结（可直接背诵）-1"><a href="#🔟-一分钟高分总结（可直接背诵）-1" class="headerlink" title="🔟 一分钟高分总结（可直接背诵）"></a>🔟 一分钟高分总结（可直接背诵）</h2><blockquote>
+<p>Java 使用自动垃圾回收机制（GC）管理堆内存。<br> 堆分为年轻代、老年代和方法区，采用分代收集策略。<br> 年轻代使用复制算法，老年代使用标记-整理或标记-清除。<br> GC 类型包括 Minor GC、Major&#x2F;Full GC、CMS、G1 等。<br> 在高并发场景下，应通过合理堆内存设置、分代收集器选择和对象复用，减少 Full GC 停顿，提高系统性能。</p>
+</blockquote>
+<hr>
+<h2 id="🧠-扩展问题（面试深挖）"><a href="#🧠-扩展问题（面试深挖）" class="headerlink" title="🧠 扩展问题（面试深挖）"></a>🧠 扩展问题（面试深挖）</h2><ol>
+<li>JVM 对象分配策略（Thread Local Allocation Buffer，TLAB）</li>
+<li>Minor GC 和 Major GC 的停顿时间分析</li>
+<li>CMS 与 G1 GC 内存整理机制</li>
+<li>如何排查内存泄漏与 OOM</li>
+<li>SoftReference、WeakReference、PhantomReference 与 GC 的关系</li>
+</ol>
+<hr>
+<p>如果你需要，我可以帮你整理 <strong>《Java 内存管理 + GC 全面面试指南（含各代收集器原理 + 调优 + 实战案例）》</strong>，适合系统复盘面试题。</p>
+<p>你希望我帮你整理吗？</p>
+<h1 id="堆和栈的区别"><a href="#堆和栈的区别" class="headerlink" title="堆和栈的区别"></a>堆和栈的区别</h1><h3 id="1-管理者与分配方式"><a href="#1-管理者与分配方式" class="headerlink" title="1 管理者与分配方式"></a>1 管理者与分配方式</h3><ul>
+<li>栈（Stack）<ul>
+<li>管理：由编译器&#x2F;运行时自动管理（通过栈指针 rsp&#x2F;esp 等）。</li>
+<li>分配：连续内存，按帧（frame）分配，分配&#x2F;回收仅需移动栈指针，开销极低。</li>
+</ul>
+</li>
+<li>堆（Heap）<ul>
+<li>管理：由程序员（malloc&#x2F;new + free&#x2F;delete）或垃圾回收器（GC）负责。</li>
+<li>分配：不连续，内存管理器维护空闲链表&#x2F;空闲树&#x2F;位图，分配需要查找合适区块，性能开销更大，且有碎片可能。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-生命周期与作用域"><a href="#2-生命周期与作用域" class="headerlink" title="2 生命周期与作用域"></a>2 生命周期与作用域</h3><ul>
+<li>栈：局部变量在其作用域（函数&#x2F;代码块）内存在，函数返回后自动销毁；生命周期短且可预测。</li>
+<li>堆：动态分配，生命周期由程序控制（显式释放或等待 GC），可以跨函数、跨线程存在直到被释放。</li>
+</ul>
+<h3 id="3-使用内容"><a href="#3-使用内容" class="headerlink" title="3 使用内容"></a>3 使用内容</h3><ul>
+<li>栈：函数调用信息、局部变量、返回地址、保存寄存器、部分语言的临时值（compiler temporaries）。</li>
+<li>堆：动态对象、动态数组、大尺寸缓冲区、需要在多个作用域&#x2F;线程间共享的数据。</li>
+</ul>
+<h3 id="4-性能"><a href="#4-性能" class="headerlink" title="4 性能"></a>4 性能</h3><ul>
+<li>访问速度：栈更快（内存连续、缓存局部性好）；堆访问相对慢且分配&#x2F;释放开销高。</li>
+<li>内存碎片：堆会产生碎片；栈不会（栈是线性分配）。</li>
+<li>并发：栈为线程私有，天然线程安全；堆为共享，需同步或采用线程安全的分配策略&#x2F;GC。</li>
+</ul>
+<h3 id="5-常见问题"><a href="#5-常见问题" class="headerlink" title="5 常见问题"></a>5 常见问题</h3><ul>
+<li>栈溢出（StackOverflow）：递归深度过大或局部变量过大（例如局部大数组）会触发。</li>
+<li>内存泄漏&#x2F;悬挂指针：堆内存未释放或释放后仍被访问（C&#x2F;C++）。</li>
+<li>GC 停顿（Stop-the-world）：某些 GC 实现会导致暂停，影响延迟敏感应用。</li>
+</ul>
+<h1 id="🎯-面试题：请谈谈你对-JVM-调优的理解"><a href="#🎯-面试题：请谈谈你对-JVM-调优的理解" class="headerlink" title="🎯 面试题：请谈谈你对 JVM 调优的理解"></a>🎯 面试题：请谈谈你对 JVM 调优的理解</h1><hr>
+<h2 id="一、面试官考察点-3"><a href="#一、面试官考察点-3" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否熟悉 JVM 内存结构和垃圾回收机制；</li>
+<li>是否了解常用调优参数（堆、年轻代、垃圾回收器等）；</li>
+<li>是否能结合业务场景分析性能瓶颈；</li>
+<li>是否掌握 GC 日志分析方法及调优策略；</li>
+<li>是否有实际项目经验进行性能优化。</li>
+</ol>
+<hr>
+<h2 id="二、30-秒高分速答模板（开场白）-1"><a href="#二、30-秒高分速答模板（开场白）-1" class="headerlink" title="二、30 秒高分速答模板（开场白）"></a>二、30 秒高分速答模板（开场白）</h2><blockquote>
+<p>JVM 调优主要从 <strong>内存优化、垃圾回收调优、线程与并发、JVM 参数配置</strong> 等方面入手，目标是提升应用性能并避免停顿。<br> 内存方面，需要合理配置堆大小、年轻代和老年代比例；<br> GC 调优方面，需要选择合适的收集器（如 G1、CMS、Parallel GC）并分析 GC 日志；<br> 并发方面，需要调整线程池大小、减少锁竞争；<br> 同时要结合 <strong>性能监控工具（jvisualvm、jconsole、Flight Recorder）</strong> 进行分析。</p>
+</blockquote>
+<hr>
+<h2 id="三、JVM-调优主要方向"><a href="#三、JVM-调优主要方向" class="headerlink" title="三、JVM 调优主要方向"></a>三、JVM 调优主要方向</h2><h3 id="1️⃣-内存调优"><a href="#1️⃣-内存调优" class="headerlink" title="1️⃣ 内存调优"></a>1️⃣ 内存调优</h3><table>
+<thead>
+<tr>
+<th>区域</th>
+<th>调优目标</th>
+<th>典型参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>堆</td>
+<td>控制内存大小，减少 Full GC</td>
+<td>-Xms、-Xmx、-Xmn、-XX:SurvivorRatio</td>
+</tr>
+<tr>
+<td>年轻代</td>
+<td>提高 Minor GC 效率</td>
+<td>-Xmn、-XX:SurvivorRatio</td>
+</tr>
+<tr>
+<td>老年代</td>
+<td>减少 Major&#x2F;Full GC</td>
+<td>-XX:NewRatio、-XX:MaxTenuringThreshold</td>
+</tr>
+<tr>
+<td>元空间</td>
+<td>避免类加载&#x2F;静态变量溢出</td>
+<td>-XX:MetaspaceSize、-XX:MaxMetaspaceSize</td>
+</tr>
+<tr>
+<td>栈</td>
+<td>防止 StackOverflowError</td>
+<td>-Xss</td>
+</tr>
+</tbody></table>
+<p>📘 面试追问：</p>
+<blockquote>
+<p>年轻代比例调大对系统有什么影响？<br> <strong>答</strong>：对象晋升老年代慢，减少 Minor GC 次数，但占用堆空间，可能导致老年代更快满。</p>
+</blockquote>
+<hr>
+<h3 id="2️⃣-垃圾回收调优"><a href="#2️⃣-垃圾回收调优" class="headerlink" title="2️⃣ 垃圾回收调优"></a>2️⃣ 垃圾回收调优</h3><table>
+<thead>
+<tr>
+<th>目标</th>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>减少停顿</td>
+<td>使用并发&#x2F;分代收集器</td>
+<td>CMS、G1 GC、ZGC</td>
+</tr>
+<tr>
+<td>提高吞吐量</td>
+<td>Parallel GC</td>
+<td>多线程回收年轻代&#x2F;老年代</td>
+</tr>
+<tr>
+<td>避免内存碎片</td>
+<td>分代策略 + 堆压缩</td>
+<td>老年代使用标记-整理</td>
+</tr>
+<tr>
+<td>调整 GC 日志</td>
+<td>打印分析</td>
+<td>-XX:+PrintGCDetails、-Xloggc:gc.log</td>
+</tr>
+</tbody></table>
+<p>📘 面试追问：</p>
+<blockquote>
+<p>如何分析 Full GC 的原因？<br> <strong>答</strong>：通过 GC 日志查看：</p>
+</blockquote>
+<ul>
+<li>老年代占用率；</li>
+<li>Minor GC 后对象晋升速率；</li>
+<li>CMS 或 G1 回收延迟；<br> 然后优化对象创建策略或调整 GC 参数。</li>
+</ul>
+<hr>
+<h3 id="3️⃣-并发与线程优化"><a href="#3️⃣-并发与线程优化" class="headerlink" title="3️⃣ 并发与线程优化"></a>3️⃣ 并发与线程优化</h3><table>
+<thead>
+<tr>
+<th>目标</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>减少锁竞争</td>
+<td>使用 ReentrantLock &#x2F; 并发容器</td>
+</tr>
+<tr>
+<td>控制线程数量</td>
+<td>线程池配置（核心线程数、最大线程数、队列大小）</td>
+</tr>
+<tr>
+<td>避免上下文切换</td>
+<td>合理分配 CPU 核数、线程池大小匹配业务</td>
+</tr>
+</tbody></table>
+<p>📘 面试追问：</p>
+<blockquote>
+<p>为什么线程池大小过大会影响 GC？<br> <strong>答</strong>：线程过多会频繁创建对象，导致 Eden 区迅速填满，触发频繁 Minor GC。</p>
+</blockquote>
+<hr>
+<h3 id="4️⃣-JVM-参数优化示例"><a href="#4️⃣-JVM-参数优化示例" class="headerlink" title="4️⃣ JVM 参数优化示例"></a>4️⃣ JVM 参数优化示例</h3><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-Xms2g -Xmx2g        # 堆大小</span><br><span class="line">-Xmn1g               # 年轻代大小</span><br><span class="line">-XX:+UseG1GC         # 使用 G1 GC</span><br><span class="line">-XX:MaxGCPauseMillis=200  # GC 最大停顿时间</span><br><span class="line">-XX:+PrintGCDetails -Xloggc:gc.log  # GC 日志</span><br><span class="line">-XX:+UseStringDeduplication       # 字符串去重</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>场景解释</strong>：<ul>
+<li>堆初始值 &#x3D; 最大值，避免频繁堆扩展；</li>
+<li>年轻代大小根据对象创建频率调优；</li>
+<li>G1 GC 控制停顿在 200ms 以内；</li>
+<li>GC 日志用于性能分析。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="5️⃣-GC-日志分析思路（面试加分）"><a href="#5️⃣-GC-日志分析思路（面试加分）" class="headerlink" title="5️⃣ GC 日志分析思路（面试加分）"></a>5️⃣ GC 日志分析思路（面试加分）</h3><ol>
+<li>查看 Minor GC 与 Major GC 次数及耗时；</li>
+<li>计算存活对象晋升速率；</li>
+<li>分析 Full GC 的触发点；</li>
+<li>根据业务特性优化对象创建、缓存和堆结构；</li>
+<li>结合工具：VisualVM、JConsole、Flight Recorder、GCViewer。</li>
+</ol>
+<hr>
+<h3 id="6️⃣-项目实战案例（WMS-系统）"><a href="#6️⃣-项目实战案例（WMS-系统）" class="headerlink" title="6️⃣ 项目实战案例（WMS 系统）"></a>6️⃣ 项目实战案例（WMS 系统）</h3><p><strong>场景</strong>：高并发入库任务导致老年代频繁 Full GC</p>
+<p><strong>问题分析</strong>：</p>
+<ul>
+<li>大量临时对象在 Eden 区快速生成；</li>
+<li>对象晋升老年代频繁；</li>
+<li>Full GC 停顿 1~2 秒，影响入库吞吐量。</li>
+</ul>
+<p><strong>优化策略</strong>：</p>
+<ol>
+<li>调整堆大小：<ul>
+<li>-Xms4g -Xmx4g -Xmn2g</li>
+</ul>
+</li>
+<li>使用 G1 GC：<ul>
+<li>-XX:+UseG1GC -XX:MaxGCPauseMillis&#x3D;200</li>
+</ul>
+</li>
+<li>减少短生命周期对象：<ul>
+<li>对象池复用，避免临时对象大量创建</li>
+</ul>
+</li>
+<li>监控：<ul>
+<li>定期查看 GC 日志，分析内存压力</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="7️⃣-面试高频追问与高分回答"><a href="#7️⃣-面试高频追问与高分回答" class="headerlink" title="7️⃣ 面试高频追问与高分回答"></a>7️⃣ 面试高频追问与高分回答</h3><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Minor GC 和 Full GC 区别？</td>
+<td>Minor GC 回收年轻代，对象晋升老年代；Full GC 回收整个堆，停顿时间长</td>
+</tr>
+<tr>
+<td>如何判断系统 GC 是否频繁？</td>
+<td>通过 GC 日志分析或使用 jstat、VisualVM 查看 GC 次数和停顿时间</td>
+</tr>
+<tr>
+<td>GC 调优原则？</td>
+<td>减少停顿时间、提高吞吐量、降低内存碎片、匹配业务特性</td>
+</tr>
+<tr>
+<td>G1 GC 和 CMS 区别？</td>
+<td>G1 支持分区回收、停顿可控；CMS 停顿短但存在内存碎片问题</td>
+</tr>
+<tr>
+<td>为什么要控制对象创建速率？</td>
+<td>避免 Eden 区频繁 GC，减少 Full GC 发生</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="8️⃣-一分钟高分总结（可直接背诵）"><a href="#8️⃣-一分钟高分总结（可直接背诵）" class="headerlink" title="8️⃣ 一分钟高分总结（可直接背诵）"></a>8️⃣ 一分钟高分总结（可直接背诵）</h3><blockquote>
+<p>JVM 调优主要包括 <strong>内存优化、垃圾回收调优、线程优化</strong>。<br> 内存优化：合理配置堆大小、年轻代比例，控制对象生命周期；<br> GC 调优：选择合适收集器（G1、CMS、Parallel GC），分析日志优化停顿；<br> 线程优化：线程池合理配置，减少锁竞争与对象创建；<br> 在我开发的 WMS 系统中，通过 G1 GC、对象复用和线程池优化，实现了入库任务高并发下的稳定运行，Full GC 停顿控制在 200ms 内。</p>
+</blockquote>
+<hr>
+<h3 id="9️⃣-高级延伸问题（面试加深挖掘）"><a href="#9️⃣-高级延伸问题（面试加深挖掘）" class="headerlink" title="9️⃣ 高级延伸问题（面试加深挖掘）"></a>9️⃣ 高级延伸问题（面试加深挖掘）</h3><ol>
+<li>Eden 区频繁 GC 如何调优？</li>
+<li>G1 GC 的 Region 分区机制与回收策略？</li>
+<li>CMS 老年代内存碎片问题如何解决？</li>
+<li>大对象（如 1MB 以上数组）如何分配？</li>
+<li>GC 与 Stop-The-World 的关系及优化方法？</li>
+<li>如何定位内存泄漏和堆溢出问题？</li>
+</ol>
+<h1 id="🎯-面试题：Java-中常用的-JVM-调优参数有哪些？请说明用途及应用场景"><a href="#🎯-面试题：Java-中常用的-JVM-调优参数有哪些？请说明用途及应用场景" class="headerlink" title="🎯 面试题：Java 中常用的 JVM 调优参数有哪些？请说明用途及应用场景"></a>🎯 面试题：Java 中常用的 JVM 调优参数有哪些？请说明用途及应用场景</h1><hr>
+<h2 id="一、面试官考察点-4"><a href="#一、面试官考察点-4" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否熟悉 JVM 堆、方法区、线程栈等内存结构；</li>
+<li>是否能区分不同 GC 收集器与参数设置；</li>
+<li>是否了解参数调整对性能、吞吐量和停顿时间的影响；</li>
+<li>是否能结合项目实例进行调优分析；</li>
+<li>是否理解调优思路，而非单纯背参数。</li>
+</ol>
+<hr>
+<h2 id="二、JVM-调优参数分类"><a href="#二、JVM-调优参数分类" class="headerlink" title="二、JVM 调优参数分类"></a>二、JVM 调优参数分类</h2><p>JVM 调优参数主要分为 <strong>内存参数、GC 参数、性能监控参数、调试参数、JIT 编译相关参数</strong>。</p>
+<hr>
+<h3 id="1️⃣-内存参数"><a href="#1️⃣-内存参数" class="headerlink" title="1️⃣ 内存参数"></a>1️⃣ 内存参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+<th>面试思路</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-Xms</code></td>
+<td>堆初始大小</td>
+<td>-Xms2g</td>
+<td>避免频繁堆扩展，提升启动性能</td>
+</tr>
+<tr>
+<td><code>-Xmx</code></td>
+<td>堆最大大小</td>
+<td>-Xmx4g</td>
+<td>限制应用最大内存，防止 OOM</td>
+</tr>
+<tr>
+<td><code>-Xmn</code></td>
+<td>年轻代大小</td>
+<td>-Xmn1g</td>
+<td>调整 Eden + Survivor 区比例，提高 Minor GC 效率</td>
+</tr>
+<tr>
+<td><code>-XX:SurvivorRatio</code></td>
+<td>Eden 与 Survivor 比例</td>
+<td>-XX:SurvivorRatio&#x3D;8</td>
+<td>优化对象复制和晋升老年代速度</td>
+</tr>
+<tr>
+<td><code>-XX:NewRatio</code></td>
+<td>年轻代与老年代比例</td>
+<td>-XX:NewRatio&#x3D;2</td>
+<td>调整新生代占堆比率</td>
+</tr>
+<tr>
+<td><code>-XX:MaxTenuringThreshold</code></td>
+<td>对象晋升老年代阈值</td>
+<td>-XX:MaxTenuringThreshold&#x3D;15</td>
+<td>避免对象过早晋升老年代</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="2️⃣-GC-参数"><a href="#2️⃣-GC-参数" class="headerlink" title="2️⃣ GC 参数"></a>2️⃣ GC 参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+<th>面试思路</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-XX:+UseSerialGC</code></td>
+<td>单线程 GC</td>
+<td>-</td>
+<td>小堆或单核环境</td>
+</tr>
+<tr>
+<td><code>-XX:+UseParallelGC</code></td>
+<td>并行 GC</td>
+<td>-</td>
+<td>高吞吐量场景</td>
+</tr>
+<tr>
+<td><code>-XX:+UseConcMarkSweepGC</code></td>
+<td>CMS 并发回收</td>
+<td>-</td>
+<td>低停顿应用</td>
+</tr>
+<tr>
+<td><code>-XX:+UseG1GC</code></td>
+<td>G1 GC</td>
+<td>-</td>
+<td>大堆、低停顿应用（JDK9 默认）</td>
+</tr>
+<tr>
+<td><code>-XX:MaxGCPauseMillis</code></td>
+<td>最大停顿时间</td>
+<td>-XX:MaxGCPauseMillis&#x3D;200</td>
+<td>G1 GC 调优停顿控制</td>
+</tr>
+<tr>
+<td><code>-XX:+PrintGCDetails</code></td>
+<td>打印 GC 详细日志</td>
+<td>-XX:+PrintGCDetails</td>
+<td>分析 GC 行为</td>
+</tr>
+<tr>
+<td><code>-Xloggc:&lt;file&gt;</code></td>
+<td>GC 日志输出</td>
+<td>-Xloggc:gc.log</td>
+<td>用于后续 GC 分析</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="3️⃣-线程与栈参数"><a href="#3️⃣-线程与栈参数" class="headerlink" title="3️⃣ 线程与栈参数"></a>3️⃣ 线程与栈参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-Xss</code></td>
+<td>每个线程栈大小</td>
+<td>-Xss512k</td>
+</tr>
+<tr>
+<td><code>-XX:ParallelGCThreads</code></td>
+<td>并行 GC 使用的线程数</td>
+<td>-XX:ParallelGCThreads&#x3D;8</td>
+</tr>
+<tr>
+<td><code>-XX:ConcGCThreads</code></td>
+<td>CMS &#x2F; G1 并发线程数</td>
+<td>-XX:ConcGCThreads&#x3D;4</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="4️⃣-监控与诊断参数"><a href="#4️⃣-监控与诊断参数" class="headerlink" title="4️⃣ 监控与诊断参数"></a>4️⃣ 监控与诊断参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-XX:+PrintGCApplicationStoppedTime</code></td>
+<td>打印应用停顿时间</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>-XX:+PrintGCApplicationConcurrentTime</code></td>
+<td>打印应用并发执行时间</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>-XX:+HeapDumpOnOutOfMemoryError</code></td>
+<td>OOM 时生成堆转储</td>
+<td>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath&#x3D;&#x2F;tmp&#x2F;heap.hprof</td>
+</tr>
+<tr>
+<td><code>-XX:+UseCompressedOops</code></td>
+<td>对 64 位 JVM 压缩对象指针</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="5️⃣-JIT-编译与性能参数"><a href="#5️⃣-JIT-编译与性能参数" class="headerlink" title="5️⃣ JIT 编译与性能参数"></a>5️⃣ JIT 编译与性能参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-XX:+TieredCompilation</code></td>
+<td>分层编译</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>-XX:CompileThreshold</code></td>
+<td>方法 JIT 编译阈值</td>
+<td>-XX:CompileThreshold&#x3D;10000</td>
+</tr>
+<tr>
+<td><code>-XX:+PrintCompilation</code></td>
+<td>输出 JIT 编译信息</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、调优思路（面试核心）"><a href="#三、调优思路（面试核心）" class="headerlink" title="三、调优思路（面试核心）"></a>三、调优思路（面试核心）</h2><ol>
+<li><strong>分析业务特性</strong><ul>
+<li>对象创建速率高 → 增大 Eden 区，减少 Minor GC</li>
+<li>对象存活时间长 → 调整老年代大小和晋升阈值</li>
+</ul>
+</li>
+<li><strong>选择合适 GC</strong><ul>
+<li>小堆、单线程应用 → Serial GC</li>
+<li>高吞吐量 → Parallel GC</li>
+<li>低停顿、大堆 → CMS 或 G1 GC</li>
+<li>超大堆或低延迟 → ZGC &#x2F; Shenandoah</li>
+</ul>
+</li>
+<li><strong>堆大小调优</strong><ul>
+<li>堆大小 &#x3D; 年轻代 + 老年代</li>
+<li>初始堆 &#x3D; 最大堆，避免频繁扩展</li>
+</ul>
+</li>
+<li><strong>日志分析与验证</strong><ul>
+<li>打印 GC 日志，分析 Minor&#x2F;Full GC 次数和停顿时间</li>
+<li>调整对象创建策略或缓存</li>
+</ul>
+</li>
+<li><strong>线程与栈优化</strong><ul>
+<li>控制线程池大小，避免过多线程导致 Eden 区快速填满</li>
+<li>调整栈大小，避免 StackOverflowError</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="四、项目实战示例（WMS-系统）"><a href="#四、项目实战示例（WMS-系统）" class="headerlink" title="四、项目实战示例（WMS 系统）"></a>四、项目实战示例（WMS 系统）</h2><p><strong>场景</strong>：高并发入库任务导致 Full GC 停顿严重</p>
+<p><strong>调优方案</strong>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-Xms4g -Xmx4g       # 堆大小固定</span><br><span class="line">-Xmn2g              # 年轻代占堆一半</span><br><span class="line">-XX:+UseG1GC        # 使用 G1 GC</span><br><span class="line">-XX:MaxGCPauseMillis=200  # 控制停顿</span><br><span class="line">-XX:+PrintGCDetails -Xloggc:/var/log/gc.log</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结合 GC 日志分析 Minor&#x2F;Full GC 次数</li>
+<li>对短生命周期对象使用对象池复用，减少 Eden 区压力</li>
+<li>优化线程池大小，减少线程上下文切换</li>
+</ul>
+<hr>
+<h2 id="五、面试高频追问与高分回答"><a href="#五、面试高频追问与高分回答" class="headerlink" title="五、面试高频追问与高分回答"></a>五、面试高频追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Xms 和 Xmx 有何作用？</td>
+<td>Xms：堆初始大小，避免扩展；Xmx：堆最大大小，限制 OOM</td>
+</tr>
+<tr>
+<td>Xmn 调整策略？</td>
+<td>新生代对象多 → 增大 Xmn；对象生命周期长 → 减小 Xmn</td>
+</tr>
+<tr>
+<td>如何选择 GC？</td>
+<td>根据堆大小、吞吐量要求和停顿容忍度选择：Serial、Parallel、CMS、G1、ZGC</td>
+</tr>
+<tr>
+<td>MaxGCPauseMillis 如何使用？</td>
+<td>结合 G1 GC，设置目标最大停顿，JVM 调整 Region 回收</td>
+</tr>
+<tr>
+<td>如何分析 GC 日志？</td>
+<td>查看 Minor&#x2F;Full GC 次数、耗时、晋升对象数量、停顿时间，并根据业务特性调整堆参数</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、一分钟高分总结（可直接背诵）"><a href="#六、一分钟高分总结（可直接背诵）" class="headerlink" title="六、一分钟高分总结（可直接背诵）"></a>六、一分钟高分总结（可直接背诵）</h2><blockquote>
+<p>JVM 调优主要包括内存调优、GC 调优、线程栈优化和日志分析。<br> 内存调优：-Xms&#x2F;-Xmx&#x2F;-Xmn、SurvivorRatio、NewRatio、MaxTenuringThreshold。<br> GC 调优：选择收集器（G1&#x2F;CMS&#x2F;Parallel）、控制停顿（MaxGCPauseMillis）、打印日志分析。<br> 线程栈调优：-Xss、线程池配置。<br> 调优原则：分析业务特性 → 选择合适 GC → 设置合理堆参数 → 日志验证 → 持续优化。</p>
+</blockquote>
+<p>非常好 ✅ 王帅锴，这道题是 Java 高级面试中常问的题目，尤其涉及 <strong>性能优化、GC 调优和内存分析</strong> 的岗位。面试官想考察你是否熟悉 <strong>JVM 性能诊断工具、监控工具以及分析思路</strong>，能否结合实际场景定位问题。下面我以 <strong>正式面试风格</strong>为你系统梳理。</p>
+<hr>
+<h1 id="🎯-面试题：Java-JVM-调优工具有哪些？请说明用途和使用场景"><a href="#🎯-面试题：Java-JVM-调优工具有哪些？请说明用途和使用场景" class="headerlink" title="🎯 面试题：Java JVM 调优工具有哪些？请说明用途和使用场景"></a>🎯 面试题：Java JVM 调优工具有哪些？请说明用途和使用场景</h1><hr>
+<h2 id="一、面试官考察点-5"><a href="#一、面试官考察点-5" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否熟悉 JVM 提供的调优和监控工具；</li>
+<li>是否了解工具用途、适用场景和分析方法；</li>
+<li>是否能结合业务场景进行 GC、内存、线程性能调优；</li>
+<li>是否能在面试中给出实际使用经验和调优案例。</li>
+</ol>
+<hr>
+<h2 id="二、JVM-调优工具分类"><a href="#二、JVM-调优工具分类" class="headerlink" title="二、JVM 调优工具分类"></a>二、JVM 调优工具分类</h2><p>JVM 调优工具主要分为三类：</p>
+<ol>
+<li><strong>JVM 自带命令行工具（命令行 + 日志分析）</strong></li>
+<li><strong>图形化监控工具</strong></li>
+<li><strong>第三方分析工具</strong></li>
+</ol>
+<hr>
+<h3 id="1️⃣-JVM-自带命令行工具"><a href="#1️⃣-JVM-自带命令行工具" class="headerlink" title="1️⃣ JVM 自带命令行工具"></a>1️⃣ JVM 自带命令行工具</h3><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>说明</th>
+<th>面试高频用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>jps</code></td>
+<td>查看当前 JVM 进程</td>
+<td>定位 PID</td>
+</tr>
+<tr>
+<td><code>jstat</code></td>
+<td>JVM 性能统计</td>
+<td>查看 GC 次数、堆内存使用、GC 时长</td>
+</tr>
+<tr>
+<td><code>jmap</code></td>
+<td>内存映射和堆信息</td>
+<td>导出堆转储（heap dump）、分析对象分布</td>
+</tr>
+<tr>
+<td><code>jstack</code></td>
+<td>线程快照</td>
+<td>分析死锁、线程阻塞、堆栈信息</td>
+</tr>
+<tr>
+<td><code>jcmd</code></td>
+<td>统一管理命令</td>
+<td>GC 信息、线程信息、堆信息、执行诊断命令</td>
+</tr>
+<tr>
+<td><code>javacore</code> &#x2F; <code>jinfo</code></td>
+<td>配置参数查询</td>
+<td>查看 JVM 启动参数、系统属性</td>
+</tr>
+</tbody></table>
+<p>📘 <strong>面试追问</strong>：</p>
+<blockquote>
+<p>你如何分析 Full GC 的原因？<br> <strong>答</strong>：使用 <code>jstat -gc PID 1000</code> 观察 Eden&#x2F;Survivor&#x2F;Old 区占用率，并结合 <code>jmap -dump:format=b,file=heap.hprof PID</code> 导出堆快照分析对象分布。</p>
+</blockquote>
+<hr>
+<h3 id="2️⃣-图形化监控工具"><a href="#2️⃣-图形化监控工具" class="headerlink" title="2️⃣ 图形化监控工具"></a>2️⃣ 图形化监控工具</h3><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>说明</th>
+<th>场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>JVisualVM</strong></td>
+<td>JVM 自带 GUI 工具</td>
+<td>监控堆内存、GC、线程、CPU 使用率</td>
+</tr>
+<tr>
+<td><strong>JConsole</strong></td>
+<td>Java Management Extensions (JMX)</td>
+<td>实时监控线程、堆、类加载等</td>
+</tr>
+<tr>
+<td><strong>Java Mission Control (JMC)</strong></td>
+<td>Oracle 提供，Flight Recorder 集成</td>
+<td>长期性能分析、低开销监控</td>
+</tr>
+</tbody></table>
+<p>📘 <strong>面试追问</strong>：</p>
+<blockquote>
+<p>JVisualVM 可以做哪些调优工作？<br> <strong>答</strong>：分析堆内存占用趋势、发现内存泄漏、线程阻塞分析、GC 可视化、CPU 火焰图分析方法热点。</p>
+</blockquote>
+<hr>
+<h3 id="3️⃣-第三方分析工具"><a href="#3️⃣-第三方分析工具" class="headerlink" title="3️⃣ 第三方分析工具"></a>3️⃣ 第三方分析工具</h3><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>功能</th>
+<th>面试价值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MAT (Memory Analyzer Tool)</strong></td>
+<td>堆转储分析</td>
+<td>内存泄漏分析、对象占用分析</td>
+</tr>
+<tr>
+<td><strong>VisualVM 插件</strong></td>
+<td>高级分析</td>
+<td>Thread Dump 分析、GC 可视化</td>
+</tr>
+<tr>
+<td><strong>Arthas</strong></td>
+<td>热更新诊断</td>
+<td>线程、堆、GC、方法调用、监控在线系统</td>
+</tr>
+<tr>
+<td><strong>YourKit &#x2F; JProfiler</strong></td>
+<td>高级性能分析</td>
+<td>CPU、内存、GC、线程，企业常用</td>
+</tr>
+</tbody></table>
+<p>📘 <strong>面试追问</strong>：</p>
+<blockquote>
+<p>内存泄漏排查流程？<br> <strong>答</strong>：1. 导出堆转储（<code>jmap -dump</code>）；2. 使用 MAT 分析 Dominator Tree 找到对象持有链；3. 分析哪些对象生命周期异常；4. 优化代码或对象管理策略。</p>
+</blockquote>
+<hr>
+<h2 id="三、项目实战案例（WMS-系统）"><a href="#三、项目实战案例（WMS-系统）" class="headerlink" title="三、项目实战案例（WMS 系统）"></a>三、项目实战案例（WMS 系统）</h2><p><strong>场景</strong>：高并发入库任务导致老年代频繁 Full GC</p>
+<p><strong>分析工具及方法</strong>：</p>
+<ol>
+<li><strong>定位进程</strong>：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jps -l</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>查看 GC 日志</strong>：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jstat -gc PID 1000</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>导出堆快照</strong>：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jmap -dump:format=b,file=heap.hprof PID</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>分析堆占用</strong>：MAT 分析对象占用量，发现大量临时对象未及时释放 → 优化对象池复用</li>
+<li><strong>监控线程</strong>：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jstack PID &gt; thread.log</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>分析入库线程阻塞和死锁</li>
+</ul>
+<ol>
+<li><strong>可视化监控</strong>：</li>
+</ol>
+<ul>
+<li>使用 JVisualVM 查看实时堆内存、GC 次数和线程状态</li>
+</ul>
+<hr>
+<h2 id="四、调优思路总结"><a href="#四、调优思路总结" class="headerlink" title="四、调优思路总结"></a>四、调优思路总结</h2><ol>
+<li><strong>内存使用分析</strong> → jstat &#x2F; jmap &#x2F; MAT</li>
+<li><strong>GC 分析</strong> → GC 日志 + jstat</li>
+<li><strong>线程分析</strong> → jstack &#x2F; VisualVM &#x2F; Arthas</li>
+<li><strong>性能瓶颈排查</strong> → CPU &#x2F; 堆 &#x2F; I&#x2F;O &#x2F; 锁竞争</li>
+<li><strong>持续监控</strong> → JMX &#x2F; JConsole &#x2F; JMC</li>
+</ol>
+<hr>
+<h2 id="五、面试高频追问与高分回答-1"><a href="#五、面试高频追问与高分回答-1" class="headerlink" title="五、面试高频追问与高分回答"></a>五、面试高频追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>如何快速定位死锁？</td>
+<td>使用 <code>jstack</code> 导出线程栈，搜索 BLOCKED 状态和锁对象持有链</td>
+</tr>
+<tr>
+<td>内存泄漏排查流程？</td>
+<td>导出堆 dump → MAT 分析 Dominator Tree → 查找异常长生命周期对象 → 修复引用管理</td>
+</tr>
+<tr>
+<td>GC 日志分析指标？</td>
+<td>Minor&#x2F;Full GC 次数、时间、Eden&#x2F;Old 区占用率、晋升对象数量</td>
+</tr>
+<tr>
+<td>Arthas 用于调优的优势？</td>
+<td>可在线监控生产系统，支持线程、GC、对象大小、方法调用分析，无需停机</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、一分钟高分总结（可直接背诵）-1"><a href="#六、一分钟高分总结（可直接背诵）-1" class="headerlink" title="六、一分钟高分总结（可直接背诵）"></a>六、一分钟高分总结（可直接背诵）</h2><blockquote>
+<p>JVM 调优工具包括命令行工具（jps&#x2F;jstat&#x2F;jmap&#x2F;jstack&#x2F;jcmd）、图形化监控工具（JVisualVM、JConsole、JMC）和第三方分析工具（MAT、Arthas、YourKit）。<br> 使用工具分析内存占用、GC 行为、线程状态和 CPU 消耗，是 JVM 调优的重要环节。<br> 在我开发的 WMS 系统中，通过 jstat 和 MAT 分析堆对象占用，结合 JVisualVM 监控 GC，优化对象复用和线程池大小，有效降低 Full GC 停顿，提升系统吞吐量。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Wsk</div><div class="post-copyright__author_desc">Believe in yourself</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://wsk0404.github.io/posts/d50306ed.html">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://wsk0404.github.io/posts/d50306ed.html')">JVM 与内存管理</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div><div class="reward-link mode"><a class="reward-link-button" href="/wecaht/"><i class="anzhiyufont anzhiyu-icon-plant-fill"></i>运营模式与责任</a></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://wsk0404.github.io/posts/d50306ed.html"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=JVM 与内存管理&amp;url=https://wsk0404.github.io/posts/d50306ed.html&amp;pic=https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=11e9dc92-d821-4c1c-326a-707dc6e7b22a" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="rm.copyPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wsk0404.github.io" target="_blank">Wsk Blog</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/JVM/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>JVM<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/JVM%E8%B0%83%E4%BC%98/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>JVM调优<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=913fcd22-22b9-a6a0-8249-7c94e671686f" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/aff6963e.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=68b12c63-9aee-5df1-7beb-fffecf2a0dc1" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">如何解决高并发下的库存抢购超卖少买问题？</div></div></a></div><div class="next-post pull-right"><a href="/posts/c45230cb.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=028a5fb8-2521-e303-58ff-fa35d782afde" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">mysql面试题</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/zc998800/cdn/face/gif/m17.gif" ait="status"/></div></div><div class="author-info__description">路慢其修远兮 吾将上下而求索</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Wsk</h1><div class="author-info__desc">Believe in yourself</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/gukeyang" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/1542898061" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://s2.loli.net/2023/10/19/vNio4QGBSX9x5lO.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E8%B0%88%E8%B0%88-Java-%E5%9B%9B%E5%A4%A7%E5%BC%95%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">🎯 面试题：请谈谈 Java 四大引用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%9B%9B%E5%A4%A7%E5%BC%95%E7%94%A8%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">二、四大引用概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E4%B8%8E%E8%A1%8C%E4%B8%BA"><span class="toc-number">1.3.</span> <span class="toc-text">三、底层原理与行为</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%BC%BA%E5%BC%95%E7%94%A8%EF%BC%88Strong-Reference%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">1️⃣ 强引用（Strong Reference）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E8%BD%AF%E5%BC%95%E7%94%A8%EF%BC%88Soft-Reference%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">2️⃣ 软引用（Soft Reference）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E5%BC%B1%E5%BC%95%E7%94%A8%EF%BC%88Weak-Reference%EF%BC%89"><span class="toc-number">1.3.3.</span> <span class="toc-text">3️⃣ 弱引用（Weak Reference）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%B8%8F%E2%83%A3-%E8%99%9A%E5%BC%95%E7%94%A8%EF%BC%88Phantom-Reference%EF%BC%89"><span class="toc-number">1.3.4.</span> <span class="toc-text">4️⃣ 虚引用（Phantom Reference）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B8%E5%9E%8B%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.4.</span> <span class="toc-text">四、典型使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%BF%BD%E9%97%AE"><span class="toc-number">1.5.</span> <span class="toc-text">五、面试高频追问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%A1%B9%E7%9B%AE%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">六、项目应用示例（WMS 系统）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">1.7.</span> <span class="toc-text">七、高分总结模板（可直接背诵）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9-JVM-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text">🎯 面试题：请谈谈你对 JVM 内存模型的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-1"><span class="toc-number">2.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%AB%98%E5%88%86%E9%80%9F%E7%AD%94%EF%BC%88%E9%9D%A2%E8%AF%95%E5%BC%80%E5%9C%BA%E7%99%BD%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">二、30 秒高分速答（面试开场白）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81JVM-%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84"><span class="toc-number">2.3.</span> <span class="toc-text">三、JVM 内存结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.4.</span> <span class="toc-text">四、线程与内存访问模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81JMM%EF%BC%88Java-Memory-Model%EF%BC%89%E6%A6%82%E5%BF%B5"><span class="toc-number">2.5.</span> <span class="toc-text">五、JMM（Java Memory Model）概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81happens-before-%E5%8E%9F%E5%88%99%EF%BC%88%E6%A0%B8%E5%BF%83%E9%9D%A2%E8%AF%95%E7%82%B9%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">六、happens-before 原则（核心面试点）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E4%B8%8E%E9%94%81%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.7.</span> <span class="toc-text">七、内存模型与锁的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81JVM-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%E7%A4%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">2.8.</span> <span class="toc-text">八、JVM 内存模型在项目中的应用（WMS 系统示例）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">2.9.</span> <span class="toc-text">九、常见面试追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9F-%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">2.10.</span> <span class="toc-text">🔟 一分钟高分总结（可直接背诵）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A0-%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98%EF%BC%88%E4%B8%AD%E9%AB%98%E7%BA%A7%E8%BF%BD%E9%97%AE%EF%BC%89"><span class="toc-number">2.11.</span> <span class="toc-text">🧠 扩展问题（中高级追问）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E8%B0%88%E8%B0%88-GC%EF%BC%88Garbage-Collection%EF%BC%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">🎯 面试题：请谈谈 GC（Garbage Collection，垃圾回收）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-2"><span class="toc-number">3.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%AB%98%E5%88%86%E9%80%9F%E7%AD%94%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%BC%80%E5%9C%BA%E7%99%BD%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">二、30 秒高分速答模板（开场白）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81JVM-%E5%A0%86%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E4%B8%8E-GC-%E5%85%B3%E8%81%94"><span class="toc-number">3.3.</span> <span class="toc-text">三、JVM 堆内存结构与 GC 关联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95"><span class="toc-number">3.4.</span> <span class="toc-text">四、垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%A0%87%E8%AE%B0-%E6%B8%85%E9%99%A4%EF%BC%88Mark-Sweep%EF%BC%89"><span class="toc-number">3.4.1.</span> <span class="toc-text">1️⃣ 标记-清除（Mark-Sweep）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95%EF%BC%88Copying%EF%BC%89"><span class="toc-number">3.4.2.</span> <span class="toc-text">2️⃣ 复制算法（Copying）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E6%A0%87%E8%AE%B0-%E6%95%B4%E7%90%86%EF%BC%88Mark-Compact%EF%BC%89"><span class="toc-number">3.4.3.</span> <span class="toc-text">3️⃣ 标记-整理（Mark-Compact）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%B8%8F%E2%83%A3-%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%EF%BC%88Generational-GC%EF%BC%89"><span class="toc-number">3.4.4.</span> <span class="toc-text">4️⃣ 分代收集（Generational GC）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81-GC-%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.5.</span> <span class="toc-text">五、常见 GC 类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81GC-%E8%B0%83%E4%BC%98%E5%8F%82%E6%95%B0%EF%BC%88%E9%9D%A2%E8%AF%95%E5%B8%B8%E9%97%AE%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">六、GC 调优参数（面试常问）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81GC-%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%B8%8E-Stop-The-World%EF%BC%88STW%EF%BC%89"><span class="toc-number">3.7.</span> <span class="toc-text">七、GC 的线程与 Stop-The-World（STW）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">3.8.</span> <span class="toc-text">八、常见面试追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98%E5%BA%94%E7%94%A8%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">3.9.</span> <span class="toc-text">九、项目实战应用（WMS 系统）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9F-%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89-1"><span class="toc-number">3.10.</span> <span class="toc-text">🔟 一分钟高分总结（可直接背诵）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A0-%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98%EF%BC%88%E9%9D%A2%E8%AF%95%E6%B7%B1%E6%8C%96%EF%BC%89"><span class="toc-number">3.11.</span> <span class="toc-text">🧠 扩展问题（面试深挖）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.</span> <span class="toc-text">堆和栈的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%AE%A1%E7%90%86%E8%80%85%E4%B8%8E%E5%88%86%E9%85%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">4.0.1.</span> <span class="toc-text">1 管理者与分配方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-number">4.0.2.</span> <span class="toc-text">2 生命周期与作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8%E5%86%85%E5%AE%B9"><span class="toc-number">4.0.3.</span> <span class="toc-text">3 使用内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%80%A7%E8%83%BD"><span class="toc-number">4.0.4.</span> <span class="toc-text">4 性能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">4.0.5.</span> <span class="toc-text">5 常见问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9-JVM-%E8%B0%83%E4%BC%98%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">5.</span> <span class="toc-text">🎯 面试题：请谈谈你对 JVM 调优的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-3"><span class="toc-number">5.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%AB%98%E5%88%86%E9%80%9F%E7%AD%94%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%BC%80%E5%9C%BA%E7%99%BD%EF%BC%89-1"><span class="toc-number">5.2.</span> <span class="toc-text">二、30 秒高分速答模板（开场白）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81JVM-%E8%B0%83%E4%BC%98%E4%B8%BB%E8%A6%81%E6%96%B9%E5%90%91"><span class="toc-number">5.3.</span> <span class="toc-text">三、JVM 调优主要方向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98"><span class="toc-number">5.3.1.</span> <span class="toc-text">1️⃣ 内存调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%B0%83%E4%BC%98"><span class="toc-number">5.3.2.</span> <span class="toc-text">2️⃣ 垃圾回收调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E5%B9%B6%E5%8F%91%E4%B8%8E%E7%BA%BF%E7%A8%8B%E4%BC%98%E5%8C%96"><span class="toc-number">5.3.3.</span> <span class="toc-text">3️⃣ 并发与线程优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%B8%8F%E2%83%A3-JVM-%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.3.4.</span> <span class="toc-text">4️⃣ JVM 参数优化示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%EF%B8%8F%E2%83%A3-GC-%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF%EF%BC%88%E9%9D%A2%E8%AF%95%E5%8A%A0%E5%88%86%EF%BC%89"><span class="toc-number">5.3.5.</span> <span class="toc-text">5️⃣ GC 日志分析思路（面试加分）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%EF%B8%8F%E2%83%A3-%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">5.3.6.</span> <span class="toc-text">6️⃣ 项目实战案例（WMS 系统）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%EF%B8%8F%E2%83%A3-%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">5.3.7.</span> <span class="toc-text">7️⃣ 面试高频追问与高分回答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%EF%B8%8F%E2%83%A3-%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">5.3.8.</span> <span class="toc-text">8️⃣ 一分钟高分总结（可直接背诵）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%EF%B8%8F%E2%83%A3-%E9%AB%98%E7%BA%A7%E5%BB%B6%E4%BC%B8%E9%97%AE%E9%A2%98%EF%BC%88%E9%9D%A2%E8%AF%95%E5%8A%A0%E6%B7%B1%E6%8C%96%E6%8E%98%EF%BC%89"><span class="toc-number">5.3.9.</span> <span class="toc-text">9️⃣ 高级延伸问题（面试加深挖掘）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9AJava-%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84-JVM-%E8%B0%83%E4%BC%98%E5%8F%82%E6%95%B0%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%E8%AF%B7%E8%AF%B4%E6%98%8E%E7%94%A8%E9%80%94%E5%8F%8A%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">6.</span> <span class="toc-text">🎯 面试题：Java 中常用的 JVM 调优参数有哪些？请说明用途及应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-4"><span class="toc-number">6.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81JVM-%E8%B0%83%E4%BC%98%E5%8F%82%E6%95%B0%E5%88%86%E7%B1%BB"><span class="toc-number">6.2.</span> <span class="toc-text">二、JVM 调优参数分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%86%85%E5%AD%98%E5%8F%82%E6%95%B0"><span class="toc-number">6.2.1.</span> <span class="toc-text">1️⃣ 内存参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-GC-%E5%8F%82%E6%95%B0"><span class="toc-number">6.2.2.</span> <span class="toc-text">2️⃣ GC 参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E7%BA%BF%E7%A8%8B%E4%B8%8E%E6%A0%88%E5%8F%82%E6%95%B0"><span class="toc-number">6.2.3.</span> <span class="toc-text">3️⃣ 线程与栈参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%B8%8F%E2%83%A3-%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%AF%8A%E6%96%AD%E5%8F%82%E6%95%B0"><span class="toc-number">6.2.4.</span> <span class="toc-text">4️⃣ 监控与诊断参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%EF%B8%8F%E2%83%A3-JIT-%E7%BC%96%E8%AF%91%E4%B8%8E%E6%80%A7%E8%83%BD%E5%8F%82%E6%95%B0"><span class="toc-number">6.2.5.</span> <span class="toc-text">5️⃣ JIT 编译与性能参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%B0%83%E4%BC%98%E6%80%9D%E8%B7%AF%EF%BC%88%E9%9D%A2%E8%AF%95%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="toc-number">6.3.</span> <span class="toc-text">三、调优思路（面试核心）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98%E7%A4%BA%E4%BE%8B%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">6.4.</span> <span class="toc-text">四、项目实战示例（WMS 系统）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">6.5.</span> <span class="toc-text">五、面试高频追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">6.6.</span> <span class="toc-text">六、一分钟高分总结（可直接背诵）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9AJava-JVM-%E8%B0%83%E4%BC%98%E5%B7%A5%E5%85%B7%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%E8%AF%B7%E8%AF%B4%E6%98%8E%E7%94%A8%E9%80%94%E5%92%8C%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">7.</span> <span class="toc-text">🎯 面试题：Java JVM 调优工具有哪些？请说明用途和使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-5"><span class="toc-number">7.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81JVM-%E8%B0%83%E4%BC%98%E5%B7%A5%E5%85%B7%E5%88%86%E7%B1%BB"><span class="toc-number">7.2.</span> <span class="toc-text">二、JVM 调优工具分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-JVM-%E8%87%AA%E5%B8%A6%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7"><span class="toc-number">7.2.1.</span> <span class="toc-text">1️⃣ JVM 自带命令行工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7"><span class="toc-number">7.2.2.</span> <span class="toc-text">2️⃣ 图形化监控工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E7%AC%AC%E4%B8%89%E6%96%B9%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="toc-number">7.2.3.</span> <span class="toc-text">3️⃣ 第三方分析工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%EF%BC%88WMS-%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">7.3.</span> <span class="toc-text">三、项目实战案例（WMS 系统）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%B0%83%E4%BC%98%E6%80%9D%E8%B7%AF%E6%80%BB%E7%BB%93"><span class="toc-number">7.4.</span> <span class="toc-text">四、调优思路总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94-1"><span class="toc-number">7.5.</span> <span class="toc-text">五、面试高频追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%83%8C%E8%AF%B5%EF%BC%89-1"><span class="toc-number">7.6.</span> <span class="toc-text">六、一分钟高分总结（可直接背诵）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/162c3636.html" title="IO 与序列化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=913fcd22-22b9-a6a0-8249-7c94e671686f" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IO 与序列化"/></a><div class="content"><a class="title" href="/posts/162c3636.html" title="IO 与序列化">IO 与序列化</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/86c7f0f3.html" title="集合与泛型"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=32c81b6c-1816-a337-3eac-75b42108d52c" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="集合与泛型"/></a><div class="content"><a class="title" href="/posts/86c7f0f3.html" title="集合与泛型">集合与泛型</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/aa8deaab.html" title="多线程与并发"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=57bb59c2-d4a5-d584-0a4a-430a7c09e00c" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="多线程与并发"/></a><div class="content"><a class="title" href="/posts/aa8deaab.html" title="多线程与并发">多线程与并发</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/f7ede91d.html" title="Java基础"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/YUHOf5MZEItlGd3.jpg?_r_=cf887ce7-3e1e-3edf-d149-62b6db91df85" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java基础"/></a><div class="content"><a class="title" href="/posts/f7ede91d.html" title="Java基础">Java基础</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/c45230cb.html" title="mysql面试题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=028a5fb8-2521-e303-58ff-fa35d782afde" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="mysql面试题"/></a><div class="content"><a class="title" href="/posts/c45230cb.html" title="mysql面试题">mysql面试题</a><time datetime="2025-10-27T03:31:36.000Z" title="发表于 2025-10-27 11:31:36">2025-10-27</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-上班摸鱼中.svg" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title="博客框架为Hexo_v5.4.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a class="github-badge" target="_blank" href="https://blog.anheyu.com/" style="margin-inline:5px" data-title="本站使用AnZhiYu主题" title="本站使用AnZhiYu主题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.9/img/Theme-AnZhiYu-2E67D3.svg" alt="本站使用AnZhiYu主题"/></a><a class="github-badge" target="_blank" href="https://www.dogecloud.com/" style="margin-inline:5px" data-title="本站使用多吉云为静态资源提供CDN加速" title="本站使用多吉云为静态资源提供CDN加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/CDN-多吉云-3693F3.svg" alt="本站使用多吉云为静态资源提供CDN加速"/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title="本站项目由Github托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Source-Github.svg" alt="本站项目由Github托管"/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg" alt="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"/></a></p></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Wsk" target="_blank">Wsk</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.png" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/IO/" style="font-size: 0.88rem;">IO<sup>1</sup></a><a href="/tags/JVM/" style="font-size: 0.88rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 0.88rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 0.88rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 0.88rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 0.88rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 0.88rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 0.88rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 0.88rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 0.88rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 0.88rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 0.88rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 0.88rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 0.88rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="chat-btn" type="button" title="聊天"><i class="anzhiyufont anzhiyu-icon-comment-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><a id="switch-commentBarrage" href="javascript:anzhiyu.switchCommentBarrage();" title="开关弹幕"><i class="anzhiyufont anzhiyu-icon-danmu"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8152976493&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.4/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2023 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2020 By 安知鱼 V1.6.8",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Wsk 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("04/01/2023 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      img.src = "";
+      img.title = "";
+      img.alt = "";
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+      appKey: 'TjKeHNK7GJrGTYuKYzGzh8yg',
+      avatar: 'mp',
+      serverURLs: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_亲亲":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再见":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_发怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_发财":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可爱":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_呕吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_坏笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尴尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_惊吓":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.cbd.int/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) anzhiyu.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script src="https://cdn.cbd.int/blueimp-md5@2.19.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=mp'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://4GK2IcRZ.api.lncldglobal.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+        "X-LC-Key": 'TjKeHNK7GJrGTYuKYzGzh8yg',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script>var visitorMail = "visitor@anheyu.com";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="//code.tidio.co/4nifo6zdbrmyjsngh2yzxwbnlhrvshrf.js" async="async"></script><script>(() => {
+  const isChatBtn = true
+  const isChatHideShow = true
+
+  if (isChatBtn) {
+    let isShow = false
+    const close = () => {
+      window.tidioChatApi.hide()
+      isShow = false
+    }
+    
+    const open = () => {
+      window.tidioChatApi.open()
+      window.tidioChatApi.show()
+      isShow = true
+    }
+
+    const onTidioChatApiReady = () => {
+      window.tidioChatApi.hide()
+      window.tidioChatApi.on("close", close)
+    }
+    if (window.tidioChatApi) {
+      window.tidioChatApi.on("ready", onTidioChatApiReady)
+    } else {
+      document.addEventListener("tidioChat-ready", onTidioChatApiReady)
+    }
+
+    window.chatBtnFn = () => {
+      if (!window.tidioChatApi) return
+      isShow ? close() : open()
+    }
+  } else if (isChatHideShow) {
+    window.chatBtn = {
+      hide: () => {
+        window.tidioChatApi && window.tidioChatApi.hide()
+      },
+      show: () => {
+        window.tidioChatApi && window.tidioChatApi.show()
+      }
+    }
+  }
+})()</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
