@@ -1,0 +1,1976 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>Spring MVC | Wsk Blog</title><meta name="keywords" content="IOC,AOP"><meta name="author" content="Wsk,2047891093@qq.com"><meta name="copyright" content="Wsk"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="Spring MVC"><meta name="application-name" content="Spring MVC"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="Spring MVC"><meta property="og:url" content="https://wsk0404.github.io/posts/73f99711.html"><meta property="og:site_name" content="Wsk Blog"><meta property="og:description" content="🎯 面试题：请你详细说一下 SpringMVC 的工作流程 一、面试官考察点 面试官通过此题主要考察候选人是否：  理解 SpringMVC 的整体架构和请求生命周期； 能清楚说出各组件的职责（DispatcherServlet、HandlerMapping、HandlerAdapter、View"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=a3aae7ee-12c2-4e8a-a864-536a9d4ce903"><meta property="article:author" content="Wsk"><meta property="article:tag" content="博客,笔记,学习"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=a3aae7ee-12c2-4e8a-a864-536a9d4ce903"><meta name="description" content="🎯 面试题：请你详细说一下 SpringMVC 的工作流程 一、面试官考察点 面试官通过此题主要考察候选人是否：  理解 SpringMVC 的整体架构和请求生命周期； 能清楚说出各组件的职责（DispatcherServlet、HandlerMapping、HandlerAdapter、View"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://wsk0404.github.io/posts/73f99711"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2023/09/03/125766904/ee23df8517f3c3e3efc4145658269c06_5714860933110284659.png"},
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:{"enable":true,"maxBarrage":1,"barrageTime":4000,"accessToken":"","mailMd5":"3932F24FA213E964B6B1B0FD091F88CE"},
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: {"apiurl":"https://friends.anheyu.com/"},
+  navMusic: true,
+  mainTone: {"mode":"both","api":"https://img2color-go.vercel.app/api?img=","cover_change":true},
+  authorStatus: {"skills":["🤖️ 数码科技爱好者","🔍 分享与热心帮助","🔨 设计开发一条龙","🏃 脚踏实地行动派"]},
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    simplehomepage: false,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":true,"limitCount":50,"languages":{"author":"作者: Wsk","link":"链接: ","source":"来源: Wsk Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Wsk Blog',
+  title: 'Spring MVC',
+  postAI: '',
+  pageFillDescription: '🎯 面试题：请你详细说一下 SpringMVC 的工作流程, 一、面试官考察点, 二、30 秒面试速答版（高分简答）, 三、SpringMVC 总体架构图（文字版）, 四、SpringMVC 七大核心组件, 五、SpringMVC 工作流程详细分解（7步）, 🧩 Step 1：客户端发送请求, ⚙️ Step 2：前端控制器 DispatcherServlet 接收请求, 🔍 Step 3：调用 HandlerMapping 寻找处理器, 🧩 Step 4：调用 HandlerAdapter 执行 Controller 方法, 🧠 Step 5：Controller 执行业务逻辑, 🔄 Step 6：DispatcherServlet 调用 ViewResolver 解析视图, 🖼️ Step 7：渲染视图并返回响应, 六、源码级核心调用链（简化伪代码）, 七、SpringMVC 异常与数据处理机制, 八、常见追问与高分回答, 九、性能与扩展分析, 🔥 十、一分钟总结（可背诵）, 🎯 面试题：SpringMVC 常用注解有哪些？它们的作用是什么？, 一、面试官考察点, 二、30 秒速答版（面试简答）, 三、SpringMVC 常用注解详解（含示例）, 🧩 一、控制层注解, 📘 底层原理, 🧭 二、请求映射注解, ⚙️ 示例：, 🧮 三、参数绑定注解, ⚙️ 示例：, 📘 底层机制：, 🧾 四、响应相关注解, ⚙️ 示例：, ⚙️ 五、全局控制与增强注解, ⚙️ 示例：, 四、核心底层原理分析, 1️⃣ 注解解析机制, 2️⃣ 底层本质：, 五、常见面试追问与高分回答, 六、常见陷阱与注意事项, 七、加分扩展话题（高级面试方向）, 🔥 八、一分钟高分总结（可背诵）, 🎯 面试题：@RestController 和 @Controller 有什么区别？, 一、面试官考察点, 二、核心结论（30 秒快速回答）, 三、详细解析, 1️⃣ @Controller 的作用, 2️⃣ @RestController 的作用, 四、底层原理分析, 五、源码层面理解（Spring 设计原理）, ✅ @RestController 源码：, 六、实际开发中的应用场景（结合项目）, 七、常见错误与陷阱, 八、常见面试追问, 九、性能与实践建议, 🔟 一分钟高分总结（可背诵）, 🎯 面试题：Spring 后端验证注解有哪些？它们的作用是什么？, 一、面试官考察点, 二、30 秒答题模板（高分开场）, 三、常用后端验证注解分类与详解, 🧩 一、空值校验类, ⚙️ 示例：, 💡 区别总结：, 🧮 二、长度与大小校验, ⚙️ 示例：, 📅 三、时间日期类, ✉️ 四、格式与正则验证, 🧠 五、其他常用注解, 四、Spring 中的启用方式, ✅ 1. 在实体类上使用注解, ✅ 2. 在 Controller 层启用校验, ✅ 3. 方法级参数校验（Service 层）, 五、底层实现原理, 六、自定义验证注解（高频加分题）, 七、常见面试追问与答案, 八、常见陷阱与注意点, 九、高分总结（面试背诵版）, 🎯 面试题：Spring 中的拦截器是什么？它的作用是什么？（拦截器执行顺序）, 一、面试速答模板（适合开场陈述）, 二、Spring MVC 拦截器核心机制, 1️⃣ 拦截器接口：HandlerInterceptor, 2️⃣ 生命周期说明, 3️⃣ 核心执行链结构, 三、拦截器使用示例（标准写法）, 1️⃣ 定义拦截器类, 2️⃣ 注册拦截器, 3️⃣ 控制台输出执行顺序, 四、拦截器与过滤器的区别（面试高频追问）, 五、常见面试追问与标准回答, 六、常见陷阱与注意事项, 七、高级扩展：Spring 5 新特性拦截器, 八、总结（面试背诵版）, 🎯 面试题：全局异常处理（Global Exception Handling）, 一、面试速答（标准回答）, 二、核心原理（基于 HandlerExceptionResolver）, 三、核心注解说明, 四、代码示例（标准实现）, 五、最佳实践设计（推荐结构）, 1️⃣ 定义统一返回体, 2️⃣ 自定义业务异常, 3️⃣ 异常处理类返回统一结构, 六、常见面试追问与标准回答, 七、常见陷阱与注意事项, 八、底层执行顺序（流程图）, 九、扩展知识点, 🔚 十、总结（背诵版）面试题请你详细说一下的工作流程一面试官考察点面试官通过此题主要考察候选人是否理解的整体架构和请求生命周期能清楚说出各组件的职责等能讲明白请求是如何被定位执行渲染的能从源码或调用链角度分析底层执行逻辑二秒面试速答版高分简答是基于前端控制器模式实现的框架当请求到达时作为核心调度器按以下步骤处理用户发送请求到前端控制器查询寻找匹配的控制器方法通过调用对应的方法执行业务逻辑后返回调用解析视图渲染视图并返回响应给客户端这一系列流程体现了典型的请求分发业务处理响应渲染三层架构思想三总体架构图文字版浏览器请求前端控制器处理器映射器处理器适配器找到方法调用执行业务逻辑返回视图解析器渲染返回四七大核心组件组件作用常见实现类前端控制器统一入口处理器映射器找到处理请求的控制器处理器适配器执行控制器方法具体的控制器方法业务逻辑类封装模型数据和视图名称视图解析器将逻辑视图名转为实际视图对象视图对象负责渲染等五工作流程详细分解步客户端发送请求用户通过浏览器访问如该请求首先被捕获因为它在或中被映射为前端控制器接收请求作为整个框架的入口负责接收所有请求调用相应组件控制整个调度流程本质不直接暴露给前端所有请求必须经过调用寻找处理器通过所有注册的查找哪个方法匹配该默认使用它根据等注解信息匹配路径举例当请求时会返回该方法对应的对象调用执行方法根据类型决定如何调用它常见基于注解的传统接口调用完成后会返回一个对象包含模型数据和视图信息执行业务逻辑执行示例返回逻辑视图名如数据模型如或调用解析视图调用将逻辑视图名解析为物理路径如中常用视图解析器响应渲染视图并返回响应返回视图对象后调用的方法将模型数据渲染成或最终响应通过返回客户端六源码级核心调用链简化伪代码源码要点是整个的核心方法内部依次调用任何异常都会被统一异常处理器捕获七异常与数据处理机制模块说明参数绑定自动绑定请求参数到方法参数数据校验注解结合全局异常统一异常处理返回值解析负责页面渲染八常见追问与高分回答追问高分回答是单例吗是的它是单例在应用启动时初始化只处理请求调度逻辑不保存状态线程安全是线程安全的吗默认是单例必须保证方法无共享可变状态否则需使用局部变量或如何返回由将对象序列化为响应头为和区别自动将返回值转为和区别处理请求细节基于实现架构解耦九性能与扩展分析方面内容性能基于单线程请求响应模型默认线程池由容器管理缓存可通过拦截器缓存数据拦截使用实现请求拦截和日志记录可扩展性自定义异步支持或支持异步响应十一分钟总结可背诵的核心是前端控制器当请求到达时它会依次调用定位通过调用方法返回调用渲染视图最终将结果返回给客户端整个流程体现了典型的模式控制流程管理数据渲染展示面试题常用注解有哪些它们的作用是什么一面试官考察点通过此题考察开发者是否熟悉的核心使用方式包括控制层类与方法的声明请求映射与参数绑定返回值与响应体处理数据校验异常处理等是否理解注解的底层原理与组合逻辑二秒速答版面试简答中常用注解分为五大类控制层类相关注解请求映射相关注解等参数绑定注解响应结果处理注解其他扩展注解这些注解共同构成了的控制层核心机制三常用注解详解含示例一控制层注解注解作用示例说明声明一个控制器类被容器识别返回视图组合注解用于返回数据常用于前后端分离底层原理通过告诉返回值由序列化为不再经过二请求映射注解注解说明示例映射请求路径和请求方法处理请求的快捷方式处理请求处理请求处理请求处理请求示例所有这些映射注解的底层都依赖注册映射关系三参数绑定注解注解作用示例说明获取请求参数适用于查询参数获取路径变量适用于将请求体反序列化为对象适用于绑定表单参数到对象多用于表单提交获取请求头适用于参数获取值示例底层机制使用自动解析并注入方法参数对象型参数通过进行属性绑定与类型转换四响应相关注解注解作用示例说明返回内容直接写入响应体用于返回设置响应状态码可用于自定义异常类示例底层由实现对象序列化五全局控制与增强注解注解作用示例说明定义全局异常处理全局数据绑定类级别增强处理特定异常类型方法级别异常处理自定义参数绑定规则可注册属性编辑器在执行前绑定数据多用于全局属性注入允许跨域请求前后端分离必备示例服务器异常四核心底层原理分析注解解析机制在启动时会通过解析控制器中的负责执行对应的方法处理入参注解处理出参注解如底层本质这些注解大多基于反射元注解机制策略模式实现例如是的快捷注解是和的组合注解是一种特殊的用于全局增强五常见面试追问与高分回答追问高分回答和区别前者直接返回不走视图解析和区别前者解析请求体后者解析参数和的区别用于表单提交用于能作用于吗可以默认作用于所有可通过限制范围有什么用用于自定义数据绑定比如将字符串转日期或注册自定义编辑器六常见陷阱与注意事项场景问题解决方案参数为请求头未设置正确设置不匹配路径占位符与变量名不一致指定参数名返回中文乱码响应编码未配置设置全局异常未生效未加或包扫描不包含检查包路径与注解七加分扩展话题高级面试方向方向内容注解元模型所有注解都继承自元注解体系参数解析机制基于可自定义注解参数解析器返回值处理机制负责对象序列化定制化扩展可自定义注解实现统一权限校验或接口日志八一分钟高分总结可背诵提供了一套完整的注解体系来简化层开发定义控制层系列定义请求路由绑定请求参数定义响应行为实现全局异常处理底层通过反射机制和组件解析执行使整个流程完全基于注解驱动实现了高内聚低耦合的控制层架构面试题和有什么区别一面试官考察点是否理解的控制层处理机制是否清楚视图解析与消息转换的差异是否了解中常见注解的组合原理能否结合实际开发场景说明选择原因如系统接口开发二核心结论秒快速回答用于返回视图页面一般配合前后端不分离项目使用是的组合注解返回的是数据常用于前后端分离或接口型系统如微服务三详细解析的作用用于标识一个类是控制器通常用于返回页面视图通过视图解析器渲染等模板示例欢迎访问系统对应执行流程返回逻辑视图名视图解析器解析为真实路径结合数据渲染页面返回给浏览器的作用是一个组合注解等价于表示该类的所有方法默认返回或数据而不是视图页面常用于开发前后端分离移动端接口示例执行流程接收到请求调用方法方法返回对象如通过自动转换为将响应返回给客户端四底层原理分析对比项是否返回视图是交由视图解析器处理否直接返回数据是否自动加否需手动加是类级别返回值类型视图名对象序列化为典型应用模板页面接口前后端分离底层支持常用场景微服务五源码层面理解设计原理源码说明本质是元注解组合加上在调用方法后会跳过视图解析调用将返回对象转为响应六实际开发中的应用场景结合项目场景推荐注解原因系统前端页面如仓库列表页需要返回视图系统接口如前后端分离返回微服务接口提供日志监控接口统一输出方便收集七常见错误与陷阱错误现象原因解决方案返回页面显示字符串使用了改为返回出现乱码未配置编码或检查默认配置自定义对象无法序列化缺少使用标准循环引用报错序列化时双向引用使用或八常见面试追问面试官提问高分回答和有什么区别是的组合作用于类级别可以单独用于方法级别如何在中返回在方法上添加注解如何将对象转为通过如实现自动序列化层返回结果如何统一封装使用或自定义响应封装类如九性能与实践建议统一返回结构封装成通用响应类使用全局异常处理日志与接口分析可配合接口文档自动生成使用默认全局支持无需手动配置一分钟高分总结可背诵用于返回视图页面配合模板引擎使用是与的组合用于返回数据前后端分离项目中一般使用而传统项目使用它们的底层区别在于处理流程不同前者通过输出数据后者通过渲染视图在实际开发中我会根据模块类型选择不同的注解以实现高内聚低耦合的控制层设计面试题后端验证注解有哪些它们的作用是什么一面试官考察点该题考察候选人是否了解规范与的整合原理常见内置注解的使用场景与差异如何自定义校验注解与全局异常处理机制二秒答题模板高分开场的后端参数校验基于标准规范其默认实现是常用的验证注解包括基础约束注解格式校验注解数值精度控制注解复合与自定义注解这些注解通常与或结合使用并通过实现方法级验证三常用后端验证注解分类与详解一空值校验类注解说明示例不能为但可以是空字符串或空集合不能为空不能为或空集合数组列表不能为空不能为或空字符串仅用于字符串用户名不能为空示例用户名不能为空角色列表不能为空区别总结注解可用于类型是否允许空字符串是否允许所有类型集合数组字符串字符串二长度与大小校验注解说明示例检查字符串集合数组长度长度必须在之间检查数值范围检查浮点数范围限制整数位与小数位示例三时间日期类注解说明示例必须是过去时间生日必须是过去时间必须是将来时间预约时间必须是未来过去或当前将来或当前四格式与正则验证注解说明示例验证邮箱格式邮箱格式错误使用正则表达式验证手机号必须为位验证地址扩展格式不正确五其他常用注解注解说明检查布尔值是否为校验信用卡号格式扩展特有等价于检查数值是否在范围内四中的启用方式在实体类上使用注解用户名不能为空邮箱格式错误在层启用校验校验通过来自而是的增强版本支持分组验证方法级参数校验层通过代理类实现方法参数校验五底层实现原理是基于规范的标准化机制其实现类为底层流程在启动时注册当检测到或注解时会自动调用通过反射扫描目标对象字段根据注解类型匹配对应的执行校验逻辑返回集合若校验失败则抛出六自定义验证注解高频加分题面试官常追问如何自定义一个校验注解比如手机号校验示例定义自定义注解手机号格式不正确编写校验逻辑类值可通过控制七常见面试追问与答案追问高分回答和有什么区别是标准注解不支持分组是扩展支持分组校验如何进行分组验证使用标注方法参数实体类字段定义方法级别验证是怎么实现的通过实现代理校验入参和返回值为什么不生效可能未添加或没有启用校验异常怎么统一处理使用捕获八常见陷阱与注意点场景问题解决方案嵌套对象校验未触发子对象缺少在子对象字段上添加方法参数校验无效缺少在类上添加返回错误未捕获校验异常全局异常捕获处理分组未生效忘记声明指定正确的分组类九高分总结面试背诵版后端验证基于标准默认实现是常用注解包括空值类范围类格式类时间类核心配合注解底层原理基于反射策略模式实现常用于接口参数校验表单验证与接口防御编程面试题中的拦截器是什么它的作用是什么拦截器执行顺序一面试速答模板适合开场陈述在中拦截器是一种基于思想的机制用于在请求到达之前执行之后以及完成视图渲染之后对请求进行预处理和后处理拦截器由接口定义常用于登录鉴权权限控制日志记录参数预处理性能监控全局数据注入等执行顺序为方法多个拦截器执行顺序遵循顺序执行和逆序执行二拦截器核心机制拦截器接口拦截器是由框架提供的接口定义在其核心方法如下方法执行前调用方法执行后视图渲染前调用整个请求结束后包括视图渲染后调用生命周期说明阶段方法说明请求前阶段在进入之前执行可用于权限校验日志记录参数预处理返回表示中断请求请求后阶段方法执行完后但尚未渲染视图可用于修改或添加公共属性请求完成阶段整个请求结束后执行常用于清理资源性能统计或异常处理核心执行链结构的执行链如下拦截器拦截器方法执行拦截器拦截器视图渲染拦截器拦截器执行顺序总结阶段执行顺序按配置顺序正序执行逆序执行逆序执行三拦截器使用示例标准写法定义拦截器类阻止后续执行放行注册拦截器在中通过实现接口注册拦截所有路径排除登录接口控制台输出执行顺序执行多个拦截器时顺序如下拦截器顺序执行顺序执行顺序执行顺序拦截器拦截器四拦截器与过滤器的区别面试高频追问对比项拦截器过滤器所属框架规范拦截范围层由管理所有请求包括静态资源实现接口执行时机调用前后之前应用场景登录校验权限日志编码设置跨域全局过滤可访问对象可反射方法信息仅配置方式配置类或或一般项目中全局控制如日志追踪放在业务相关拦截如权限登录态验证放在五常见面试追问与标准回答追问高分回答返回会怎样请求被中断不会执行也不会执行后续拦截器的或与区别在执行后但视图渲染前调用在整个请求完成包括渲染后调用拦截器如何获取方法信息通过参数可强转为获取类名和方法名拦截器中如何注入将拦截器声明为由管理拦截器线程安全吗默认是单例的不应在成员变量中存放线程不安全的数据六常见陷阱与注意事项场景问题解决方案静态资源被拦截默认拦截所有请求使用排除拦截器顺序混乱注册顺序不明确按调用顺序执行不执行返回或抛异常保证放行且无异常异步请求未执行异步线程未触发回调使用适配七高级扩展新特性拦截器引入了接口它扩展了异步请求的回调如可用于场景或异步八总结面试背诵版拦截器是一种基于的请求拦截机制通过实现接口在请求处理的三个阶段请求前拦截执行后拦截请求完成后拦截主要用于权限验证日志记录性能监控等业务场景执行顺序遵循正序逆序它位于与之间是构建高可扩展框架的重要机制面试题全局异常处理一面试速答标准回答在中全局异常处理是一种基于思想的异常捕获机制通过使用或与注解可以统一捕获层抛出的各种异常并进行集中处理其核心目标是实现统一异常格式输出区分业务异常与系统异常提升接口一致性与可维护性避免冗余的防止异常信息泄露二核心原理基于内部对异常的处理是通过接口当抛出异常后会按照以下步骤调用解析器调用抛出异常遍历列表匹配方法调用处理并返回统一结果提供的默认实现包括支持三核心注解说明注解作用定义全局异常处理器作用于所有等价于返回指定要捕获的异常类型设置返回的状态码控制多个异常处理器的优先级四代码示例标准实现处理自定义业务异常处理空指针异常空指针异常处理所有未知异常兜底系统异常五最佳实践设计推荐结构定义统一返回体操作成功自定义业务异常异常处理类返回统一结构系统异常六常见面试追问与标准回答追问高分回答与有什么区别后者相当于前者可直接返回可以捕获层的异常吗可以但前提是异常最终抛到了层异常没被捕获会发生什么会交由默认的返回如何区分业务异常与系统异常业务异常通过自定义异常类继承系统异常通过捕获异常处理器能否分类可以使用多个通过包路径或注解条件限制作用范围七常见陷阱与注意事项问题场景原因解决方案返回页面而不是使用了而非改用后者异常未被捕获异常在过滤器或拦截器中发生可在中单独统一返回结构不一致部分接口返回强制统一为自定义响应类国际化错误提示直接返回使用做国际化处理八底层执行顺序流程图执行异常抛出异常解析链方法匹配执行封装统一响应体返回前端九扩展知识点自定义异常枚举用户不存在参数错误国际化异常信息全局异常日志记录系统异常十总结背诵版的全局异常处理机制基于实现本质上是通过责任链对层抛出的异常进行统一拦截处理和格式化返回优势简化业务逻辑保证返回格式一致易于维护与扩展支持多层异常分类在实际项目中通常结合自定义异常类统一返回结构日志记录构建标准的后端异常体系',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-11-04 19:48:06',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Wsk Blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" alt="微信" src="/./img/wechat.jpg"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/./img/alipay.jpg"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AOP/" style="font-size: 1.05rem;">AOP<sup>2</sup></a><a href="/tags/IO/" style="font-size: 1.05rem;">IO<sup>1</sup></a><a href="/tags/IOC/" style="font-size: 1.05rem;">IOC<sup>2</sup></a><a href="/tags/JVM/" style="font-size: 1.05rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 1.05rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 1.05rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 1.05rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.05rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 1.05rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.05rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 1.05rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.05rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 1.05rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 1.05rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" style="font-size: 1.05rem;">自动装配<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 1.05rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 1.05rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">十一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">8</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="anzhiyu.switchCommentBarrage()" title="热评开关"><a class="commentBarrage"><i class="anzhiyufont anzhiyu-icon-message"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/IOC/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>IOC</span></a><a class="article-meta__tags" href="/tags/AOP/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>AOP</span></a></span></div></div><h1 class="post-title" itemprop="name headline">Spring MVC</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-11-04T11:48:06.959Z" title="更新于 2025-11-04 19:48:06">2025-11-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="Spring MVC"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为新乡"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>新乡</span><span class="post-meta-separator"></span><span class="post-meta-commentcount"><i class="anzhiyufont anzhiyu-icon-comments post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/73f99711.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/posts/73f99711.html" itemprop="commentCount"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></a></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=a3aae7ee-12c2-4e8a-a864-536a9d4ce903"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://wsk0404.github.io/posts/73f99711.html"><header><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a><a href="/tags/IOC/" tabindex="-1" itemprop="url">IOC</a><a href="/tags/AOP/" tabindex="-1" itemprop="url">AOP</a><h1 id="CrawlerTitle" itemprop="name headline">Spring MVC</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Wsk</span><time itemprop="dateCreated datePublished" datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time><time itemprop="dateCreated datePublished" datetime="2025-11-04T11:48:06.959Z" title="更新于 2025-11-04 19:48:06">2025-11-04</time></header><h1 id="🎯-面试题：请你详细说一下-SpringMVC-的工作流程"><a href="#🎯-面试题：请你详细说一下-SpringMVC-的工作流程" class="headerlink" title="🎯 面试题：请你详细说一下 SpringMVC 的工作流程"></a>🎯 面试题：请你详细说一下 SpringMVC 的工作流程</h1><hr>
+<h2 id="一、面试官考察点"><a href="#一、面试官考察点" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><blockquote>
+<p>面试官通过此题主要考察候选人是否：</p>
+<ul>
+<li>理解 <strong>SpringMVC 的整体架构和请求生命周期</strong>；</li>
+<li>能清楚说出各组件的职责（DispatcherServlet、HandlerMapping、HandlerAdapter、ViewResolver等）；</li>
+<li>能讲明白“请求是如何被定位、执行、渲染”的；</li>
+<li>能从源码或调用链角度分析底层执行逻辑。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="二、30-秒面试速答版（高分简答）"><a href="#二、30-秒面试速答版（高分简答）" class="headerlink" title="二、30 秒面试速答版（高分简答）"></a>二、30 秒面试速答版（高分简答）</h2><blockquote>
+<p>SpringMVC 是基于 <strong>前端控制器（DispatcherServlet）</strong> 模式实现的 Web MVC 框架。<br> 当请求到达时，DispatcherServlet 作为核心调度器，按以下步骤处理：</p>
+<p>1️⃣ 用户发送请求到前端控制器 <code>DispatcherServlet</code>；<br> 2️⃣ <code>DispatcherServlet</code> 查询 <code>HandlerMapping</code> 寻找匹配的 <code>Handler（控制器方法）</code>；<br> 3️⃣ 通过 <code>HandlerAdapter</code> 调用对应的 <code>Controller</code> 方法；<br> 4️⃣ Controller 执行业务逻辑后返回 <code>ModelAndView</code>；<br> 5️⃣ <code>DispatcherServlet</code> 调用 <code>ViewResolver</code> 解析视图；<br> 6️⃣ 渲染视图并返回响应给客户端。</p>
+</blockquote>
+<blockquote>
+<p>这一系列流程体现了典型的 <strong>“请求分发 - 业务处理 - 响应渲染”</strong> MVC 三层架构思想。</p>
+</blockquote>
+<hr>
+<h2 id="三、SpringMVC-总体架构图（文字版）"><a href="#三、SpringMVC-总体架构图（文字版）" class="headerlink" title="三、SpringMVC 总体架构图（文字版）"></a>三、SpringMVC 总体架构图（文字版）</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">          ┌────────────────────┐</span><br><span class="line">          │      Client(浏览器) │</span><br><span class="line">          └─────────┬──────────┘</span><br><span class="line">                    │ HTTP请求</span><br><span class="line">                    ▼</span><br><span class="line">         ┌─────────────────────────┐</span><br><span class="line">         │  DispatcherServlet(前端控制器) │</span><br><span class="line">         └─────────┬──────────────────┘</span><br><span class="line">                    │</span><br><span class="line">   ┌────────────────┴────────────────┐</span><br><span class="line">   ▼                                 ▼</span><br><span class="line">HandlerMapping                HandlerAdapter</span><br><span class="line">(处理器映射器)                 (处理器适配器)</span><br><span class="line">   │                                 │</span><br><span class="line">   ▼                                 ▼</span><br><span class="line">找到Controller方法          调用Controller执行业务逻辑</span><br><span class="line">                                      │</span><br><span class="line">                                      ▼</span><br><span class="line">                             返回ModelAndView</span><br><span class="line">                                      │</span><br><span class="line">                                      ▼</span><br><span class="line">                           ViewResolver(视图解析器)</span><br><span class="line">                                      │</span><br><span class="line">                                      ▼</span><br><span class="line">                            渲染View返回Response</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、SpringMVC-七大核心组件"><a href="#四、SpringMVC-七大核心组件" class="headerlink" title="四、SpringMVC 七大核心组件"></a>四、SpringMVC 七大核心组件</h2><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>作用</th>
+<th>常见实现类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DispatcherServlet</strong></td>
+<td>前端控制器，统一入口</td>
+<td>org.springframework.web.servlet.DispatcherServlet</td>
+</tr>
+<tr>
+<td><strong>HandlerMapping</strong></td>
+<td>处理器映射器，找到处理请求的控制器</td>
+<td>RequestMappingHandlerMapping</td>
+</tr>
+<tr>
+<td><strong>HandlerAdapter</strong></td>
+<td>处理器适配器，执行控制器方法</td>
+<td>RequestMappingHandlerAdapter</td>
+</tr>
+<tr>
+<td><strong>Handler</strong></td>
+<td>具体的控制器（Controller 方法）</td>
+<td>业务逻辑类</td>
+</tr>
+<tr>
+<td><strong>ModelAndView</strong></td>
+<td>封装模型数据和视图名称</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>ViewResolver</strong></td>
+<td>视图解析器，将逻辑视图名转为实际视图对象</td>
+<td>InternalResourceViewResolver</td>
+</tr>
+<tr>
+<td><strong>View</strong></td>
+<td>视图对象，负责渲染（JSP&#x2F;Thymeleaf&#x2F;JSON等）</td>
+<td>JstlView、ThymeleafView</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、SpringMVC-工作流程详细分解（7步）"><a href="#五、SpringMVC-工作流程详细分解（7步）" class="headerlink" title="五、SpringMVC 工作流程详细分解（7步）"></a>五、SpringMVC 工作流程详细分解（7步）</h2><h3 id="🧩-Step-1：客户端发送请求"><a href="#🧩-Step-1：客户端发送请求" class="headerlink" title="🧩 Step 1：客户端发送请求"></a>🧩 Step 1：客户端发送请求</h3><p>用户通过浏览器访问 URL，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /user/detail?id=100</span><br></pre></td></tr></table></figure>
+
+<p>该请求首先被 <strong>DispatcherServlet</strong> 捕获（因为它在 <code>web.xml</code> 或 <code>SpringBoot</code> 中被映射为 <code>/*</code>）。</p>
+<hr>
+<h3 id="⚙️-Step-2：前端控制器-DispatcherServlet-接收请求"><a href="#⚙️-Step-2：前端控制器-DispatcherServlet-接收请求" class="headerlink" title="⚙️ Step 2：前端控制器 DispatcherServlet 接收请求"></a>⚙️ Step 2：前端控制器 DispatcherServlet 接收请求</h3><p>DispatcherServlet 作为整个 MVC 框架的入口，负责：</p>
+<ul>
+<li>接收所有请求；</li>
+<li>调用相应组件；</li>
+<li>控制整个调度流程。</li>
+</ul>
+<p>📘 本质：<strong>Controller 不直接暴露给前端，所有请求必须经过 DispatcherServlet。</strong></p>
+<hr>
+<h3 id="🔍-Step-3：调用-HandlerMapping-寻找处理器"><a href="#🔍-Step-3：调用-HandlerMapping-寻找处理器" class="headerlink" title="🔍 Step 3：调用 HandlerMapping 寻找处理器"></a>🔍 Step 3：调用 HandlerMapping 寻找处理器</h3><p>DispatcherServlet 通过所有注册的 <strong>HandlerMapping</strong> 查找哪个 Controller 方法匹配该 URL。</p>
+<ul>
+<li>SpringBoot 默认使用 <code>RequestMappingHandlerMapping</code></li>
+<li>它根据 <code>@RequestMapping</code>、<code>@GetMapping</code> 等注解信息匹配路径。</li>
+</ul>
+<blockquote>
+<p>📌 举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@GetMapping(&quot;/user/detail&quot;)</span><br><span class="line">public User detail(@RequestParam Long id) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p>当请求 <code>/user/detail</code> 时，HandlerMapping 会返回该方法对应的 <strong>HandlerMethod 对象</strong>。</p>
+</blockquote>
+<hr>
+<h3 id="🧩-Step-4：调用-HandlerAdapter-执行-Controller-方法"><a href="#🧩-Step-4：调用-HandlerAdapter-执行-Controller-方法" class="headerlink" title="🧩 Step 4：调用 HandlerAdapter 执行 Controller 方法"></a>🧩 Step 4：调用 HandlerAdapter 执行 Controller 方法</h3><p>HandlerAdapter 根据 Handler 类型，决定如何调用它。</p>
+<p>SpringMVC 常见 HandlerAdapter：</p>
+<ul>
+<li><code>RequestMappingHandlerAdapter</code>（基于注解的 Controller）</li>
+<li><code>SimpleControllerHandlerAdapter</code>（传统 Controller 接口）</li>
+</ul>
+<p>调用完成后，会返回一个 <code>ModelAndView</code> 对象（包含模型数据和视图信息）。</p>
+<hr>
+<h3 id="🧠-Step-5：Controller-执行业务逻辑"><a href="#🧠-Step-5：Controller-执行业务逻辑" class="headerlink" title="🧠 Step 5：Controller 执行业务逻辑"></a>🧠 Step 5：Controller 执行业务逻辑</h3><p>执行示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/user/detail&quot;)</span></span><br><span class="line"><span class="keyword">public</span> ModelAndView <span class="title function_">userDetail</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userService.findById(id);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ModelAndView</span>(<span class="string">&quot;userView&quot;</span>, <span class="string">&quot;user&quot;</span>, user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Controller 返回：</p>
+<ul>
+<li>逻辑视图名（如 <code>&quot;userView&quot;</code>）</li>
+<li>数据模型（如 <code>Map</code> 或 <code>Model</code>）</li>
+</ul>
+<hr>
+<h3 id="🔄-Step-6：DispatcherServlet-调用-ViewResolver-解析视图"><a href="#🔄-Step-6：DispatcherServlet-调用-ViewResolver-解析视图" class="headerlink" title="🔄 Step 6：DispatcherServlet 调用 ViewResolver 解析视图"></a>🔄 Step 6：DispatcherServlet 调用 ViewResolver 解析视图</h3><p>DispatcherServlet 调用 <strong>ViewResolver</strong> 将逻辑视图名解析为物理路径。</p>
+<p>如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;UserView&quot;</span> → /WEB-INF/views/UserView.jsp</span><br></pre></td></tr></table></figure>
+
+<p>SpringBoot 中常用视图解析器：</p>
+<ul>
+<li><code>InternalResourceViewResolver</code>（JSP）</li>
+<li><code>ThymeleafViewResolver</code>（Thymeleaf）</li>
+<li><code>MappingJackson2JsonView</code>（JSON 响应）</li>
+</ul>
+<hr>
+<h3 id="🖼️-Step-7：渲染视图并返回响应"><a href="#🖼️-Step-7：渲染视图并返回响应" class="headerlink" title="🖼️ Step 7：渲染视图并返回响应"></a>🖼️ Step 7：渲染视图并返回响应</h3><p><code>ViewResolver</code> 返回视图对象后，DispatcherServlet 调用 View 的 <code>render()</code> 方法，将模型数据渲染成 HTML 或 JSON。</p>
+<p>最终响应通过 <code>HttpServletResponse</code> 返回客户端。</p>
+<hr>
+<h2 id="六、源码级核心调用链（简化伪代码）"><a href="#六、源码级核心调用链（简化伪代码）" class="headerlink" title="六、源码级核心调用链（简化伪代码）"></a>六、源码级核心调用链（简化伪代码）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">doDispatch(request, response):</span><br><span class="line">    mappedHandler = getHandler(request)</span><br><span class="line">    ha = getHandlerAdapter(mappedHandler.getHandler())</span><br><span class="line">    mv = ha.handle(request, response, mappedHandler.getHandler())</span><br><span class="line">    processDispatchResult(request, response, mv)</span><br></pre></td></tr></table></figure>
+
+<p>源码要点：</p>
+<ul>
+<li><code>doDispatch()</code> 是整个 SpringMVC 的核心方法；</li>
+<li>内部依次调用 HandlerMapping、HandlerAdapter、ViewResolver；</li>
+<li>任何异常都会被统一异常处理器（HandlerExceptionResolver）捕获。</li>
+</ul>
+<hr>
+<h2 id="七、SpringMVC-异常与数据处理机制"><a href="#七、SpringMVC-异常与数据处理机制" class="headerlink" title="七、SpringMVC 异常与数据处理机制"></a>七、SpringMVC 异常与数据处理机制</h2><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数绑定</td>
+<td><code>HandlerMethodArgumentResolver</code> 自动绑定请求参数到方法参数</td>
+</tr>
+<tr>
+<td>数据校验</td>
+<td><code>@Valid</code>、<code>@Validated</code> 注解结合 <code>BindingResult</code></td>
+</tr>
+<tr>
+<td>全局异常</td>
+<td><code>@ControllerAdvice + @ExceptionHandler</code> 统一异常处理</td>
+</tr>
+<tr>
+<td>返回值解析</td>
+<td><code>HandlerMethodReturnValueHandler</code> 负责 JSON &#x2F; 页面渲染</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、常见追问与高分回答"><a href="#八、常见追问与高分回答" class="headerlink" title="八、常见追问与高分回答"></a>八、常见追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ DispatcherServlet 是单例吗？</td>
+<td>是的，它是单例 Bean，在应用启动时初始化，只处理请求调度逻辑，不保存状态，线程安全。</td>
+</tr>
+<tr>
+<td>❓ Controller 是线程安全的吗？</td>
+<td>默认是单例，必须保证方法无共享可变状态，否则需使用局部变量或 <code>@Scope(&quot;prototype&quot;)</code>。</td>
+</tr>
+<tr>
+<td>❓ SpringMVC 如何返回 JSON？</td>
+<td>由 <code>MappingJackson2HttpMessageConverter</code> 将对象序列化为 JSON，响应头为 <code>application/json</code>。</td>
+</tr>
+<tr>
+<td>❓ @RestController 和 @Controller 区别？</td>
+<td><code>@RestController</code> &#x3D; <code>@Controller + @ResponseBody</code>，自动将返回值转为 JSON。</td>
+</tr>
+<tr>
+<td>❓ SpringMVC 和 Servlet 区别？</td>
+<td>Servlet 处理请求细节，SpringMVC 基于 DispatcherServlet 实现 MVC 架构，解耦 Controller、View、Model。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、性能与扩展分析"><a href="#九、性能与扩展分析" class="headerlink" title="九、性能与扩展分析"></a>九、性能与扩展分析</h2><table>
+<thead>
+<tr>
+<th>方面</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>性能</td>
+<td>基于单线程请求-响应模型，默认线程池由容器管理</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>可通过 @Cacheable、拦截器缓存数据</td>
+</tr>
+<tr>
+<td>拦截</td>
+<td>使用 HandlerInterceptor 实现请求拦截和日志记录</td>
+</tr>
+<tr>
+<td>可扩展性</td>
+<td>自定义 HandlerMapping &#x2F; HandlerAdapter &#x2F; ViewResolver</td>
+</tr>
+<tr>
+<td>异步支持</td>
+<td><code>@Async</code> 或 <code>Callable&lt;&gt;</code>、<code>DeferredResult&lt;&gt;</code> 支持异步响应</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔥-十、一分钟总结（可背诵）"><a href="#🔥-十、一分钟总结（可背诵）" class="headerlink" title="🔥 十、一分钟总结（可背诵）"></a>🔥 十、一分钟总结（可背诵）</h2><blockquote>
+<p>SpringMVC 的核心是 <code>DispatcherServlet</code> 前端控制器。<br> 当请求到达时，它会依次：<br> 1️⃣ 调用 <code>HandlerMapping</code> 定位 Controller；<br> 2️⃣ 通过 <code>HandlerAdapter</code> 调用方法；<br> 3️⃣ 返回 <code>ModelAndView</code>；<br> 4️⃣ 调用 <code>ViewResolver</code> 渲染视图；<br> 5️⃣ 最终将结果返回给客户端。</p>
+<p>整个流程体现了典型的 MVC 模式：<br> <strong>Controller 控制流程，Model 管理数据，View 渲染展示</strong>。</p>
+</blockquote>
+<h1 id="🎯-面试题：SpringMVC-常用注解有哪些？它们的作用是什么？"><a href="#🎯-面试题：SpringMVC-常用注解有哪些？它们的作用是什么？" class="headerlink" title="🎯 面试题：SpringMVC 常用注解有哪些？它们的作用是什么？"></a>🎯 面试题：SpringMVC 常用注解有哪些？它们的作用是什么？</h1><hr>
+<h2 id="一、面试官考察点-1"><a href="#一、面试官考察点-1" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><blockquote>
+<p>通过此题考察开发者是否熟悉 SpringMVC 的核心使用方式，包括：</p>
+<ul>
+<li>控制层类与方法的声明；</li>
+<li>请求映射与参数绑定；</li>
+<li>返回值与响应体处理；</li>
+<li>数据校验、异常处理等；</li>
+<li>是否理解注解的底层原理与组合逻辑。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="二、30-秒速答版（面试简答）"><a href="#二、30-秒速答版（面试简答）" class="headerlink" title="二、30 秒速答版（面试简答）"></a>二、30 秒速答版（面试简答）</h2><blockquote>
+<p>SpringMVC 中常用注解分为五大类：</p>
+<p>1️⃣ <strong>控制层类相关注解</strong>：<code>@Controller</code>、<code>@RestController</code><br> 2️⃣ <strong>请求映射相关注解</strong>：<code>@RequestMapping</code>、<code>@GetMapping</code>、<code>@PostMapping</code> 等<br> 3️⃣ <strong>参数绑定注解</strong>：<code>@RequestParam</code>、<code>@PathVariable</code>、<code>@RequestBody</code>、<code>@ModelAttribute</code><br> 4️⃣ <strong>响应结果处理注解</strong>：<code>@ResponseBody</code>、<code>@ResponseStatus</code><br> 5️⃣ <strong>其他扩展注解</strong>：<code>@ControllerAdvice</code>、<code>@ExceptionHandler</code>、<code>@InitBinder</code>、<code>@CrossOrigin</code></p>
+<p>这些注解共同构成了 SpringMVC 的控制层核心机制。</p>
+</blockquote>
+<hr>
+<h2 id="三、SpringMVC-常用注解详解（含示例）"><a href="#三、SpringMVC-常用注解详解（含示例）" class="headerlink" title="三、SpringMVC 常用注解详解（含示例）"></a>三、SpringMVC 常用注解详解（含示例）</h2><hr>
+<h3 id="🧩-一、控制层注解"><a href="#🧩-一、控制层注解" class="headerlink" title="🧩 一、控制层注解"></a>🧩 一、控制层注解</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>作用</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@Controller</code></td>
+<td>声明一个控制器类，被 Spring 容器识别</td>
+<td><code>@Controller public class UserController &#123;&#125;</code></td>
+<td>返回视图（JSP、HTML）</td>
+</tr>
+<tr>
+<td><code>@RestController</code></td>
+<td>组合注解（&#x3D; <code>@Controller + @ResponseBody</code>）</td>
+<td><code>@RestController public class UserController &#123;&#125;</code></td>
+<td>用于返回 JSON 数据（常用于前后端分离）</td>
+</tr>
+</tbody></table>
+<h4 id="📘-底层原理"><a href="#📘-底层原理" class="headerlink" title="📘 底层原理"></a>📘 底层原理</h4><p><code>@RestController</code> 通过 <code>@ResponseBody</code> 告诉 Spring：<br> 返回值由 <code>HttpMessageConverter</code> 序列化为 JSON &#x2F; XML，不再经过 <code>ViewResolver</code>。</p>
+<hr>
+<h3 id="🧭-二、请求映射注解"><a href="#🧭-二、请求映射注解" class="headerlink" title="🧭 二、请求映射注解"></a>🧭 二、请求映射注解</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@RequestMapping</code></td>
+<td>映射请求路径和请求方法</td>
+<td><code>@RequestMapping(value=&quot;/user&quot;, method=RequestMethod.GET)</code></td>
+</tr>
+<tr>
+<td><code>@GetMapping</code></td>
+<td>处理 GET 请求（@RequestMapping 的快捷方式）</td>
+<td><code>@GetMapping(&quot;/user&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@PostMapping</code></td>
+<td>处理 POST 请求</td>
+<td><code>@PostMapping(&quot;/save&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@PutMapping</code></td>
+<td>处理 PUT 请求</td>
+<td><code>@PutMapping(&quot;/update/&#123;id&#125;&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@DeleteMapping</code></td>
+<td>处理 DELETE 请求</td>
+<td><code>@DeleteMapping(&quot;/delete/&#123;id&#125;&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@PatchMapping</code></td>
+<td>处理 PATCH 请求</td>
+<td><code>@PatchMapping(&quot;/updateStatus&quot;)</code></td>
+</tr>
+</tbody></table>
+<h4 id="⚙️-示例："><a href="#⚙️-示例：" class="headerlink" title="⚙️ 示例："></a>⚙️ 示例：</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">getUser</span><span class="params">(<span class="meta">@PathVariable</span> Long id)</span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">addUser</span><span class="params">(<span class="meta">@RequestBody</span> User user)</span> &#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 所有这些映射注解的底层都依赖 <code>RequestMappingHandlerMapping</code> 注册映射关系。</p>
+</blockquote>
+<hr>
+<h3 id="🧮-三、参数绑定注解"><a href="#🧮-三、参数绑定注解" class="headerlink" title="🧮 三、参数绑定注解"></a>🧮 三、参数绑定注解</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>作用</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@RequestParam</code></td>
+<td>获取请求参数（?key&#x3D;value）</td>
+<td><code>@RequestParam String name</code></td>
+<td>适用于查询参数</td>
+</tr>
+<tr>
+<td><code>@PathVariable</code></td>
+<td>获取 URL 路径变量</td>
+<td><code>@PathVariable Long id</code></td>
+<td>适用于 <code>/user/&#123;id&#125;</code></td>
+</tr>
+<tr>
+<td><code>@RequestBody</code></td>
+<td>将请求体 JSON 反序列化为对象</td>
+<td><code>@RequestBody User user</code></td>
+<td>适用于 POST&#x2F;PUT JSON</td>
+</tr>
+<tr>
+<td><code>@ModelAttribute</code></td>
+<td>绑定表单参数到对象</td>
+<td><code>@ModelAttribute User user</code></td>
+<td>多用于表单提交</td>
+</tr>
+<tr>
+<td><code>@RequestHeader</code></td>
+<td>获取请求头</td>
+<td><code>@RequestHeader(&quot;token&quot;) String token</code></td>
+<td>适用于 Header 参数</td>
+</tr>
+<tr>
+<td><code>@CookieValue</code></td>
+<td>获取 Cookie 值</td>
+<td><code>@CookieValue(&quot;JSESSIONID&quot;) String sessionId</code></td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h4 id="⚙️-示例：-1"><a href="#⚙️-示例：-1" class="headerlink" title="⚙️ 示例："></a>⚙️ 示例：</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/save&quot;)</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">saveUser</span><span class="params">(</span></span><br><span class="line"><span class="params">    <span class="meta">@RequestParam(&quot;name&quot;)</span> String name,</span></span><br><span class="line"><span class="params">    <span class="meta">@RequestBody</span> User user,</span></span><br><span class="line"><span class="params">    <span class="meta">@RequestHeader(&quot;token&quot;)</span> String token)</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="📘-底层机制："><a href="#📘-底层机制：" class="headerlink" title="📘 底层机制："></a>📘 底层机制：</h4><ul>
+<li>Spring 使用 <code>HandlerMethodArgumentResolver</code> 自动解析并注入方法参数；</li>
+<li>对象型参数通过 <code>WebDataBinder</code> 进行属性绑定与类型转换。</li>
+</ul>
+<hr>
+<h3 id="🧾-四、响应相关注解"><a href="#🧾-四、响应相关注解" class="headerlink" title="🧾 四、响应相关注解"></a>🧾 四、响应相关注解</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>作用</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@ResponseBody</code></td>
+<td>返回内容直接写入响应体</td>
+<td><code>@ResponseBody List&lt;User&gt; list()</code></td>
+<td>用于返回 JSON&#x2F;XML</td>
+</tr>
+<tr>
+<td><code>@ResponseStatus</code></td>
+<td>设置响应状态码</td>
+<td><code>@ResponseStatus(HttpStatus.CREATED)</code></td>
+<td>可用于自定义异常类</td>
+</tr>
+</tbody></table>
+<h4 id="⚙️-示例：-2"><a href="#⚙️-示例：-2" class="headerlink" title="⚙️ 示例："></a>⚙️ 示例：</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/list&quot;)</span></span><br><span class="line"><span class="keyword">public</span> List&lt;User&gt; <span class="title function_">list</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> userService.findAll();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ResponseStatus(HttpStatus.NOT_FOUND)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NotFoundException</span> <span class="keyword">extends</span> <span class="title class_">RuntimeException</span> &#123; &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 @ResponseBody 底层由 <code>HttpMessageConverter</code> 实现对象序列化。</p>
+</blockquote>
+<hr>
+<h3 id="⚙️-五、全局控制与增强注解"><a href="#⚙️-五、全局控制与增强注解" class="headerlink" title="⚙️ 五、全局控制与增强注解"></a>⚙️ 五、全局控制与增强注解</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>作用</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@ControllerAdvice</code></td>
+<td>定义全局异常处理 &#x2F; 全局数据绑定</td>
+<td><code>@ControllerAdvice public class GlobalHandler &#123;&#125;</code></td>
+<td>类级别增强</td>
+</tr>
+<tr>
+<td><code>@ExceptionHandler</code></td>
+<td>处理特定异常类型</td>
+<td><code>@ExceptionHandler(Exception.class)</code></td>
+<td>方法级别异常处理</td>
+</tr>
+<tr>
+<td><code>@InitBinder</code></td>
+<td>自定义参数绑定规则</td>
+<td><code>@InitBinder public void bind(WebDataBinder binder)</code></td>
+<td>可注册属性编辑器</td>
+</tr>
+<tr>
+<td><code>@ModelAttribute</code></td>
+<td>在 Controller 执行前绑定数据</td>
+<td><code>@ModelAttribute public void addAttr(Model model)</code></td>
+<td>多用于全局属性注入</td>
+</tr>
+<tr>
+<td><code>@CrossOrigin</code></td>
+<td>允许跨域请求（CORS）</td>
+<td><code>@CrossOrigin(origins = &quot;*&quot;)</code></td>
+<td>前后端分离必备</td>
+</tr>
+</tbody></table>
+<h4 id="⚙️-示例：-3"><a href="#⚙️-示例：-3" class="headerlink" title="⚙️ 示例："></a>⚙️ 示例：</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalExceptionHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ExceptionHandler(Exception.class)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title function_">handle</span><span class="params">(Exception e)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span><br><span class="line">                             .body(<span class="string">&quot;服务器异常：&quot;</span> + e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、核心底层原理分析"><a href="#四、核心底层原理分析" class="headerlink" title="四、核心底层原理分析"></a>四、核心底层原理分析</h2><h3 id="1️⃣-注解解析机制"><a href="#1️⃣-注解解析机制" class="headerlink" title="1️⃣ 注解解析机制"></a>1️⃣ 注解解析机制</h3><p>Spring 在启动时会通过：</p>
+<ul>
+<li><code>RequestMappingHandlerMapping</code> 解析控制器中的 <code>@RequestMapping</code>；</li>
+<li><code>RequestMappingHandlerAdapter</code> 负责执行对应的方法；</li>
+<li><code>HandlerMethodArgumentResolver</code> 处理入参注解；</li>
+<li><code>HandlerMethodReturnValueHandler</code> 处理出参注解（如 @ResponseBody）。</li>
+</ul>
+<h3 id="2️⃣-底层本质："><a href="#2️⃣-底层本质：" class="headerlink" title="2️⃣ 底层本质："></a>2️⃣ 底层本质：</h3><p>这些注解大多基于 <strong>反射 + 元注解机制 + 策略模式</strong> 实现。<br> 例如：</p>
+<ul>
+<li><code>@GetMapping</code> 是 <code>@RequestMapping(method = RequestMethod.GET)</code> 的快捷注解；</li>
+<li><code>@RestController</code> 是 <code>@Controller</code> 和 <code>@ResponseBody</code> 的组合注解；</li>
+<li><code>@ControllerAdvice</code> 是一种特殊的 <code>@Component</code>，用于全局增强。</li>
+</ul>
+<hr>
+<h2 id="五、常见面试追问与高分回答"><a href="#五、常见面试追问与高分回答" class="headerlink" title="五、常见面试追问与高分回答"></a>五、常见面试追问与高分回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ <code>@RestController</code> 和 <code>@Controller</code> 区别？</td>
+<td><code>@RestController</code> &#x3D; <code>@Controller + @ResponseBody</code>，前者直接返回 JSON，不走视图解析。</td>
+</tr>
+<tr>
+<td>❓ <code>@RequestBody</code> 和 <code>@RequestParam</code> 区别？</td>
+<td>前者解析请求体 JSON，后者解析 URL 参数。</td>
+</tr>
+<tr>
+<td>❓ <code>@ModelAttribute</code> 和 <code>@RequestBody</code> 的区别？</td>
+<td><code>@ModelAttribute</code> 用于表单提交（x-www-form-urlencoded），<code>@RequestBody</code> 用于 JSON。</td>
+</tr>
+<tr>
+<td>❓ <code>@ControllerAdvice</code> 能作用于 @RestController 吗？</td>
+<td>可以，默认作用于所有 Controller，可通过 <code>basePackages</code> 限制范围。</td>
+</tr>
+<tr>
+<td>❓ <code>@InitBinder</code> 有什么用？</td>
+<td>用于自定义数据绑定，比如将字符串转日期或注册自定义编辑器。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、常见陷阱与注意事项"><a href="#六、常见陷阱与注意事项" class="headerlink" title="六、常见陷阱与注意事项"></a>六、常见陷阱与注意事项</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@RequestBody</code> 参数为 null</td>
+<td>请求头未设置 <code>Content-Type: application/json</code></td>
+<td>正确设置 Content-Type</td>
+</tr>
+<tr>
+<td><code>@PathVariable</code> 不匹配</td>
+<td>路径占位符与变量名不一致</td>
+<td>指定参数名：<code>@PathVariable(&quot;id&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@ResponseBody</code> 返回中文乱码</td>
+<td>响应编码未配置</td>
+<td>设置 <code>produces=&quot;application/json;charset=UTF-8&quot;</code></td>
+</tr>
+<tr>
+<td>全局异常未生效</td>
+<td>未加 <code>@ControllerAdvice</code> 或包扫描不包含</td>
+<td>检查包路径与注解</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、加分扩展话题（高级面试方向）"><a href="#七、加分扩展话题（高级面试方向）" class="headerlink" title="七、加分扩展话题（高级面试方向）"></a>七、加分扩展话题（高级面试方向）</h2><table>
+<thead>
+<tr>
+<th>方向</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>注解元模型</td>
+<td>所有注解都继承自 <code>@RequestMapping</code> 元注解体系</td>
+</tr>
+<tr>
+<td>参数解析机制</td>
+<td>基于 <code>HandlerMethodArgumentResolver</code> 可自定义注解参数解析器</td>
+</tr>
+<tr>
+<td>返回值处理机制</td>
+<td><code>HandlerMethodReturnValueHandler</code> 负责对象序列化</td>
+</tr>
+<tr>
+<td>定制化扩展</td>
+<td>可自定义注解实现统一权限校验或接口日志</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔥-八、一分钟高分总结（可背诵）"><a href="#🔥-八、一分钟高分总结（可背诵）" class="headerlink" title="🔥 八、一分钟高分总结（可背诵）"></a>🔥 八、一分钟高分总结（可背诵）</h2><blockquote>
+<p>SpringMVC 提供了一套完整的注解体系来简化 Web 层开发：</p>
+<ul>
+<li><code>@Controller</code>、<code>@RestController</code>：定义控制层；</li>
+<li><code>@RequestMapping</code> 系列：定义请求路由；</li>
+<li><code>@RequestParam</code>、<code>@PathVariable</code>、<code>@RequestBody</code>：绑定请求参数；</li>
+<li><code>@ResponseBody</code>、<code>@ResponseStatus</code>：定义响应行为；</li>
+<li><code>@ControllerAdvice</code>、<code>@ExceptionHandler</code>：实现全局异常处理。</li>
+</ul>
+<p>底层通过反射机制和 HandlerMapping &#x2F; HandlerAdapter 组件解析执行，<br> 使整个 MVC 流程完全基于注解驱动，实现了高内聚、低耦合的控制层架构。</p>
+</blockquote>
+<h1 id="🎯-面试题：-RestController-和-Controller-有什么区别？"><a href="#🎯-面试题：-RestController-和-Controller-有什么区别？" class="headerlink" title="🎯 面试题：@RestController 和 @Controller 有什么区别？"></a>🎯 面试题：@RestController 和 @Controller 有什么区别？</h1><hr>
+<h2 id="一、面试官考察点-2"><a href="#一、面试官考察点-2" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><ol>
+<li>是否理解 <strong>Spring MVC 的控制层处理机制</strong>；</li>
+<li>是否清楚 <strong>视图解析（ViewResolver）</strong> 与 <strong>消息转换（HttpMessageConverter）</strong> 的差异；</li>
+<li>是否了解 <strong>SpringBoot 中常见注解的组合原理</strong>；</li>
+<li>能否结合实际开发场景说明选择原因（如 WMS 系统接口开发）。</li>
+</ol>
+<hr>
+<h2 id="二、核心结论（30-秒快速回答）"><a href="#二、核心结论（30-秒快速回答）" class="headerlink" title="二、核心结论（30 秒快速回答）"></a>二、核心结论（30 秒快速回答）</h2><blockquote>
+<p><code>@Controller</code> 用于返回 <strong>视图页面</strong>，一般配合 <strong>前后端不分离项目</strong> 使用；</p>
+<p><code>@RestController</code> 是 <code>@Controller + @ResponseBody</code> 的组合注解，返回的是 <strong>JSON&#x2F;XML 数据</strong>，常用于 <strong>前后端分离或接口型系统（如微服务、API）</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="三、详细解析"><a href="#三、详细解析" class="headerlink" title="三、详细解析"></a>三、详细解析</h2><h3 id="1️⃣-Controller-的作用"><a href="#1️⃣-Controller-的作用" class="headerlink" title="1️⃣ @Controller 的作用"></a>1️⃣ <code>@Controller</code> 的作用</h3><ul>
+<li>用于标识一个类是 <strong>Spring MVC 控制器</strong>；</li>
+<li>通常用于返回页面（视图），通过 <strong>视图解析器(ViewResolver)</strong> 渲染 JSP、Thymeleaf、Freemarker 等模板。</li>
+</ul>
+<p><strong>示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PageController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/welcome&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">welcomePage</span><span class="params">(Model model)</span> &#123;</span><br><span class="line">        model.addAttribute(<span class="string">&quot;msg&quot;</span>, <span class="string">&quot;欢迎访问 WMS 系统&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;welcome&quot;</span>; <span class="comment">// 对应 resources/templates/welcome.html</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>🔍 <strong>执行流程</strong>：</p>
+<ol>
+<li>Controller 返回逻辑视图名 <code>&quot;welcome&quot;</code>；</li>
+<li>视图解析器解析为真实路径 <code>templates/welcome.html</code>；</li>
+<li>结合 Model 数据渲染 HTML 页面；</li>
+<li>返回给浏览器。</li>
+</ol>
+<hr>
+<h3 id="2️⃣-RestController-的作用"><a href="#2️⃣-RestController-的作用" class="headerlink" title="2️⃣ @RestController 的作用"></a>2️⃣ <code>@RestController</code> 的作用</h3><ul>
+<li><p>是一个组合注解，等价于：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>表示该类的所有方法默认返回 <strong>JSON 或 XML 数据</strong>，而不是视图页面；</p>
+</li>
+<li><p>常用于 <strong>RESTful API 开发</strong>（前后端分离、移动端接口）。</p>
+</li>
+</ul>
+<p><strong>示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/api/inbound&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InboundController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> InboundOrder <span class="title function_">getInboundById</span><span class="params">(<span class="meta">@PathVariable</span> Long id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> inboundService.findById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>🔍 <strong>执行流程：</strong></p>
+<ol>
+<li>Spring MVC 接收到请求；</li>
+<li>调用 Controller 方法；</li>
+<li>方法返回对象（如 <code>InboundOrder</code>）；</li>
+<li>通过 <strong>HttpMessageConverter</strong> 自动转换为 JSON；</li>
+<li>将 JSON 响应返回给客户端。</li>
+</ol>
+<hr>
+<h2 id="四、底层原理分析"><a href="#四、底层原理分析" class="headerlink" title="四、底层原理分析"></a>四、底层原理分析</h2><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>@Controller</th>
+<th>@RestController</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否返回视图</td>
+<td>✅ 是（交由视图解析器处理）</td>
+<td>❌ 否（直接返回数据）</td>
+</tr>
+<tr>
+<td>是否自动加@ResponseBody</td>
+<td>❌ 否（需手动加）</td>
+<td>✅ 是（类级别）</td>
+</tr>
+<tr>
+<td>返回值类型</td>
+<td>String（视图名）</td>
+<td>对象（序列化为 JSON&#x2F;XML）</td>
+</tr>
+<tr>
+<td>典型应用</td>
+<td>MVC 模板页面</td>
+<td>RESTful 接口、前后端分离</td>
+</tr>
+<tr>
+<td>底层支持</td>
+<td>ViewResolver</td>
+<td>HttpMessageConverter</td>
+</tr>
+<tr>
+<td>常用场景</td>
+<td>JSP、Thymeleaf</td>
+<td>JSON API、微服务</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、源码层面理解（Spring-设计原理）"><a href="#五、源码层面理解（Spring-设计原理）" class="headerlink" title="五、源码层面理解（Spring 设计原理）"></a>五、源码层面理解（Spring 设计原理）</h2><h3 id="✅-RestController-源码："><a href="#✅-RestController-源码：" class="headerlink" title="✅ @RestController 源码："></a>✅ <code>@RestController</code> 源码：</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RestController &#123;</span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>➡️ 说明：</p>
+<ul>
+<li>本质是 <strong>元注解组合</strong>；</li>
+<li>加上 <code>@ResponseBody</code>，Spring MVC 在调用方法后会：<ul>
+<li>跳过视图解析；</li>
+<li>调用 <code>MappingJackson2HttpMessageConverter</code>；</li>
+<li>将返回对象转为 JSON 响应。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="六、实际开发中的应用场景（结合项目）"><a href="#六、实际开发中的应用场景（结合项目）" class="headerlink" title="六、实际开发中的应用场景（结合项目）"></a>六、实际开发中的应用场景（结合项目）</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐注解</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>WMS 系统前端页面（如仓库列表页）</td>
+<td><code>@Controller</code></td>
+<td>需要返回 Thymeleaf 视图</td>
+</tr>
+<tr>
+<td>WMS 系统接口（如 <code>/api/inbound/save</code>）</td>
+<td><code>@RestController</code></td>
+<td>前后端分离，返回 JSON</td>
+</tr>
+<tr>
+<td>微服务接口</td>
+<td><code>@RestController</code></td>
+<td>提供 RESTful API</td>
+</tr>
+<tr>
+<td>日志&#x2F;监控接口</td>
+<td><code>@RestController</code></td>
+<td>统一 JSON 输出，方便收集</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、常见错误与陷阱"><a href="#七、常见错误与陷阱" class="headerlink" title="七、常见错误与陷阱"></a>七、常见错误与陷阱</h2><table>
+<thead>
+<tr>
+<th>错误现象</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>返回页面显示 JSON 字符串</td>
+<td>使用了 <code>@RestController</code></td>
+<td>改为 <code>@Controller</code></td>
+</tr>
+<tr>
+<td>返回 JSON 出现乱码</td>
+<td>未配置编码或 HttpMessageConverter</td>
+<td>检查 Spring Boot 默认配置</td>
+</tr>
+<tr>
+<td>自定义对象无法序列化</td>
+<td>缺少 getter &#x2F; setter</td>
+<td>使用标准 JavaBean</td>
+</tr>
+<tr>
+<td>循环引用报错</td>
+<td>JSON 序列化时双向引用</td>
+<td>使用 <code>@JsonIgnore</code> 或 DTO</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、常见面试追问"><a href="#八、常见面试追问" class="headerlink" title="八、常见面试追问"></a>八、常见面试追问</h2><table>
+<thead>
+<tr>
+<th>面试官提问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@RestController</code> 和 <code>@ResponseBody</code> 有什么区别？</td>
+<td><code>@RestController</code> 是 <code>@Controller + @ResponseBody</code> 的组合，作用于类级别；<code>@ResponseBody</code> 可以单独用于方法级别。</td>
+</tr>
+<tr>
+<td>如何在 <code>@Controller</code> 中返回 JSON？</td>
+<td>在方法上添加 <code>@ResponseBody</code> 注解。</td>
+</tr>
+<tr>
+<td>Spring MVC 如何将对象转为 JSON？</td>
+<td>通过 <code>HttpMessageConverter</code>（如 Jackson 实现）自动序列化。</td>
+</tr>
+<tr>
+<td>Controller 层返回结果如何统一封装？</td>
+<td>使用 <code>ResponseEntity</code> 或自定义响应封装类（如 <code>Result&lt;T&gt;</code>）。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、性能与实践建议"><a href="#九、性能与实践建议" class="headerlink" title="九、性能与实践建议"></a>九、性能与实践建议</h2><ul>
+<li>✅ <strong>统一返回结构</strong>：封装成通用响应类 <code>Result&lt;T&gt;</code>；</li>
+<li>✅ <strong>使用全局异常处理</strong>（<code>@ControllerAdvice</code> + <code>@ExceptionHandler</code>）；</li>
+<li>✅ <strong>日志与接口分析</strong>可配合 AOP；</li>
+<li>✅ <strong>接口文档自动生成</strong>：使用 <code>Swagger</code> &#x2F; <code>Knife4j</code>；</li>
+<li>✅ <strong>Spring Boot 默认全局 JSON 支持</strong>（无需手动配置 <code>MessageConverter</code>）。</li>
+</ul>
+<hr>
+<h2 id="🔟-一分钟高分总结（可背诵）"><a href="#🔟-一分钟高分总结（可背诵）" class="headerlink" title="🔟 一分钟高分总结（可背诵）"></a>🔟 一分钟高分总结（可背诵）</h2><blockquote>
+<p><code>@Controller</code> 用于返回视图页面，配合模板引擎使用；<br> <code>@RestController</code> 是 <code>@Controller</code> 与 <code>@ResponseBody</code> 的组合，用于返回 JSON 数据。<br> 前后端分离项目中一般使用 <code>@RestController</code>，而传统 MVC 项目使用 <code>@Controller</code>。<br> 它们的底层区别在于处理流程不同：<br> 前者通过 <code>HttpMessageConverter</code> 输出数据，后者通过 <code>ViewResolver</code> 渲染视图。<br> 在实际开发中，我会根据模块类型选择不同的注解，以实现高内聚、低耦合的控制层设计。</p>
+</blockquote>
+<h1 id="🎯-面试题：Spring-后端验证注解有哪些？它们的作用是什么？"><a href="#🎯-面试题：Spring-后端验证注解有哪些？它们的作用是什么？" class="headerlink" title="🎯 面试题：Spring 后端验证注解有哪些？它们的作用是什么？"></a>🎯 面试题：Spring 后端验证注解有哪些？它们的作用是什么？</h1><hr>
+<h2 id="一、面试官考察点-3"><a href="#一、面试官考察点-3" class="headerlink" title="一、面试官考察点"></a>一、面试官考察点</h2><blockquote>
+<p>该题考察候选人是否了解：</p>
+<ul>
+<li><strong>JSR-303 &#x2F; JSR-380 Bean Validation 规范</strong>；</li>
+<li><strong>Spring Boot 与 Hibernate Validator 的整合原理</strong>；</li>
+<li><strong>常见内置注解的使用场景与差异</strong>；</li>
+<li><strong>如何自定义校验注解与全局异常处理机制</strong>。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="二、30-秒答题模板（高分开场）"><a href="#二、30-秒答题模板（高分开场）" class="headerlink" title="二、30 秒答题模板（高分开场）"></a>二、30 秒答题模板（高分开场）</h2><blockquote>
+<p>Spring 的后端参数校验基于 <strong>JSR-303&#x2F;JSR-380 标准规范</strong>，<br> 其默认实现是 <strong>Hibernate Validator</strong>。</p>
+<p>常用的验证注解包括：</p>
+<ul>
+<li>基础约束注解（<code>@NotNull</code>, <code>@NotEmpty</code>, <code>@NotBlank</code>, <code>@Size</code>, <code>@Min</code>, <code>@Max</code>）</li>
+<li>格式校验注解（<code>@Email</code>, <code>@Pattern</code>, <code>@Past</code>, <code>@Future</code>）</li>
+<li>数值精度控制注解（<code>@DecimalMin</code>, <code>@DecimalMax</code>, <code>@Digits</code>）</li>
+<li>复合与自定义注解。</li>
+</ul>
+<p>这些注解通常与 <code>@Valid</code> 或 <code>@Validated</code> 结合使用，<br> 并通过 <code>MethodValidationPostProcessor</code> 实现方法级验证。</p>
+</blockquote>
+<hr>
+<h2 id="三、常用后端验证注解分类与详解"><a href="#三、常用后端验证注解分类与详解" class="headerlink" title="三、常用后端验证注解分类与详解"></a>三、常用后端验证注解分类与详解</h2><hr>
+<h3 id="🧩-一、空值校验类"><a href="#🧩-一、空值校验类" class="headerlink" title="🧩 一、空值校验类"></a>🧩 一、空值校验类</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@NotNull</code></td>
+<td>不能为 <code>null</code>，但可以是空字符串或空集合</td>
+<td><code>@NotNull(message=&quot;ID不能为空&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@NotEmpty</code></td>
+<td>不能为 <code>null</code> 或空集合&#x2F;数组</td>
+<td><code>@NotEmpty(message=&quot;列表不能为空&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@NotBlank</code></td>
+<td>不能为 <code>null</code> 或空字符串（仅用于字符串）</td>
+<td><code>@NotBlank(message=&quot;用户名不能为空&quot;)</code></td>
+</tr>
+</tbody></table>
+<h4 id="⚙️-示例：-4"><a href="#⚙️-示例：-4" class="headerlink" title="⚙️ 示例："></a>⚙️ 示例：</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDTO</span> &#123;</span><br><span class="line">    <span class="meta">@NotBlank(message = &quot;用户名不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotEmpty(message = &quot;角色列表不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; roles;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="💡-区别总结："><a href="#💡-区别总结：" class="headerlink" title="💡 区别总结："></a>💡 区别总结：</h4><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>可用于类型</th>
+<th>是否允许空字符串</th>
+<th>是否允许 null</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@NotNull</td>
+<td>所有类型</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>@NotEmpty</td>
+<td>集合&#x2F;数组&#x2F;字符串</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>@NotBlank</td>
+<td>字符串</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="🧮-二、长度与大小校验"><a href="#🧮-二、长度与大小校验" class="headerlink" title="🧮 二、长度与大小校验"></a>🧮 二、长度与大小校验</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@Size(min, max)</code></td>
+<td>检查字符串、集合、数组长度</td>
+<td><code>@Size(min=3, max=10, message=&quot;长度必须在3~10之间&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@Min</code> &#x2F; <code>@Max</code></td>
+<td>检查数值范围</td>
+<td><code>@Min(18)</code> &#x2F; <code>@Max(100)</code></td>
+</tr>
+<tr>
+<td><code>@DecimalMin</code> &#x2F; <code>@DecimalMax</code></td>
+<td>检查浮点数范围</td>
+<td><code>@DecimalMin(&quot;0.01&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@Digits(integer, fraction)</code></td>
+<td>限制整数位与小数位</td>
+<td><code>@Digits(integer=6, fraction=2)</code></td>
+</tr>
+</tbody></table>
+<h4 id="⚙️-示例：-5"><a href="#⚙️-示例：-5" class="headerlink" title="⚙️ 示例："></a>⚙️ 示例：</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProductDTO</span> &#123;</span><br><span class="line">    <span class="meta">@Size(min = 3, max = 20)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DecimalMin(&quot;0.01&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> BigDecimal price;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Digits(integer = 5, fraction = 2)</span></span><br><span class="line">    <span class="keyword">private</span> BigDecimal discount;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="📅-三、时间日期类"><a href="#📅-三、时间日期类" class="headerlink" title="📅 三、时间日期类"></a>📅 三、时间日期类</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@Past</code></td>
+<td>必须是过去时间</td>
+<td><code>@Past(message=&quot;生日必须是过去时间&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@Future</code></td>
+<td>必须是将来时间</td>
+<td><code>@Future(message=&quot;预约时间必须是未来&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@PastOrPresent</code></td>
+<td>过去或当前</td>
+<td><code>@PastOrPresent</code></td>
+</tr>
+<tr>
+<td><code>@FutureOrPresent</code></td>
+<td>将来或当前</td>
+<td><code>@FutureOrPresent</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="✉️-四、格式与正则验证"><a href="#✉️-四、格式与正则验证" class="headerlink" title="✉️ 四、格式与正则验证"></a>✉️ 四、格式与正则验证</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@Email</code></td>
+<td>验证邮箱格式</td>
+<td><code>@Email(message=&quot;邮箱格式错误&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@Pattern</code></td>
+<td>使用正则表达式验证</td>
+<td><code>@Pattern(regexp=&quot;^\\d&#123;11&#125;$&quot;, message=&quot;手机号必须为11位&quot;)</code></td>
+</tr>
+<tr>
+<td><code>@URL</code></td>
+<td>验证 URL 地址（Hibernate 扩展）</td>
+<td><code>@URL(message=&quot;URL格式不正确&quot;)</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="🧠-五、其他常用注解"><a href="#🧠-五、其他常用注解" class="headerlink" title="🧠 五、其他常用注解"></a>🧠 五、其他常用注解</h3><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@AssertTrue</code> &#x2F; <code>@AssertFalse</code></td>
+<td>检查布尔值是否为 true&#x2F;false</td>
+</tr>
+<tr>
+<td><code>@CreditCardNumber</code></td>
+<td>校验信用卡号格式（Hibernate 扩展）</td>
+</tr>
+<tr>
+<td><code>@Length</code></td>
+<td>Hibernate 特有，等价于 @Size</td>
+</tr>
+<tr>
+<td><code>@Range(min, max)</code></td>
+<td>检查数值是否在范围内</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、Spring-中的启用方式"><a href="#四、Spring-中的启用方式" class="headerlink" title="四、Spring 中的启用方式"></a>四、Spring 中的启用方式</h2><hr>
+<h3 id="✅-1-在实体类上使用注解"><a href="#✅-1-在实体类上使用注解" class="headerlink" title="✅ 1. 在实体类上使用注解"></a>✅ 1. 在实体类上使用注解</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDTO</span> &#123;</span><br><span class="line">    <span class="meta">@NotBlank(message = &quot;用户名不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Email(message = &quot;邮箱格式错误&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="✅-2-在-Controller-层启用校验"><a href="#✅-2-在-Controller-层启用校验" class="headerlink" title="✅ 2. 在 Controller 层启用校验"></a>✅ 2. 在 Controller 层启用校验</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/add&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">addUser</span><span class="params">(<span class="meta">@Valid</span> <span class="meta">@RequestBody</span> UserDTO user, BindingResult result)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (result.hasErrors()) &#123;</span><br><span class="line">            <span class="keyword">return</span> result.getFieldError().getDefaultMessage();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;校验通过&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 <code>@Valid</code> 来自 <code>javax.validation.Valid</code>，<br> 而 <code>@Validated</code> 是 Spring 的增强版本，支持分组验证（groups）。</p>
+</blockquote>
+<hr>
+<h3 id="✅-3-方法级参数校验（Service-层）"><a href="#✅-3-方法级参数校验（Service-层）" class="headerlink" title="✅ 3. 方法级参数校验（Service 层）"></a>✅ 3. 方法级参数校验（Service 层）</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Validated</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateUser</span><span class="params">(<span class="meta">@NotNull</span> Long id, <span class="meta">@Size(min=3)</span> String name)</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Spring 通过 <code>MethodValidationPostProcessor</code> 代理类实现方法参数校验。</p>
+</blockquote>
+<hr>
+<h2 id="五、底层实现原理"><a href="#五、底层实现原理" class="headerlink" title="五、底层实现原理"></a>五、底层实现原理</h2><blockquote>
+<p>Bean Validation 是基于 <strong>JSR-303 规范</strong> 的标准化机制，其实现类为 Hibernate Validator。</p>
+</blockquote>
+<p>底层流程：</p>
+<ol>
+<li>Spring 在启动时注册 <code>LocalValidatorFactoryBean</code>；</li>
+<li>当检测到 <code>@Valid</code> 或 <code>@Validated</code> 注解时，会自动调用 Hibernate Validator；</li>
+<li>Hibernate Validator 通过反射扫描目标对象字段；</li>
+<li>根据注解类型匹配对应的 <code>ConstraintValidator</code>；</li>
+<li>执行校验逻辑，返回 <code>ConstraintViolation</code> 集合；</li>
+<li>若校验失败则抛出 <code>ConstraintViolationException</code>。</li>
+</ol>
+<hr>
+<h2 id="六、自定义验证注解（高频加分题）"><a href="#六、自定义验证注解（高频加分题）" class="headerlink" title="六、自定义验证注解（高频加分题）"></a>六、自定义验证注解（高频加分题）</h2><p>面试官常追问：“如何自定义一个校验注解，比如手机号校验？”</p>
+<p>✅ 示例：定义自定义注解 <code>@Phone</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.FIELD&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Constraint(validatedBy = PhoneValidator.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Phone &#123;</span><br><span class="line">    String <span class="title function_">message</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;手机号格式不正确&quot;</span>;</span><br><span class="line">    Class&lt;?&gt;[] groups() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    Class&lt;? <span class="keyword">extends</span> <span class="title class_">Payload</span>&gt;[] payload() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>✅ 编写校验逻辑类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PhoneValidator</span> <span class="keyword">implements</span> <span class="title class_">ConstraintValidator</span>&lt;Phone, String&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Pattern</span> <span class="variable">PHONE_PATTERN</span> <span class="operator">=</span> Pattern.compile(<span class="string">&quot;^1[3-9]\\d&#123;9&#125;$&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isValid</span><span class="params">(String value, ConstraintValidatorContext context)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (value == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// null值可通过@NotNull控制</span></span><br><span class="line">        <span class="keyword">return</span> PHONE_PATTERN.matcher(value).matches();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、常见面试追问与答案"><a href="#七、常见面试追问与答案" class="headerlink" title="七、常见面试追问与答案"></a>七、常见面试追问与答案</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ <code>@Valid</code> 和 <code>@Validated</code> 有什么区别？</td>
+<td><code>@Valid</code> 是 JSR-303 标准注解，不支持分组；<code>@Validated</code> 是 Spring 扩展，支持分组校验。</td>
+</tr>
+<tr>
+<td>❓ 如何进行分组验证？</td>
+<td>使用 <code>@Validated(GroupA.class)</code> 标注 Controller 方法参数，实体类字段定义 <code>groups = GroupA.class</code>。</td>
+</tr>
+<tr>
+<td>❓ 方法级别验证是怎么实现的？</td>
+<td>通过 <code>MethodValidationPostProcessor</code> 实现 AOP 代理，校验入参和返回值。</td>
+</tr>
+<tr>
+<td>❓ 为什么 <code>@Valid</code> 不生效？</td>
+<td>可能未添加 <code>@RequestBody</code>、<code>BindingResult</code> 或 Spring 没有启用 validator。</td>
+</tr>
+<tr>
+<td>❓ 校验异常怎么统一处理？</td>
+<td>使用 <code>@ControllerAdvice + @ExceptionHandler(MethodArgumentNotValidException.class)</code> 捕获。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、常见陷阱与注意点"><a href="#八、常见陷阱与注意点" class="headerlink" title="八、常见陷阱与注意点"></a>八、常见陷阱与注意点</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>嵌套对象校验未触发</td>
+<td>子对象缺少 <code>@Valid</code></td>
+<td>在子对象字段上添加 <code>@Valid</code></td>
+</tr>
+<tr>
+<td>方法参数校验无效</td>
+<td>缺少 <code>@Validated</code></td>
+<td>在类上添加 <code>@Validated</code></td>
+</tr>
+<tr>
+<td>Controller 返回 400 错误</td>
+<td>未捕获校验异常</td>
+<td>全局异常捕获处理</td>
+</tr>
+<tr>
+<td>分组未生效</td>
+<td>忘记声明 groups</td>
+<td>指定正确的分组类</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、高分总结（面试背诵版）"><a href="#九、高分总结（面试背诵版）" class="headerlink" title="九、高分总结（面试背诵版）"></a>九、高分总结（面试背诵版）</h2><blockquote>
+<p>Spring 后端验证基于 <strong>JSR-303 Bean Validation 标准</strong>，默认实现是 <strong>Hibernate Validator</strong>。</p>
+<p>常用注解包括：</p>
+<ul>
+<li>空值类：<code>@NotNull</code>, <code>@NotEmpty</code>, <code>@NotBlank</code></li>
+<li>范围类：<code>@Min</code>, <code>@Max</code>, <code>@Size</code>, <code>@Range</code></li>
+<li>格式类：<code>@Email</code>, <code>@Pattern</code>, <code>@URL</code></li>
+<li>时间类：<code>@Past</code>, <code>@Future</code></li>
+</ul>
+<p>核心配合注解：<code>@Valid</code>、<code>@Validated</code>、<code>@ControllerAdvice</code>、<code>@ExceptionHandler</code>。</p>
+<p>底层原理基于反射 + <code>ConstraintValidator</code> 策略模式实现，<br> 常用于接口参数校验、表单验证与接口防御编程。</p>
+</blockquote>
+<h1 id="🎯-面试题：Spring-中的拦截器是什么？它的作用是什么？（拦截器执行顺序）"><a href="#🎯-面试题：Spring-中的拦截器是什么？它的作用是什么？（拦截器执行顺序）" class="headerlink" title="🎯 面试题：Spring 中的拦截器是什么？它的作用是什么？（拦截器执行顺序）"></a>🎯 面试题：Spring 中的拦截器是什么？它的作用是什么？（拦截器执行顺序）</h1><hr>
+<h2 id="一、面试速答模板（适合开场陈述）"><a href="#一、面试速答模板（适合开场陈述）" class="headerlink" title="一、面试速答模板（适合开场陈述）"></a>一、面试速答模板（适合开场陈述）</h2><blockquote>
+<p>在 Spring MVC 中，<strong>拦截器（Interceptor）</strong> 是一种基于 AOP 思想的机制，<br> 用于在请求到达 Controller 之前、执行之后以及完成视图渲染之后，<br> 对请求进行<strong>预处理和后处理</strong>。</p>
+<p>拦截器由 <code>HandlerInterceptor</code> 接口定义，常用于：</p>
+<ul>
+<li>登录鉴权、权限控制；</li>
+<li>日志记录；</li>
+<li>参数预处理；</li>
+<li>性能监控；</li>
+<li>全局数据注入等。</li>
+</ul>
+<p>执行顺序为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">preHandle() → Controller方法 → postHandle() → afterCompletion()</span><br></pre></td></tr></table></figure>
+
+<p>多个拦截器执行顺序遵循：<br> <strong>preHandle 顺序执行，postHandle 和 afterCompletion 逆序执行。</strong></p>
+</blockquote>
+<hr>
+<h2 id="二、Spring-MVC-拦截器核心机制"><a href="#二、Spring-MVC-拦截器核心机制" class="headerlink" title="二、Spring MVC 拦截器核心机制"></a>二、Spring MVC 拦截器核心机制</h2><hr>
+<h3 id="1️⃣-拦截器接口：HandlerInterceptor"><a href="#1️⃣-拦截器接口：HandlerInterceptor" class="headerlink" title="1️⃣ 拦截器接口：HandlerInterceptor"></a>1️⃣ 拦截器接口：<code>HandlerInterceptor</code></h3><p>拦截器是由 Spring MVC 框架提供的接口，定义在：<br> <code>org.springframework.web.servlet.HandlerInterceptor</code></p>
+<p>其核心方法如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">HandlerInterceptor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Controller 方法执行前调用</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(HttpServletRequest request,</span></span><br><span class="line"><span class="params">                      HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Controller 方法执行后，视图渲染前调用</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">postHandle</span><span class="params">(HttpServletRequest request,</span></span><br><span class="line"><span class="params">                    HttpServletResponse response, Object handler,</span></span><br><span class="line"><span class="params">                    ModelAndView modelAndView)</span> <span class="keyword">throws</span> Exception;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 整个请求结束后（包括视图渲染后）调用</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">afterCompletion</span><span class="params">(HttpServletRequest request,</span></span><br><span class="line"><span class="params">                         HttpServletResponse response, Object handler, Exception ex)</span> <span class="keyword">throws</span> Exception;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2️⃣-生命周期说明"><a href="#2️⃣-生命周期说明" class="headerlink" title="2️⃣ 生命周期说明"></a>2️⃣ 生命周期说明</h3><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>请求前阶段</strong></td>
+<td><code>preHandle()</code></td>
+<td>在进入 Controller 之前执行，可用于权限校验、日志记录、参数预处理。返回 false 表示中断请求。</td>
+</tr>
+<tr>
+<td><strong>请求后阶段</strong></td>
+<td><code>postHandle()</code></td>
+<td>Controller 方法执行完后（但尚未渲染视图），可用于修改 Model 或添加公共属性。</td>
+</tr>
+<tr>
+<td><strong>请求完成阶段</strong></td>
+<td><code>afterCompletion()</code></td>
+<td>整个请求结束后执行，常用于清理资源、性能统计或异常处理。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="3️⃣-核心执行链结构"><a href="#3️⃣-核心执行链结构" class="headerlink" title="3️⃣ 核心执行链结构"></a>3️⃣ 核心执行链结构</h3><p>SpringMVC 的执行链（HandlerExecutionChain）如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">DispatcherServlet</span><br><span class="line">   ↓</span><br><span class="line">HandlerMapping</span><br><span class="line">   ↓</span><br><span class="line">HandlerExecutionChain</span><br><span class="line">   ├── preHandle() 拦截器1</span><br><span class="line">   ├── preHandle() 拦截器2</span><br><span class="line">   ↓</span><br><span class="line">   Controller 方法执行</span><br><span class="line">   ↓</span><br><span class="line">   ├── postHandle() 拦截器2</span><br><span class="line">   ├── postHandle() 拦截器1</span><br><span class="line">   ↓</span><br><span class="line">   视图渲染</span><br><span class="line">   ↓</span><br><span class="line">   ├── afterCompletion() 拦截器2</span><br><span class="line">   └── afterCompletion() 拦截器1</span><br></pre></td></tr></table></figure>
+
+<p>✅ <strong>执行顺序总结：</strong></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>执行顺序</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>preHandle</td>
+<td>按配置顺序正序执行</td>
+</tr>
+<tr>
+<td>postHandle</td>
+<td>逆序执行</td>
+</tr>
+<tr>
+<td>afterCompletion</td>
+<td>逆序执行</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、拦截器使用示例（标准写法）"><a href="#三、拦截器使用示例（标准写法）" class="headerlink" title="三、拦截器使用示例（标准写法）"></a>三、拦截器使用示例（标准写法）</h2><hr>
+<h3 id="1️⃣-定义拦截器类"><a href="#1️⃣-定义拦截器类" class="headerlink" title="1️⃣ 定义拦截器类"></a>1️⃣ 定义拦截器类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthInterceptor</span> <span class="keyword">implements</span> <span class="title class_">HandlerInterceptor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span></span><br><span class="line">            <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;AuthInterceptor - preHandle&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> request.getHeader(<span class="string">&quot;Authorization&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (token == <span class="literal">null</span> || !token.equals(<span class="string">&quot;admin&quot;</span>)) &#123;</span><br><span class="line">            response.setStatus(<span class="number">401</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 阻止后续执行</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// 放行</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">postHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</span></span><br><span class="line"><span class="params">                           Object handler, ModelAndView modelAndView)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;AuthInterceptor - postHandle&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterCompletion</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</span></span><br><span class="line"><span class="params">                                Object handler, Exception ex)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;AuthInterceptor - afterCompletion&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2️⃣-注册拦截器"><a href="#2️⃣-注册拦截器" class="headerlink" title="2️⃣ 注册拦截器"></a>2️⃣ 注册拦截器</h3><p>在 Spring Boot 中通过实现 <code>WebMvcConfigurer</code> 接口注册：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> AuthInterceptor authInterceptor;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> &#123;</span><br><span class="line">        registry.addInterceptor(authInterceptor)</span><br><span class="line">                .addPathPatterns(<span class="string">&quot;/**&quot;</span>)           <span class="comment">// 拦截所有路径</span></span><br><span class="line">                .excludePathPatterns(<span class="string">&quot;/login&quot;</span>);   <span class="comment">// 排除登录接口</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3️⃣-控制台输出执行顺序"><a href="#3️⃣-控制台输出执行顺序" class="headerlink" title="3️⃣ 控制台输出执行顺序"></a>3️⃣ 控制台输出执行顺序</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AuthInterceptor - preHandle</span><br><span class="line">--&gt; Controller 执行</span><br><span class="line">AuthInterceptor - postHandle</span><br><span class="line">AuthInterceptor - afterCompletion</span><br></pre></td></tr></table></figure>
+
+<p>✅ <strong>多个拦截器时顺序如下：</strong></p>
+<table>
+<thead>
+<tr>
+<th>拦截器顺序</th>
+<th>preHandle 执行顺序</th>
+<th>postHandle 执行顺序</th>
+<th>afterCompletion 执行顺序</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拦截器1</td>
+<td>①</td>
+<td>③</td>
+<td>⑤</td>
+</tr>
+<tr>
+<td>拦截器2</td>
+<td>②</td>
+<td>④</td>
+<td>⑥</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、拦截器与过滤器的区别（面试高频追问）"><a href="#四、拦截器与过滤器的区别（面试高频追问）" class="headerlink" title="四、拦截器与过滤器的区别（面试高频追问）"></a>四、拦截器与过滤器的区别（面试高频追问）</h2><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>拦截器（Interceptor）</th>
+<th>过滤器（Filter）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>所属框架</td>
+<td>Spring MVC</td>
+<td>Servlet 规范</td>
+</tr>
+<tr>
+<td>拦截范围</td>
+<td>Controller 层（由 DispatcherServlet 管理）</td>
+<td>所有请求（包括静态资源）</td>
+</tr>
+<tr>
+<td>实现接口</td>
+<td>HandlerInterceptor</td>
+<td>javax.servlet.Filter</td>
+</tr>
+<tr>
+<td>执行时机</td>
+<td>DispatcherServlet 调用 Handler 前后</td>
+<td>DispatcherServlet 之前</td>
+</tr>
+<tr>
+<td>应用场景</td>
+<td>登录校验、权限、日志</td>
+<td>编码设置、跨域、全局过滤</td>
+</tr>
+<tr>
+<td>可访问对象</td>
+<td>HandlerMethod（可反射方法信息）</td>
+<td>仅 Request &#x2F; Response</td>
+</tr>
+<tr>
+<td>配置方式</td>
+<td>Spring 配置类或 XML</td>
+<td>web.xml 或 FilterRegistrationBean</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 一般项目中：</p>
+<ul>
+<li><strong>全局控制</strong>（如 CORS、日志追踪）放在 Filter；</li>
+<li><strong>业务相关拦截</strong>（如权限、登录态验证）放在 Interceptor。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="五、常见面试追问与标准回答"><a href="#五、常见面试追问与标准回答" class="headerlink" title="五、常见面试追问与标准回答"></a>五、常见面试追问与标准回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ preHandle 返回 false 会怎样？</td>
+<td>请求被中断，不会执行 Controller，也不会执行后续拦截器的 preHandle 或 postHandle。</td>
+</tr>
+<tr>
+<td>❓ postHandle 与 afterCompletion 区别？</td>
+<td>postHandle 在 Controller 执行后但视图渲染前调用；afterCompletion 在整个请求完成（包括渲染后）调用。</td>
+</tr>
+<tr>
+<td>❓ 拦截器如何获取 Controller 方法信息？</td>
+<td>通过参数 <code>Object handler</code>，可强转为 <code>HandlerMethod</code> 获取类名和方法名。</td>
+</tr>
+<tr>
+<td>❓ 拦截器中如何注入 Service？</td>
+<td>将拦截器声明为 <code>@Component</code>，由 Spring 管理。</td>
+</tr>
+<tr>
+<td>❓ 拦截器线程安全吗？</td>
+<td>默认是单例的，不应在成员变量中存放线程不安全的数据。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、常见陷阱与注意事项-1"><a href="#六、常见陷阱与注意事项-1" class="headerlink" title="六、常见陷阱与注意事项"></a>六、常见陷阱与注意事项</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>静态资源被拦截</td>
+<td>默认 &#x2F;** 拦截所有请求</td>
+<td>使用 <code>excludePathPatterns(&quot;/static/**&quot;)</code> 排除</td>
+</tr>
+<tr>
+<td>拦截器顺序混乱</td>
+<td>注册顺序不明确</td>
+<td>按 <code>registry.addInterceptor()</code> 调用顺序执行</td>
+</tr>
+<tr>
+<td>postHandle 不执行</td>
+<td>preHandle 返回 false 或 Controller 抛异常</td>
+<td>保证放行且无异常</td>
+</tr>
+<tr>
+<td>异步请求未执行 afterCompletion</td>
+<td>异步线程未触发回调</td>
+<td>使用 <code>AsyncHandlerInterceptor</code> 适配</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、高级扩展：Spring-5-新特性拦截器"><a href="#七、高级扩展：Spring-5-新特性拦截器" class="headerlink" title="七、高级扩展：Spring 5 新特性拦截器"></a>七、高级扩展：Spring 5 新特性拦截器</h2><p>Spring 5 引入了 <strong>AsyncHandlerInterceptor</strong> 接口，<br> 它扩展了异步请求的回调，如 <code>afterConcurrentHandlingStarted()</code>，<br> 可用于 WebFlux 场景或异步 Controller。</p>
+<hr>
+<h2 id="八、总结（面试背诵版）"><a href="#八、总结（面试背诵版）" class="headerlink" title="八、总结（面试背诵版）"></a>八、总结（面试背诵版）</h2><blockquote>
+<p>Spring MVC 拦截器（Interceptor）是一种基于 AOP 的请求拦截机制，<br> 通过实现 <code>HandlerInterceptor</code> 接口，在请求处理的三个阶段：</p>
+<ul>
+<li><code>preHandle()</code>：请求前拦截；</li>
+<li><code>postHandle()</code>：Controller 执行后拦截；</li>
+<li><code>afterCompletion()</code>：请求完成后拦截。</li>
+</ul>
+<p>主要用于权限验证、日志记录、性能监控等业务场景。<br> 执行顺序遵循 <strong>preHandle 正序、postHandle &amp; afterCompletion 逆序</strong>。<br> 它位于 DispatcherServlet 与 Controller 之间，<br> 是构建高可扩展 Web 框架的重要机制。</p>
+</blockquote>
+<h1 id="🎯-面试题：全局异常处理（Global-Exception-Handling）"><a href="#🎯-面试题：全局异常处理（Global-Exception-Handling）" class="headerlink" title="🎯 面试题：全局异常处理（Global Exception Handling）"></a>🎯 面试题：全局异常处理（Global Exception Handling）</h1><hr>
+<h2 id="一、面试速答（标准回答）"><a href="#一、面试速答（标准回答）" class="headerlink" title="一、面试速答（标准回答）"></a>一、面试速答（标准回答）</h2><blockquote>
+<p>在 Spring Boot 中，<strong>全局异常处理（Global Exception Handling）</strong> 是一种基于 AOP 思想的异常捕获机制，<br> 通过使用 <code>@ControllerAdvice</code> 或 <code>@RestControllerAdvice</code> 与 <code>@ExceptionHandler</code> 注解，<br> 可以统一捕获 Controller 层抛出的各种异常并进行集中处理。</p>
+<p>其核心目标是实现：</p>
+<ul>
+<li><strong>统一异常格式输出；</strong></li>
+<li><strong>区分业务异常与系统异常；</strong></li>
+<li><strong>提升接口一致性与可维护性；</strong></li>
+<li><strong>避免冗余的 try-catch；</strong></li>
+<li><strong>防止异常信息泄露。</strong></li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="二、核心原理（基于-HandlerExceptionResolver）"><a href="#二、核心原理（基于-HandlerExceptionResolver）" class="headerlink" title="二、核心原理（基于 HandlerExceptionResolver）"></a>二、核心原理（基于 HandlerExceptionResolver）</h2><p>Spring MVC 内部对异常的处理是通过接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">HandlerExceptionResolver</span> &#123;</span><br><span class="line">    ModelAndView <span class="title function_">resolveException</span><span class="params">(HttpServletRequest request,</span></span><br><span class="line"><span class="params">                                  HttpServletResponse response,</span></span><br><span class="line"><span class="params">                                  Object handler, Exception ex)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当 Controller 抛出异常后，<code>DispatcherServlet</code> 会按照以下步骤调用解析器：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">DispatcherServlet</span><br><span class="line">   ↓</span><br><span class="line">调用 Controller</span><br><span class="line">   ↓</span><br><span class="line">Controller 抛出异常</span><br><span class="line">   ↓</span><br><span class="line">遍历 HandlerExceptionResolver 列表</span><br><span class="line">   ↓</span><br><span class="line">匹配 @ExceptionHandler 方法</span><br><span class="line">   ↓</span><br><span class="line">调用 GlobalExceptionHandler 处理并返回统一结果</span><br></pre></td></tr></table></figure>
+
+<p>✅ Spring 提供的默认实现包括：</p>
+<ul>
+<li><code>ExceptionHandlerExceptionResolver</code>（支持 @ControllerAdvice）</li>
+<li><code>ResponseStatusExceptionResolver</code></li>
+<li><code>DefaultHandlerExceptionResolver</code></li>
+</ul>
+<hr>
+<h2 id="三、核心注解说明"><a href="#三、核心注解说明" class="headerlink" title="三、核心注解说明"></a>三、核心注解说明</h2><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@ControllerAdvice</code></td>
+<td>定义全局异常处理器（作用于所有 Controller）</td>
+</tr>
+<tr>
+<td><code>@RestControllerAdvice</code></td>
+<td>等价于 <code>@ControllerAdvice + @ResponseBody</code>，返回 JSON</td>
+</tr>
+<tr>
+<td><code>@ExceptionHandler(Exception.class)</code></td>
+<td>指定要捕获的异常类型</td>
+</tr>
+<tr>
+<td><code>@ResponseStatus(HttpStatus.XXX)</code></td>
+<td>设置返回的 HTTP 状态码</td>
+</tr>
+<tr>
+<td><code>@Order</code></td>
+<td>控制多个异常处理器的优先级</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、代码示例（标准实现）"><a href="#四、代码示例（标准实现）" class="headerlink" title="四、代码示例（标准实现）"></a>四、代码示例（标准实现）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalExceptionHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理自定义业务异常</span></span><br><span class="line">    <span class="meta">@ExceptionHandler(BusinessException.class)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;?&gt; handleBusinessException(BusinessException ex) &#123;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity</span><br><span class="line">                .status(HttpStatus.BAD_REQUEST)</span><br><span class="line">                .body(Map.of(<span class="string">&quot;code&quot;</span>, ex.getCode(), <span class="string">&quot;msg&quot;</span>, ex.getMessage()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理空指针异常</span></span><br><span class="line">    <span class="meta">@ExceptionHandler(NullPointerException.class)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;?&gt; handleNullPointer(NullPointerException ex) &#123;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity</span><br><span class="line">                .status(HttpStatus.INTERNAL_SERVER_ERROR)</span><br><span class="line">                .body(Map.of(<span class="string">&quot;code&quot;</span>, <span class="number">500</span>, <span class="string">&quot;msg&quot;</span>, <span class="string">&quot;空指针异常：&quot;</span> + ex.getMessage()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理所有未知异常（兜底）</span></span><br><span class="line">    <span class="meta">@ExceptionHandler(Exception.class)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;?&gt; handleException(Exception ex) &#123;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity</span><br><span class="line">                .status(HttpStatus.INTERNAL_SERVER_ERROR)</span><br><span class="line">                .body(Map.of(<span class="string">&quot;code&quot;</span>, <span class="number">500</span>, <span class="string">&quot;msg&quot;</span>, <span class="string">&quot;系统异常：&quot;</span> + ex.getMessage()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、最佳实践设计（推荐结构）"><a href="#五、最佳实践设计（推荐结构）" class="headerlink" title="五、最佳实践设计（推荐结构）"></a>五、最佳实践设计（推荐结构）</h2><h3 id="1️⃣-定义统一返回体"><a href="#1️⃣-定义统一返回体" class="headerlink" title="1️⃣ 定义统一返回体"></a>1️⃣ 定义统一返回体</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ApiResponse</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> Integer code;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; ApiResponse&lt;T&gt; <span class="title function_">success</span><span class="params">(T data)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ApiResponse</span>&lt;&gt;(<span class="number">200</span>, <span class="string">&quot;操作成功&quot;</span>, data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ApiResponse&lt;?&gt; fail(Integer code, String msg) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ApiResponse</span>&lt;&gt;(code, msg, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2️⃣-自定义业务异常"><a href="#2️⃣-自定义业务异常" class="headerlink" title="2️⃣ 自定义业务异常"></a>2️⃣ 自定义业务异常</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BusinessException</span> <span class="keyword">extends</span> <span class="title class_">RuntimeException</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Integer code;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BusinessException</span><span class="params">(Integer code, String message)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(message);</span><br><span class="line">        <span class="built_in">this</span>.code = code;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">getCode</span><span class="params">()</span> &#123; <span class="keyword">return</span> code; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3️⃣-异常处理类返回统一结构"><a href="#3️⃣-异常处理类返回统一结构" class="headerlink" title="3️⃣ 异常处理类返回统一结构"></a>3️⃣ 异常处理类返回统一结构</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalExceptionHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ExceptionHandler(BusinessException.class)</span></span><br><span class="line">    <span class="keyword">public</span> ApiResponse&lt;?&gt; handleBusinessException(BusinessException ex) &#123;</span><br><span class="line">        <span class="keyword">return</span> ApiResponse.fail(ex.getCode(), ex.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ExceptionHandler(Exception.class)</span></span><br><span class="line">    <span class="keyword">public</span> ApiResponse&lt;?&gt; handleException(Exception ex) &#123;</span><br><span class="line">        <span class="keyword">return</span> ApiResponse.fail(<span class="number">500</span>, <span class="string">&quot;系统异常：&quot;</span> + ex.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、常见面试追问与标准回答"><a href="#六、常见面试追问与标准回答" class="headerlink" title="六、常见面试追问与标准回答"></a>六、常见面试追问与标准回答</h2><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ <code>@ControllerAdvice</code> 与 <code>@RestControllerAdvice</code> 有什么区别？</td>
+<td>后者相当于前者 + <code>@ResponseBody</code>，可直接返回 JSON。</td>
+</tr>
+<tr>
+<td>❓ 可以捕获 Service 层的异常吗？</td>
+<td>可以，但前提是异常最终抛到了 Controller 层。</td>
+</tr>
+<tr>
+<td>❓ 异常没被捕获会发生什么？</td>
+<td>Spring 会交由默认的 <code>DefaultHandlerExceptionResolver</code>，返回 500。</td>
+</tr>
+<tr>
+<td>❓ 如何区分业务异常与系统异常？</td>
+<td>业务异常通过自定义异常类继承 RuntimeException；系统异常通过 Exception 捕获。</td>
+</tr>
+<tr>
+<td>❓ 异常处理器能否分类？</td>
+<td>可以使用多个 <code>@ControllerAdvice</code>，通过包路径或注解条件限制作用范围。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、常见陷阱与注意事项"><a href="#七、常见陷阱与注意事项" class="headerlink" title="七、常见陷阱与注意事项"></a>七、常见陷阱与注意事项</h2><table>
+<thead>
+<tr>
+<th>问题场景</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>返回 HTML 页面而不是 JSON</td>
+<td>使用了 <code>@ControllerAdvice</code> 而非 <code>@RestControllerAdvice</code></td>
+<td>改用后者</td>
+</tr>
+<tr>
+<td>异常未被捕获</td>
+<td>异常在过滤器或拦截器中发生</td>
+<td>可在 Filter&#x2F;Interceptor 中单独 try-catch</td>
+</tr>
+<tr>
+<td>统一返回结构不一致</td>
+<td>部分接口返回 ResponseEntity</td>
+<td>强制统一为自定义响应类</td>
+</tr>
+<tr>
+<td>国际化错误提示</td>
+<td>直接返回 message</td>
+<td>使用 <code>MessageSource</code> 做国际化处理</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、底层执行顺序（流程图）"><a href="#八、底层执行顺序（流程图）" class="headerlink" title="八、底层执行顺序（流程图）"></a>八、底层执行顺序（流程图）</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">DispatcherServlet</span><br><span class="line">   ↓</span><br><span class="line">Controller 执行</span><br><span class="line">   ↓</span><br><span class="line">异常抛出</span><br><span class="line">   ↓</span><br><span class="line">HandlerExceptionResolver（异常解析链）</span><br><span class="line">   ↓</span><br><span class="line">→ @ExceptionHandler 方法匹配</span><br><span class="line">   ↓</span><br><span class="line">→ GlobalExceptionHandler 执行</span><br><span class="line">   ↓</span><br><span class="line">→ 封装统一响应体返回前端</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、扩展知识点"><a href="#九、扩展知识点" class="headerlink" title="九、扩展知识点"></a>九、扩展知识点</h2><p>1️⃣ <strong>自定义异常枚举</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">ErrorCode</span> &#123;</span><br><span class="line">    USER_NOT_FOUND(<span class="number">1001</span>, <span class="string">&quot;用户不存在&quot;</span>),</span><br><span class="line">    PARAM_ERROR(<span class="number">1002</span>, <span class="string">&quot;参数错误&quot;</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2️⃣ <strong>国际化异常信息</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> MessageSource messageSource;</span><br><span class="line"><span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> messageSource.getMessage(<span class="string">&quot;user.notfound&quot;</span>, <span class="literal">null</span>, locale);</span><br></pre></td></tr></table></figure>
+
+<p>3️⃣ <strong>全局异常日志记录</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">log.error(<span class="string">&quot;系统异常&quot;</span>, ex);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔚-十、总结（背诵版）"><a href="#🔚-十、总结（背诵版）" class="headerlink" title="🔚 十、总结（背诵版）"></a>🔚 十、总结（背诵版）</h2><blockquote>
+<p>Spring Boot 的 <strong>全局异常处理机制</strong> 基于 <code>@ControllerAdvice</code> + <code>@ExceptionHandler</code> 实现，<br> 本质上是通过 <strong>HandlerExceptionResolver 责任链</strong> 对 Controller 层抛出的异常进行统一拦截、<br> 处理和格式化返回。</p>
+<p>优势：</p>
+<ul>
+<li>简化业务逻辑；</li>
+<li>保证返回格式一致；</li>
+<li>易于维护与扩展；</li>
+<li>支持多层异常分类；</li>
+</ul>
+<p>在实际项目中，通常结合 <strong>自定义异常类 + 统一返回结构 + 日志记录</strong><br> 构建标准的后端异常体系。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Wsk</div><div class="post-copyright__author_desc">Believe in yourself</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://wsk0404.github.io/posts/73f99711.html">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://wsk0404.github.io/posts/73f99711.html')">Spring MVC</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div><div class="reward-link mode"><a class="reward-link-button" href="/wecaht/"><i class="anzhiyufont anzhiyu-icon-plant-fill"></i>运营模式与责任</a></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://wsk0404.github.io/posts/73f99711.html"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=Spring MVC&amp;url=https://wsk0404.github.io/posts/73f99711.html&amp;pic=https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=a3aae7ee-12c2-4e8a-a864-536a9d4ce903" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="rm.copyPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wsk0404.github.io" target="_blank">Wsk Blog</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/IOC/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>IOC<span class="tagsPageCount">2</span></a><a class="post-meta__box__tags" href="/tags/AOP/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>AOP<span class="tagsPageCount">2</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2025/10/23/g4UkwyDri9BWZtE.jpg?_r_=f6dc091f-4657-3421-a104-1396e9836bbf" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/c45230cb.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=b74e0f1c-43f5-4fdc-b65e-36a654d63689" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">mysql面试题</div></div></a></div><div class="next-post pull-right"><a href="/posts/6c92115f.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=003dba97-ea1e-54d8-2234-a0130f575974" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Spring</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/posts/6c92115f.html" title="Spring"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=003dba97-ea1e-54d8-2234-a0130f575974" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2025-11-03</div><div class="title">Spring</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/zc998800/cdn/face/gif/m17.gif" ait="status"/></div></div><div class="author-info__description">路慢其修远兮 吾将上下而求索</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Wsk</h1><div class="author-info__desc">Believe in yourself</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/gukeyang" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/1542898061" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://s2.loli.net/2023/10/19/vNio4QGBSX9x5lO.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E8%AF%B7%E4%BD%A0%E8%AF%A6%E7%BB%86%E8%AF%B4%E4%B8%80%E4%B8%8B-SpringMVC-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">🎯 面试题：请你详细说一下 SpringMVC 的工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%9D%A2%E8%AF%95%E9%80%9F%E7%AD%94%E7%89%88%EF%BC%88%E9%AB%98%E5%88%86%E7%AE%80%E7%AD%94%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">二、30 秒面试速答版（高分简答）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81SpringMVC-%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84%E5%9B%BE%EF%BC%88%E6%96%87%E5%AD%97%E7%89%88%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">三、SpringMVC 总体架构图（文字版）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SpringMVC-%E4%B8%83%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">1.4.</span> <span class="toc-text">四、SpringMVC 七大核心组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81SpringMVC-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E8%AF%A6%E7%BB%86%E5%88%86%E8%A7%A3%EF%BC%887%E6%AD%A5%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">五、SpringMVC 工作流程详细分解（7步）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A9-Step-1%EF%BC%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="toc-number">1.5.1.</span> <span class="toc-text">🧩 Step 1：客户端发送请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-Step-2%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%8E%A7%E5%88%B6%E5%99%A8-DispatcherServlet-%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82"><span class="toc-number">1.5.2.</span> <span class="toc-text">⚙️ Step 2：前端控制器 DispatcherServlet 接收请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%8D-Step-3%EF%BC%9A%E8%B0%83%E7%94%A8-HandlerMapping-%E5%AF%BB%E6%89%BE%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.5.3.</span> <span class="toc-text">🔍 Step 3：调用 HandlerMapping 寻找处理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A9-Step-4%EF%BC%9A%E8%B0%83%E7%94%A8-HandlerAdapter-%E6%89%A7%E8%A1%8C-Controller-%E6%96%B9%E6%B3%95"><span class="toc-number">1.5.4.</span> <span class="toc-text">🧩 Step 4：调用 HandlerAdapter 执行 Controller 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A0-Step-5%EF%BC%9AController-%E6%89%A7%E8%A1%8C%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91"><span class="toc-number">1.5.5.</span> <span class="toc-text">🧠 Step 5：Controller 执行业务逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%84-Step-6%EF%BC%9ADispatcherServlet-%E8%B0%83%E7%94%A8-ViewResolver-%E8%A7%A3%E6%9E%90%E8%A7%86%E5%9B%BE"><span class="toc-number">1.5.6.</span> <span class="toc-text">🔄 Step 6：DispatcherServlet 调用 ViewResolver 解析视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%96%BC%EF%B8%8F-Step-7%EF%BC%9A%E6%B8%B2%E6%9F%93%E8%A7%86%E5%9B%BE%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%93%8D%E5%BA%94"><span class="toc-number">1.5.7.</span> <span class="toc-text">🖼️ Step 7：渲染视图并返回响应</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%BA%90%E7%A0%81%E7%BA%A7%E6%A0%B8%E5%BF%83%E8%B0%83%E7%94%A8%E9%93%BE%EF%BC%88%E7%AE%80%E5%8C%96%E4%BC%AA%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">六、源码级核心调用链（简化伪代码）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81SpringMVC-%E5%BC%82%E5%B8%B8%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-number">1.7.</span> <span class="toc-text">七、SpringMVC 异常与数据处理机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">1.8.</span> <span class="toc-text">八、常见追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%80%A7%E8%83%BD%E4%B8%8E%E6%89%A9%E5%B1%95%E5%88%86%E6%9E%90"><span class="toc-number">1.9.</span> <span class="toc-text">九、性能与扩展分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A5-%E5%8D%81%E3%80%81%E4%B8%80%E5%88%86%E9%92%9F%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">1.10.</span> <span class="toc-text">🔥 十、一分钟总结（可背诵）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ASpringMVC-%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%E5%AE%83%E4%BB%AC%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">🎯 面试题：SpringMVC 常用注解有哪些？它们的作用是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-1"><span class="toc-number">2.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E9%80%9F%E7%AD%94%E7%89%88%EF%BC%88%E9%9D%A2%E8%AF%95%E7%AE%80%E7%AD%94%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">二、30 秒速答版（面试简答）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81SpringMVC-%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%90%AB%E7%A4%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">三、SpringMVC 常用注解详解（含示例）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A9-%E4%B8%80%E3%80%81%E6%8E%A7%E5%88%B6%E5%B1%82%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.3.1.</span> <span class="toc-text">🧩 一、控制层注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%93%98-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">📘 底层原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%AD-%E4%BA%8C%E3%80%81%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.3.2.</span> <span class="toc-text">🧭 二、请求映射注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">⚙️ 示例：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%AE-%E4%B8%89%E3%80%81%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.3.3.</span> <span class="toc-text">🧮 三、参数绑定注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E7%A4%BA%E4%BE%8B%EF%BC%9A-1"><span class="toc-number">2.3.3.1.</span> <span class="toc-text">⚙️ 示例：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%93%98-%E5%BA%95%E5%B1%82%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="toc-number">2.3.3.2.</span> <span class="toc-text">📘 底层机制：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%BE-%E5%9B%9B%E3%80%81%E5%93%8D%E5%BA%94%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.3.4.</span> <span class="toc-text">🧾 四、响应相关注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E7%A4%BA%E4%BE%8B%EF%BC%9A-2"><span class="toc-number">2.3.4.1.</span> <span class="toc-text">⚙️ 示例：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E4%BA%94%E3%80%81%E5%85%A8%E5%B1%80%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%A2%9E%E5%BC%BA%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.3.5.</span> <span class="toc-text">⚙️ 五、全局控制与增强注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E7%A4%BA%E4%BE%8B%EF%BC%9A-3"><span class="toc-number">2.3.5.1.</span> <span class="toc-text">⚙️ 示例：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%B8%E5%BF%83%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-number">2.4.</span> <span class="toc-text">四、核心底层原理分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90%E6%9C%BA%E5%88%B6"><span class="toc-number">2.4.1.</span> <span class="toc-text">1️⃣ 注解解析机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E5%BA%95%E5%B1%82%E6%9C%AC%E8%B4%A8%EF%BC%9A"><span class="toc-number">2.4.2.</span> <span class="toc-text">2️⃣ 底层本质：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E9%AB%98%E5%88%86%E5%9B%9E%E7%AD%94"><span class="toc-number">2.5.</span> <span class="toc-text">五、常见面试追问与高分回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.6.</span> <span class="toc-text">六、常见陷阱与注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%8A%A0%E5%88%86%E6%89%A9%E5%B1%95%E8%AF%9D%E9%A2%98%EF%BC%88%E9%AB%98%E7%BA%A7%E9%9D%A2%E8%AF%95%E6%96%B9%E5%90%91%EF%BC%89"><span class="toc-number">2.7.</span> <span class="toc-text">七、加分扩展话题（高级面试方向）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A5-%E5%85%AB%E3%80%81%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">2.8.</span> <span class="toc-text">🔥 八、一分钟高分总结（可背诵）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A-RestController-%E5%92%8C-Controller-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">🎯 面试题：@RestController 和 @Controller 有什么区别？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-2"><span class="toc-number">3.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E7%BB%93%E8%AE%BA%EF%BC%8830-%E7%A7%92%E5%BF%AB%E9%80%9F%E5%9B%9E%E7%AD%94%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">二、核心结论（30 秒快速回答）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AF%A6%E7%BB%86%E8%A7%A3%E6%9E%90"><span class="toc-number">3.3.</span> <span class="toc-text">三、详细解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-Controller-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">3.3.1.</span> <span class="toc-text">1️⃣ @Controller 的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-RestController-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">3.3.2.</span> <span class="toc-text">2️⃣ @RestController 的作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-number">3.4.</span> <span class="toc-text">四、底层原理分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%BA%90%E7%A0%81%E5%B1%82%E9%9D%A2%E7%90%86%E8%A7%A3%EF%BC%88Spring-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">五、源码层面理解（Spring 设计原理）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-RestController-%E6%BA%90%E7%A0%81%EF%BC%9A"><span class="toc-number">3.5.1.</span> <span class="toc-text">✅ @RestController 源码：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%88%E7%BB%93%E5%90%88%E9%A1%B9%E7%9B%AE%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">六、实际开发中的应用场景（结合项目）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF%E4%B8%8E%E9%99%B7%E9%98%B1"><span class="toc-number">3.7.</span> <span class="toc-text">七、常见错误与陷阱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE"><span class="toc-number">3.8.</span> <span class="toc-text">八、常见面试追问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%80%A7%E8%83%BD%E4%B8%8E%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="toc-number">3.9.</span> <span class="toc-text">九、性能与实践建议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9F-%E4%B8%80%E5%88%86%E9%92%9F%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E5%8F%AF%E8%83%8C%E8%AF%B5%EF%BC%89"><span class="toc-number">3.10.</span> <span class="toc-text">🔟 一分钟高分总结（可背诵）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ASpring-%E5%90%8E%E7%AB%AF%E9%AA%8C%E8%AF%81%E6%B3%A8%E8%A7%A3%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%E5%AE%83%E4%BB%AC%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">🎯 面试题：Spring 后端验证注解有哪些？它们的作用是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E5%AE%98%E8%80%83%E5%AF%9F%E7%82%B9-3"><span class="toc-number">4.1.</span> <span class="toc-text">一、面试官考察点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%8130-%E7%A7%92%E7%AD%94%E9%A2%98%E6%A8%A1%E6%9D%BF%EF%BC%88%E9%AB%98%E5%88%86%E5%BC%80%E5%9C%BA%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">二、30 秒答题模板（高分开场）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%B8%B8%E7%94%A8%E5%90%8E%E7%AB%AF%E9%AA%8C%E8%AF%81%E6%B3%A8%E8%A7%A3%E5%88%86%E7%B1%BB%E4%B8%8E%E8%AF%A6%E8%A7%A3"><span class="toc-number">4.3.</span> <span class="toc-text">三、常用后端验证注解分类与详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A9-%E4%B8%80%E3%80%81%E7%A9%BA%E5%80%BC%E6%A0%A1%E9%AA%8C%E7%B1%BB"><span class="toc-number">4.3.1.</span> <span class="toc-text">🧩 一、空值校验类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E7%A4%BA%E4%BE%8B%EF%BC%9A-4"><span class="toc-number">4.3.1.1.</span> <span class="toc-text">⚙️ 示例：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%F0%9F%92%A1-%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">4.3.1.2.</span> <span class="toc-text">💡 区别总结：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%AE-%E4%BA%8C%E3%80%81%E9%95%BF%E5%BA%A6%E4%B8%8E%E5%A4%A7%E5%B0%8F%E6%A0%A1%E9%AA%8C"><span class="toc-number">4.3.2.</span> <span class="toc-text">🧮 二、长度与大小校验</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E7%A4%BA%E4%BE%8B%EF%BC%9A-5"><span class="toc-number">4.3.2.1.</span> <span class="toc-text">⚙️ 示例：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%85-%E4%B8%89%E3%80%81%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F%E7%B1%BB"><span class="toc-number">4.3.3.</span> <span class="toc-text">📅 三、时间日期类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%89%EF%B8%8F-%E5%9B%9B%E3%80%81%E6%A0%BC%E5%BC%8F%E4%B8%8E%E6%AD%A3%E5%88%99%E9%AA%8C%E8%AF%81"><span class="toc-number">4.3.4.</span> <span class="toc-text">✉️ 四、格式与正则验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A0-%E4%BA%94%E3%80%81%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="toc-number">4.3.5.</span> <span class="toc-text">🧠 五、其他常用注解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Spring-%E4%B8%AD%E7%9A%84%E5%90%AF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">4.4.</span> <span class="toc-text">四、Spring 中的启用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-1-%E5%9C%A8%E5%AE%9E%E4%BD%93%E7%B1%BB%E4%B8%8A%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3"><span class="toc-number">4.4.1.</span> <span class="toc-text">✅ 1. 在实体类上使用注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-2-%E5%9C%A8-Controller-%E5%B1%82%E5%90%AF%E7%94%A8%E6%A0%A1%E9%AA%8C"><span class="toc-number">4.4.2.</span> <span class="toc-text">✅ 2. 在 Controller 层启用校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-3-%E6%96%B9%E6%B3%95%E7%BA%A7%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C%EF%BC%88Service-%E5%B1%82%EF%BC%89"><span class="toc-number">4.4.3.</span> <span class="toc-text">✅ 3. 方法级参数校验（Service 层）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">4.5.</span> <span class="toc-text">五、底层实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E9%AA%8C%E8%AF%81%E6%B3%A8%E8%A7%A3%EF%BC%88%E9%AB%98%E9%A2%91%E5%8A%A0%E5%88%86%E9%A2%98%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">六、自定义验证注解（高频加分题）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E7%AD%94%E6%A1%88"><span class="toc-number">4.7.</span> <span class="toc-text">七、常见面试追问与答案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E4%B8%8E%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">4.8.</span> <span class="toc-text">八、常见陷阱与注意点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E9%AB%98%E5%88%86%E6%80%BB%E7%BB%93%EF%BC%88%E9%9D%A2%E8%AF%95%E8%83%8C%E8%AF%B5%E7%89%88%EF%BC%89"><span class="toc-number">4.9.</span> <span class="toc-text">九、高分总结（面试背诵版）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ASpring-%E4%B8%AD%E7%9A%84%E6%8B%A6%E6%88%AA%E5%99%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%AE%83%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%EF%BC%88%E6%8B%A6%E6%88%AA%E5%99%A8%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">🎯 面试题：Spring 中的拦截器是什么？它的作用是什么？（拦截器执行顺序）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E9%80%9F%E7%AD%94%E6%A8%A1%E6%9D%BF%EF%BC%88%E9%80%82%E5%90%88%E5%BC%80%E5%9C%BA%E9%99%88%E8%BF%B0%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">一、面试速答模板（适合开场陈述）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Spring-MVC-%E6%8B%A6%E6%88%AA%E5%99%A8%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-number">5.2.</span> <span class="toc-text">二、Spring MVC 拦截器核心机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E6%8B%A6%E6%88%AA%E5%99%A8%E6%8E%A5%E5%8F%A3%EF%BC%9AHandlerInterceptor"><span class="toc-number">5.2.1.</span> <span class="toc-text">1️⃣ 拦截器接口：HandlerInterceptor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%AF%B4%E6%98%8E"><span class="toc-number">5.2.2.</span> <span class="toc-text">2️⃣ 生命周期说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E6%A0%B8%E5%BF%83%E6%89%A7%E8%A1%8C%E9%93%BE%E7%BB%93%E6%9E%84"><span class="toc-number">5.2.3.</span> <span class="toc-text">3️⃣ 核心执行链结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%8B%A6%E6%88%AA%E5%99%A8%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B%EF%BC%88%E6%A0%87%E5%87%86%E5%86%99%E6%B3%95%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">三、拦截器使用示例（标准写法）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%AE%9A%E4%B9%89%E6%8B%A6%E6%88%AA%E5%99%A8%E7%B1%BB"><span class="toc-number">5.3.1.</span> <span class="toc-text">1️⃣ 定义拦截器类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E6%B3%A8%E5%86%8C%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">5.3.2.</span> <span class="toc-text">2️⃣ 注册拦截器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BE%93%E5%87%BA%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-number">5.3.3.</span> <span class="toc-text">3️⃣ 控制台输出执行顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8B%A6%E6%88%AA%E5%99%A8%E4%B8%8E%E8%BF%87%E6%BB%A4%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%E8%BF%BD%E9%97%AE%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、拦截器与过滤器的区别（面试高频追问）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E6%A0%87%E5%87%86%E5%9B%9E%E7%AD%94"><span class="toc-number">5.5.</span> <span class="toc-text">五、常见面试追问与标准回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-1"><span class="toc-number">5.6.</span> <span class="toc-text">六、常见陷阱与注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E9%AB%98%E7%BA%A7%E6%89%A9%E5%B1%95%EF%BC%9ASpring-5-%E6%96%B0%E7%89%B9%E6%80%A7%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">5.7.</span> <span class="toc-text">七、高级扩展：Spring 5 新特性拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E6%80%BB%E7%BB%93%EF%BC%88%E9%9D%A2%E8%AF%95%E8%83%8C%E8%AF%B5%E7%89%88%EF%BC%89"><span class="toc-number">5.8.</span> <span class="toc-text">八、总结（面试背诵版）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%88Global-Exception-Handling%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">🎯 面试题：全局异常处理（Global Exception Handling）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E9%80%9F%E7%AD%94%EF%BC%88%E6%A0%87%E5%87%86%E5%9B%9E%E7%AD%94%EF%BC%89"><span class="toc-number">6.1.</span> <span class="toc-text">一、面试速答（标准回答）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%EF%BC%88%E5%9F%BA%E4%BA%8E-HandlerExceptionResolver%EF%BC%89"><span class="toc-number">6.2.</span> <span class="toc-text">二、核心原理（基于 HandlerExceptionResolver）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E6%B3%A8%E8%A7%A3%E8%AF%B4%E6%98%8E"><span class="toc-number">6.3.</span> <span class="toc-text">三、核心注解说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B%EF%BC%88%E6%A0%87%E5%87%86%E5%AE%9E%E7%8E%B0%EF%BC%89"><span class="toc-number">6.4.</span> <span class="toc-text">四、代码示例（标准实现）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E8%AE%BE%E8%AE%A1%EF%BC%88%E6%8E%A8%E8%8D%90%E7%BB%93%E6%9E%84%EF%BC%89"><span class="toc-number">6.5.</span> <span class="toc-text">五、最佳实践设计（推荐结构）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%B8%8F%E2%83%A3-%E5%AE%9A%E4%B9%89%E7%BB%9F%E4%B8%80%E8%BF%94%E5%9B%9E%E4%BD%93"><span class="toc-number">6.5.1.</span> <span class="toc-text">1️⃣ 定义统一返回体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%B8%8F%E2%83%A3-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%9A%E5%8A%A1%E5%BC%82%E5%B8%B8"><span class="toc-number">6.5.2.</span> <span class="toc-text">2️⃣ 自定义业务异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%B8%8F%E2%83%A3-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%B1%BB%E8%BF%94%E5%9B%9E%E7%BB%9F%E4%B8%80%E7%BB%93%E6%9E%84"><span class="toc-number">6.5.3.</span> <span class="toc-text">3️⃣ 异常处理类返回统一结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E6%A0%87%E5%87%86%E5%9B%9E%E7%AD%94"><span class="toc-number">6.6.</span> <span class="toc-text">六、常见面试追问与标准回答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">6.7.</span> <span class="toc-text">七、常见陷阱与注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%BA%95%E5%B1%82%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%EF%BC%88%E6%B5%81%E7%A8%8B%E5%9B%BE%EF%BC%89"><span class="toc-number">6.8.</span> <span class="toc-text">八、底层执行顺序（流程图）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">6.9.</span> <span class="toc-text">九、扩展知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9A-%E5%8D%81%E3%80%81%E6%80%BB%E7%BB%93%EF%BC%88%E8%83%8C%E8%AF%B5%E7%89%88%EF%BC%89"><span class="toc-number">6.10.</span> <span class="toc-text">🔚 十、总结（背诵版）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/162c3636.html" title="IO 与序列化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=e068116e-c4f9-3ecf-261d-ae99439cbe7e" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IO 与序列化"/></a><div class="content"><a class="title" href="/posts/162c3636.html" title="IO 与序列化">IO 与序列化</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/aa8deaab.html" title="多线程与并发"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/g4UkwyDri9BWZtE.jpg?_r_=f6dc091f-4657-3421-a104-1396e9836bbf" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="多线程与并发"/></a><div class="content"><a class="title" href="/posts/aa8deaab.html" title="多线程与并发">多线程与并发</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/86c7f0f3.html" title="集合与泛型"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=49f72901-77de-7e7f-1baf-826df4d9874f" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="集合与泛型"/></a><div class="content"><a class="title" href="/posts/86c7f0f3.html" title="集合与泛型">集合与泛型</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a541262a.html" title="Spring Boot"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/YUHOf5MZEItlGd3.jpg?_r_=f08c005f-c7d6-b893-75e9-3668849b2d88" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring Boot"/></a><div class="content"><a class="title" href="/posts/a541262a.html" title="Spring Boot">Spring Boot</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/f7ede91d.html" title="Java基础"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/YUHOf5MZEItlGd3.jpg?_r_=8a69993b-acf4-339b-755e-db54b2ca5a1a" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java基础"/></a><div class="content"><a class="title" href="/posts/f7ede91d.html" title="Java基础">Java基础</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-上班摸鱼中.svg" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title="博客框架为Hexo_v5.4.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a class="github-badge" target="_blank" href="https://blog.anheyu.com/" style="margin-inline:5px" data-title="本站使用AnZhiYu主题" title="本站使用AnZhiYu主题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.9/img/Theme-AnZhiYu-2E67D3.svg" alt="本站使用AnZhiYu主题"/></a><a class="github-badge" target="_blank" href="https://www.dogecloud.com/" style="margin-inline:5px" data-title="本站使用多吉云为静态资源提供CDN加速" title="本站使用多吉云为静态资源提供CDN加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/CDN-多吉云-3693F3.svg" alt="本站使用多吉云为静态资源提供CDN加速"/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title="本站项目由Github托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Source-Github.svg" alt="本站项目由Github托管"/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg" alt="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"/></a></p></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Wsk" target="_blank">Wsk</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.png" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AOP/" style="font-size: 0.88rem;">AOP<sup>2</sup></a><a href="/tags/IO/" style="font-size: 0.88rem;">IO<sup>1</sup></a><a href="/tags/IOC/" style="font-size: 0.88rem;">IOC<sup>2</sup></a><a href="/tags/JVM/" style="font-size: 0.88rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 0.88rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 0.88rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 0.88rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 0.88rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 0.88rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 0.88rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 0.88rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 0.88rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 0.88rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 0.88rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" style="font-size: 0.88rem;">自动装配<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 0.88rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 0.88rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="chat-btn" type="button" title="聊天"><i class="anzhiyufont anzhiyu-icon-comment-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><a id="switch-commentBarrage" href="javascript:anzhiyu.switchCommentBarrage();" title="开关弹幕"><i class="anzhiyufont anzhiyu-icon-danmu"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8152976493&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.4/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2023 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2020 By 安知鱼 V1.6.8",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Wsk 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("04/01/2023 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      img.src = "";
+      img.title = "";
+      img.alt = "";
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+      appKey: 'TjKeHNK7GJrGTYuKYzGzh8yg',
+      avatar: 'mp',
+      serverURLs: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_亲亲":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再见":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_发怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_发财":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可爱":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_呕吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_坏笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尴尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_惊吓":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.cbd.int/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) anzhiyu.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script src="https://cdn.cbd.int/blueimp-md5@2.19.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=mp'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://4GK2IcRZ.api.lncldglobal.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+        "X-LC-Key": 'TjKeHNK7GJrGTYuKYzGzh8yg',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script>var visitorMail = "visitor@anheyu.com";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="//code.tidio.co/4nifo6zdbrmyjsngh2yzxwbnlhrvshrf.js" async="async"></script><script>(() => {
+  const isChatBtn = true
+  const isChatHideShow = true
+
+  if (isChatBtn) {
+    let isShow = false
+    const close = () => {
+      window.tidioChatApi.hide()
+      isShow = false
+    }
+    
+    const open = () => {
+      window.tidioChatApi.open()
+      window.tidioChatApi.show()
+      isShow = true
+    }
+
+    const onTidioChatApiReady = () => {
+      window.tidioChatApi.hide()
+      window.tidioChatApi.on("close", close)
+    }
+    if (window.tidioChatApi) {
+      window.tidioChatApi.on("ready", onTidioChatApiReady)
+    } else {
+      document.addEventListener("tidioChat-ready", onTidioChatApiReady)
+    }
+
+    window.chatBtnFn = () => {
+      if (!window.tidioChatApi) return
+      isShow ? close() : open()
+    }
+  } else if (isChatHideShow) {
+    window.chatBtn = {
+      hide: () => {
+        window.tidioChatApi && window.tidioChatApi.hide()
+      },
+      show: () => {
+        window.tidioChatApi && window.tidioChatApi.show()
+      }
+    }
+  }
+})()</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
