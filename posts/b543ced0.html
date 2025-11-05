@@ -1,0 +1,2530 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>RabbitMQ | Wsk Blog</title><meta name="keywords" content="博客,笔记,学习"><meta name="author" content="Wsk,2047891093@qq.com"><meta name="copyright" content="Wsk"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="RabbitMQ"><meta name="application-name" content="RabbitMQ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="RabbitMQ"><meta property="og:url" content="https://wsk0404.github.io/posts/b543ced0.html"><meta property="og:site_name" content="Wsk Blog"><meta property="og:description" content="🎯 面试题：什么是 RabbitMQ？（消息队列核心原理 + 应用场景） 一、面试速答模板（高分开场） RabbitMQ 是一个基于 AMQP（Advanced Message Queuing Protocol，高级消息队列协议） 的开源消息中间件。 它由 Erlang 语言开发，具有高可靠性、可"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=a2104e7b-bf4e-6220-ee12-24632747aec8"><meta property="article:author" content="Wsk"><meta property="article:tag" content="博客,笔记,学习"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=a2104e7b-bf4e-6220-ee12-24632747aec8"><meta name="description" content="🎯 面试题：什么是 RabbitMQ？（消息队列核心原理 + 应用场景） 一、面试速答模板（高分开场） RabbitMQ 是一个基于 AMQP（Advanced Message Queuing Protocol，高级消息队列协议） 的开源消息中间件。 它由 Erlang 语言开发，具有高可靠性、可"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://wsk0404.github.io/posts/b543ced0"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2023/09/03/125766904/ee23df8517f3c3e3efc4145658269c06_5714860933110284659.png"},
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:{"enable":true,"maxBarrage":1,"barrageTime":4000,"accessToken":"","mailMd5":"3932F24FA213E964B6B1B0FD091F88CE"},
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: {"apiurl":"https://friends.anheyu.com/"},
+  navMusic: true,
+  mainTone: {"mode":"both","api":"https://img2color-go.vercel.app/api?img=","cover_change":true},
+  authorStatus: {"skills":["🤖️ 数码科技爱好者","🔍 分享与热心帮助","🔨 设计开发一条龙","🏃 脚踏实地行动派"]},
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    simplehomepage: false,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":true,"limitCount":50,"languages":{"author":"作者: Wsk","link":"链接: ","source":"来源: Wsk Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Wsk Blog',
+  title: 'RabbitMQ',
+  postAI: '',
+  pageFillDescription: '🎯 面试题：什么是 RabbitMQ？（消息队列核心原理 + 应用场景）, 一、面试速答模板（高分开场）, 二、RabbitMQ 的核心功能与作用, 三、RabbitMQ 核心组件（重点记忆）, 四、RabbitMQ 的工作原理（流程图理解）, 五、Exchange（交换机）类型（面试高频）, 六、消息可靠性机制（面试必问）, 七、常见应用场景（实战型回答）, 八、优缺点分析（面试官爱问）, 九、集群模式（了解加分）, 🔟 常见面试追问与答法, 💡 十一、总结（背诵版）, 🎯 面试题：RabbitMQ 的工作原理（消息流转机制 + 核心组件 + 路由模型）, 🎯 面试题：RabbitMQ 消息丢失的几种情况（含原因分析 + 解决方案）, 🎯 面试题：RabbitMQ 消息持久化的条件（含原理 + 实践方案）, 🎯 面试题：RabbitMQ 死信消息的来源（含机制原理 + 应用场景）, 🎯 面试题：RabbitMQ 死信队列的用处（含原理解析 + 实战应用）, 🎯 面试题：RabbitMQ 支持延迟队列吗？实现延迟队列的条件是什么？（含原理 + 实战讲解）, 🎯 面试题：哪些情况下推荐使用 RabbitMQ 的惰性队列（含原理 + 实战分析）, 🎯 面试题：RabbitMQ 队列中存放的 Message 是否有数量限制（含机制原理 + 调优建议）, 🎯 面试题：RabbitMQ 队列的溢出行为（含机制原理 + 参数配置 + 实战示例）, 🎯 面试题：如何确保消息正确发送到 RabbitMQ amp 被消费者正确消费（含可靠投递机制 + 消费确认机制）面试题什么是消息队列核心原理应用场景一面试速答模板高分开场是一个基于高级消息队列协议的开源消息中间件它由语言开发具有高可靠性可扩展性和灵活的路由机制的主要作用是实现应用解耦异步通信流量削峰与系统解耦是分布式系统中常用的消息中间件解决方案之一二的核心功能与作用功能说明异步处理将耗时操作如短信发送图片处理异步化提高系统响应速度应用解耦发送方与接收方通过消息队列解耦互不依赖削峰填谷在高并发场景下削峰缓冲防止系统被瞬时流量压垮可靠通信通过消息确认机制与持久化机制保证消息不丢失广播分发支持多消费者多队列灵活绑定实现一对多消息分发三核心组件重点记忆的消息传递基于大核心概念组件作用说明生产者负责发送消息的应用交换机接收生产者消息并根据路由规则分发到队列队列存储消息的缓冲区绑定交换机与队列的绑定关系包含路由规则消费者从队列中接收并处理消息四的工作原理流程图理解路由规则生产者将消息发送到交换机交换机根据绑定的路由键和规则将消息分发到一个或多个队列消费者监听对应队列从中取出消息进行业务处理五交换机类型面试高频类型描述示例应用根据精确匹配路由点对点消息传递广播式忽略发给所有绑定队列广播消息如系统通知模糊匹配支持通配符分类消息如日志级别根据消息头属性匹配复杂匹配逻辑场景六消息可靠性机制面试必问机制作用关键参数消息确认确保消费者正确接收并处理消息消息持久化防止消息丢失交换机队列消息都可持久化发布确认确保消息成功发送到事务机制保证发送一致性但性能低死信队列处理消费失败过期或拒收的消息七常见应用场景实战型回答场景说明异步任务处理注册成功后异步发送邮件短信流量削峰高并发下队列充当缓冲层系统解耦订单系统与库存系统通过解耦消息广播通知多个微服务如更新缓存同步配置日志收集与分析统一收集日志异步分析与存储八优缺点分析面试官爱问优点缺点高可靠性支持持久化部署与维护复杂灵活的路由机制多种性能略低于完整的消息确认机制吞吐量不适合大规模日志系统支持集群与高可用部署语言生态较小九集群模式了解加分模式特点普通集群模式多节点共享元数据队列元数据同步镜像队列模式队列在多个节点上复制主从同步保证高可用联邦队列模式跨机房异地消息同步模式消息跨集群复制常见面试追问与答法面试官问题优秀回答是单线程的吗不是基于实现的轻量级进程模型支持并发高上下文切换成本低如何保证消息不丢失使用持久化确认机制和死信队列如何实现延迟消息借助插件或使用死信队列机制如何防止消息重复消费在消费者侧做幂等性控制如业务唯一与有什么区别吞吐量更高适合日志流可靠性更强适合业务系统异步解耦十一总结背诵版是基于协议的高可靠消息中间件核心组成包括支持多种交换机类型提供消息确认持久化死信队列等机制保证可靠性广泛应用于异步解耦削峰日志消息分发等场景面试题的工作原理消息流转机制核心组件路由模型一面试速答模板开场陈述的工作原理基于高级消息队列协议核心思想是生产者将消息发送到交换机由交换机根据路由规则将消息分发到一个或多个队列最终由消费者从队列中接收并处理消息整个过程实现了异步解耦削峰填谷与高可靠消息传递二核心组件面试高频考点组件说明关键点生产者负责发送消息到一般是业务系统中发出事件的模块交换机接收发来的消息并根据规则分发是消息路由的核心队列存储消息的中间缓冲区实现消息的可靠传递绑定定义与的绑定关系通过实现路由规则消费者监听队列从中取出并处理消息通常是异步消费的业务逻辑三的消息流转机制核心流程的消息传递过程可以抽象为生产路由存储消费四个阶段步骤详解生产者发送消息生产者创建连接与通道调用向指定的发送消息并携带交换机接收消息交换机根据消息的和其类型判断该消息应该路由到哪些队列消息路由到队列通过绑定关系消息被分发到对应的一个或多个队列中队列在中是消息的真正存储载体消费者订阅队列消费者通过方法监听队列异步接收消息消费者处理完消息后会发送确认告诉消息已被成功消费删除已消费消息如果开启了手动确认在收到后删除消息若消费失败可通过死信队列进行重新处理四交换机的类型消息路由的关键类型路由规则应用场景精确匹配一对一消息如订单状态更新忽略广播消息到所有绑定队列一对多广播如系统通知模糊匹配支持通配符分类订阅如日志或事件流根据消息头匹配规则属性高级过滤场景举例说明模式假设生产者发送消息为消费者可通过来匹配所有订单相关消息五消息确认机制保证可靠性通过多层机制确保消息可靠传递层级机制说明生产阶段保证消息成功发送到交换机阶段当消息未被正确路由时触发消费阶段确认消息是否被成功消费存储阶段消息和队列持久化防止宕机丢失示例说明开启发布确认机制阻塞等待确认六工作原理的底层实现逻辑面试深挖基于模型实现高并发与高可靠消息分发其核心原理包括每个队列是独立的进程轻量级进程每个队列都维护自己的消息列表与消费者列表消息路由由负责内部使用表路由表维护绑定关系消息存储持久化队列的消息会写入磁盘非持久化仅存内存消费者消费机制采用推送模型消息通过通道实时推送给消费者机制消费者处理完后手动否则会重投递消息七消息丢失与重复的防范机制面试延伸环节潜在问题解决方案生产者消息发送失败使用机制路由失败使用参数消费失败宕机启用持久化机制死信队列消费重复消费端异常重发实现业务幂等性如唯一流水号八工作原理流程图逻辑视图交换机消费者九面试追问与标准回答面试官问题优秀回答如何保证消息不丢失持久化队列持久化消息机制发布确认机制如何防止消息重复消费消费端实现幂等性如用记录消息唯一路由失败时怎么办开启并实现什么是死信队列当消息消费失败过期或队列满时被转发到死信交换机为什么性能高轻量级进程模型异步非阻塞内存队列总结高分背诵版的工作原理基于协议生产者交换机队列消费者根据与规则将消息路由到队列中消费者监听队列消费消息并通过确认机制实现可靠投递通过持久化发布确认死信队列等机制能保证消息的可靠性与可恢复性是分布式系统中实现异步通信与系统解耦的重要中间件面试题消息丢失的几种情况含原因分析解决方案一面试速答模板高分版开场在的消息传递过程中消息从生产者发送到消费者要经过多个环节消息可能在任意一个环节出现丢失一般分为三类生产阶段消息丢失存储阶段消息丢失消费阶段消息丢失因此确保消息可靠性需要在生产端端消费端都建立防丢机制二消息流转流程回顾发送消息路由消费者消费丢失可能点生产者未成功发送到路由失败或未持久化消费者未正确确认三三大阶段消息丢失详解生产阶段丢失可能原因网络异常崩溃未开启不匹配导致消息无法路由不存在解决方案问题场景解决方案消息未到启用模式并注册回调消息路由失败开启模式不存在提前声明一致性配置代码示例消息未到达消息无法路由存储阶段丢失可能原因消息未绑定消息或未持久化宕机导致内存数据丢失解决方案问题对应方案消息未绑定队列检查配置队列非持久化消息未持久化宕机丢消息启用镜像队列或集群机制过期拒绝消息丢失使用死信队列代码示例消费阶段丢失可能原因使用自动消费异常但未处理消费者宕机导致未发送消息被错误确认或重复消费解决方案问题解决策略自动改为手动确认机制消费异常使用并执行消息重复消费保证幂等性唯一消息积压失败启用重试机制死信队列代码示例四综合防丢方案汇总阶段潜在问题推荐解决方案生产阶段消息未达存储阶段未绑定未持久化队列消息消费阶段丢失或异常手动重试机制幂等性五消息可靠性保障机制机制作用说明确认消息成功到达异步回调机制确认消息成功路由到模式持久化防止崩溃导致丢失手动确保消息正确消费消费成功后再确认死信队列保存异常或超时消息防止数据丢失镜像集群模式提升高可用性防止单节点宕机六面试高频追问与标准回答问题高分回答消息在哪些阶段可能丢失分别在生产阶段存储阶段消费阶段如何保证消息可靠持久化手动重启会丢数据吗不会只要均持久化自动有什么风险未处理完就标记为成功可能导致消息丢失如何防止重复消费通过唯一消息幂等校验七总结背诵版消息丢失分为三类生产阶段消息未到存储阶段未路由或未持久化消费阶段丢失或异常解决方案包括持久化机制手动幂等性只有做到生产存储消费三端可靠才能实现消息不丢不重不乱面试题消息持久化的条件含原理实践方案一面试速答模板高分版开场的持久化是指在异常宕机或重启后消息仍然能够恢复不丢失想要实现消息持久化必须同时满足三大条件必须持久化必须持久化消息本身必须持久化任意一环未设置都会导致消息在系统重启后丢失二持久化原理将持久化相关的元数据存储到磁盘上的数据库或消息日志文件中当重启时会从磁盘重新加载这些对象从而实现消息恢复持久化路径磁盘存储只有当三者都具备持久化属性时才会将消息写入磁盘三持久化的三大条件必须持久化声明交换机时设置否则重启后该交换机元数据会丢失必须持久化队列声明时设置如果队列非持久化即使消息是持久化的也会在重启后丢失消息必须持久化发送消息时必须设置持久化消息为非持久化仅存在内存中四持久化机制的工作过程生产者发送消息到检测目标是否均持久化若三者都持久化则将消息写入磁盘日志当重启时从磁盘加载未消费的消息消费者重新消费确保消息可靠传递五持久化的优缺点优点缺点宕机后消息不丢失写磁盘操作增加开销提高消息系统可靠性吞吐量比纯内存模式略有下降结合确认保证强一致性不适合极端高性能场景如日志收集六常见误区与面试陷阱错误理解实际情况说明只设置消息持久化就不会丢错或非持久化依然会丢设置消息立即落盘错落盘时间由自身批量刷盘策略决定持久化消息绝不会丢失错崩溃前若尚未刷盘仍可能丢失持久化影响性能生产不建议开启错关键业务订单支付库存必须持久化七最佳实践建议与都声明为消息属性中设置搭配确保消息写盘成功对关键队列使用镜像队列或集群机制对于非关键实时消息如日志可关闭持久化以提升性能的消息持久化只有在三者都持久化时才真正生效配合与手动可实现消息不丢不乱可恢复的可靠传递面试题死信消息的来源含机制原理应用场景一面试速答模板高分版开场在中死信指的是那些无法被正常消费的消息当消息在队列中满足某些条件时就会被投递到一个专门的死信交换机死信的主要来源有三种情况消息被消费者拒绝且未重新入队消息在队列中存活时间超出队列达到最大长度限制导致消息被挤出这些机制可用于实现消息重试延迟队列异常追踪等高级功能二死信队列工作原理死信机制依赖于和当普通队列中的消息变成死信后会被自动投递到绑定在上的队列消息过期拒绝挤出死信处理三死信消息的三大来源消费者拒绝消息且不重新入队触发条件消费者调用或且不重新放回原队列场景说明消费业务处理失败如库存不足参数错误不希望消息再次被消费会将此消息发送到代码示例消费失败拒绝消息且不重新入队消息在队列中过期过期触发条件设置消息或队列超时未被消费设置方式单条消息过期时间单位毫秒队列统一过期时间说明当到期后消息不会立即被删除只有当消息位于队列头部时才会检测是否过期过期消息会自动进入死信交换机若配置了队列达到最大长度触发条件队列设置了最大长度或最大字节数新消息到达时旧消息会被丢弃或转发至设置方式最大存储条说明当队列满时最旧的消息被移除若绑定了则这些被移除的消息会进入死信队列否则直接被丢弃四配置死信交换机声明普通队列时配置参数绑定死信队列五应用场景场景类型应用说明异常消息存储保存消费失败或拒绝的消息以便排查延迟队列利用实现延迟消费消息重试机制异常消息先进入再人工或程序重发消息监控审计对死信队列消息进行告警与监控六总结背诵版死信消息主要来源于三类场景消费者拒绝消息且不重回队列消息在队列中过期到期未消费队列达到最大长度旧消息被挤出当普通队列配置了死信交换机后这些异常消息会自动转发至死信队列结合可实现消息重试延迟队列异常监控等功能是高可靠机制的重要组成部分面试题死信队列的用处含原理解析实战应用一面试速答模板高分版开场在中死信队列是用于存放无法被正常消费的消息的特殊队列它依赖于死信交换机实现用于保障消息系统的可靠性与可恢复性死信队列的核心作用在于防止消息丢失实现延迟队列机制实现消息重试与补偿帮助定位与分析异常消息二死信队列工作原理当普通队列中的消息由于某种原因拒绝过期队列满无法被正常消费时会将该消息转发到与该队列绑定的死信交换机死信交换机会将这些异常消息投递到对应的死信队列供后续处理或分析消息拒绝过期队列满监控重试分析三死信队列的常见用途防止消息丢失消息安全兜底当系统出现异常时如消费者宕机消费失败队列满等情况普通队列的消息可能被丢弃此时若配置了死信队列这些异常消息会被保存到中避免彻底丢失应用示例消费服务异常宕机时未消费的消息可在中查找运维人员可通过定位系统缺陷或消息积压问题实现延迟队列本身不直接支持延迟队列但可通过消息过期时间死信队列机制实现原理将消息发送到延迟队列并设置当到期后消息成为死信死信队列接收该消息即为延迟到达的消息示例支付订单分钟未支付自动取消秒杀系统中商品库存释放延迟处理分钟消息重试机制当消息消费失败时可通过死信队列实现延迟重试或人工补偿机制典型方案消费失败消息拒绝不重回原队列进入定时任务监听判断错误类型后重新转发消息到原队列进行再次消费应用场景网络波动导致消费失败第三方接口超时可重试临时异常不希望直接丢弃消息异常消息监控与审计死信队列还可作为系统告警与分析渠道运维系统可定期扫描并发送告警通知帮助快速定位业务异常应用示例超过阈值触发报警将数据持久化分析识别重复失败或数据格式问题消息削峰与异步处理的保护机制在高并发环境下死信队列能作为一种异常缓冲区防止因临时高负载造成消息积压或丢失例如秒杀活动中若消费者处理能力不足消息先进入稍后人工或自动系统进行重放避免系统雪崩四死信队列配置示例声明普通队列并绑定声明死信队列五面试官常追问问题与高分回答面试官提问高分回答死信队列的作用是什么用于保存无法被正常消费的消息实现消息重试延迟异常分析等机制死信消息从哪里来拒绝过期队列满支持延迟队列吗原生不支持但可通过组合实现延迟队列如何防止消息丢失为关键业务队列配置死信队列并定期消费中的消息死信队列消息太多怎么办定期清理持久化落库分析配合自动补偿或报警系统使用六总结背诵版死信队列是中处理异常消息的关键机制它的主要作用包括防止消息丢失兜底保护实现延迟队列实现消费重试机制进行异常消息监控与分析死信队列是消息系统高可用与可靠性的核心保障之一也是企业级消息中间件中最常考察的面试知识点之一面试题支持延迟队列吗实现延迟队列的条件是什么含原理实战讲解一面试速答模板高分开场原生并不直接支持延迟队列但可以通过以下两种方式实现方式一过期时间死信交换机机制最常见方案方式二使用官方插件两者的本质都是让消息在一段时间后再被消费实现延迟投递效果二延迟队列的概念延迟队列指消息发送到队列后并不会立即被消费而是等待一段时间后才进入正常消费流程典型应用场景订单分钟未支付自动取消用户注册后分钟发送欢迎邮件秒杀活动到时间才生效定时任务或延迟重试机制三方式一实现延迟队列推荐机制可以为消息或队列设置生存时间一旦超时未被消费消息会变成死信消息若配置了死信交换机则超时消息会自动转发到另一个队列即我们的延迟队列实现原理生产者延迟交换机延迟队列设置消息过期死信交换机死信队列实际消费队列核心配置代码普通延迟队列配置消息秒过期后转发到指定路由键死信交换机和死信队列配置逻辑说明消息先进入等待到期后自动将消息转发到最终进入被消费者正常消费优点与缺点优点缺点实现简单无需插件只能按队列或消息固定设定可靠稳定兼容性好无法对单条消息动态设置不同延迟时间适合延迟固定的场景大量延迟消息可能堆积占内存典型应用订单支付超时自动取消延迟通知定时任务消息重试延迟投递四方式二使用官方延迟插件从起官方提供了插件允许直接为每条消息设置不同的延迟时间毫秒级插件启用步骤下载并安装插件需声明延迟交换机发送消息时设置延迟时间延迟秒延迟消息消费者正常从绑定队列接收消息优点与缺点优点缺点支持每条消息自定义延迟需安装额外插件无需组合插件需运维团队支持更灵活性能优于方案一对集群升级兼容性要求高适用场景每条消息延迟时间不同精确控制延迟毫秒级高级延迟队列系统消息调度系统五两种方案对比对比项实现延迟插件实现是否原生支持支持需插件延迟粒度队列级消息级每条消息可自定义实现复杂度简单中等灵活性一般高运维要求无需部署插件性能表现较好更优六总结背诵版原生不支持延迟队列但可通过以下两种方式实现死信交换机常用于固定延迟场景简单稳定延迟消息插件支持灵活的消息级延迟通过这两种方式能够实现订单超时取消延迟任务消息重试等多种延迟场景是企业级消息中间件面试中高频考点之一面试题哪些情况下推荐使用的惰性队列含原理实战分析一面试速答模板高分版开场在中惰性队列是一种将消息优先存储到磁盘而非内存的队列模式它的设计目标是为了应对海量消息堆积场景有效降低内存压力提高系统稳定性推荐使用惰性队列的典型场景消息量巨大堆积严重的业务场景消费速率远低于生产速率系统内存有限但磁盘空间充足需要保证消息长期可靠存储如日志延迟任务对实时性要求不高的异步任务场景二惰性队列的核心原理默认情况下的队列是内存优先的消息先存放在内存中只有内存紧张时才会被换出到磁盘而惰性队列机制改变了这一逻辑对比项普通队列惰性队列消息存储位置内存优先磁盘优先读取方式消费时从内存读取消费时从磁盘加载内存占用高极低适用场景高实时性场景大量堆积场景启动性能快相对较慢需磁盘其本质是将消息延迟加载即只有当消费者真正需要消费时消息才被加载到内存三惰性队列的配置方式方式一声明时设置参数方式二修改已有队列模式此命令会将所有匹配的队列改为惰性模式四惰性队列的工作机制消息写入磁盘非内存消费时再从磁盘读取消息机制要点消息一旦进入队列立即写入磁盘内存仅保存最少的元数据消费时会触发磁盘读取操作当消息堆积过多时系统仍保持稳定不会因内存爆炸导致崩溃五推荐使用惰性队列的典型场景场景类型说明大量消息堆积例如订单延迟队列日志收集队列补偿任务队列等消息堆积量极大但实时性要求不高消费速度较慢生产者持续高频发送消费者处理速度有限如批处理任务低频消费任务消息可能在队列中停留较久如数据同步离线计算任务节省内存资源当部署在内存有限的服务器上可防止延迟消息或死信消息场景消息需等待较长时间后再消费适合惰性存储六不推荐使用惰性队列的场景场景类型原因高实时性业务惰性队列读取消息需磁盘会降低响应速度高频消费场景大量磁盘读写会增加延迟影响吞吐性能小消息高并发系统频繁磁盘操作开销较大反而降低整体效率七性能分析指标普通队列惰性队列内存使用率高极低磁盘少较多吞吐性能高稍低可靠性一般高持久化系统稳定性差堆积易崩高磁盘缓存结论惰性队列更适合高可靠低实时大堆积场景八惰性队列应用示例应用场景示例订单取消延迟队列分钟后自动过期用户任务重试队列异步补偿任务队列大规模日志堆积异步处理九总结背诵版惰性队列通过将消息直接持久化到磁盘解决了消息堆积导致内存溢出的问题推荐使用场景包括大量消息堆积消费速率低内存受限延迟消费低实时性业务长期存储或重试任务惰性队列牺牲部分性能换取系统稳定性与可扩展性是高可靠消息系统中的重要优化手段面试题队列中存放的是否有数量限制含机制原理调优建议一面试速答模板高分版开场严格来说队列中的消息数量没有固定上限理论上可以无限堆积但实际上受限于服务器内存磁盘容量以及系统参数配置队列中的消息数量会受到多种因素约束因此在设计高并发系统时不建议让消息在队列中长期堆积否则容易引发性能下降甚至宕机二理论上无硬性数量限制的协议并没有为队列设置消息条数上限它可以根据硬件资源动态扩展但是每条消息都会占用内存元数据指针索引需要维护每个队列的消息元信息当消息量巨大时如上千万条会引发性能和稳定性问题结论理论上无限制实际上受资源和配置限制超过一定量后性能会明显下降三影响消息数量上限的关键因素影响因素说明内存大小默认会把消息放在内存中当内存超出阈值后才写入磁盘内存限流机制磁盘容量若使用持久化磁盘空间不足会导致无法写入新消息系统参数如等限制了的资源使用上限队列模式普通队列会优先使用内存惰性队列会直接写磁盘可存更多消息消费者速率若消费速度低于生产速度消息会持续堆积最终触发内存保护或磁盘限流四的资源保护机制为了防止内存和磁盘资源被占满引入了两种保护机制内存水位保护当使用的内存超过时会阻塞所有生产者连接流控机制暂停接收新消息直到内存降至安全线磁盘保护当磁盘可用空间低于该值时同样会暂停接收新消息防止写入失败或系统崩溃五控制消息数量的配置参数如果希望显式控制队列容量可以通过队列参数队列最多存放万条消息超出时拒绝生产者参数名含义队列最大消息条数队列最大字节数总大小溢出策略或小技巧生产环境建议启用限制避免消息无限堆积六优化与调优建议问题现象调优建议消息堆积导致内存暴涨使用惰性队列限流机制磁盘写入速度过慢使用提高性能消费端处理速度慢增加消费者实例数提高并发消费能力消息堆积无上限配置或使用死信队列延迟消息占用资源使用实现延迟转移七典型实践场景场景推荐配置大量堆积低实时性惰性队列限制高频交易系统普通队列实时消费限流控制延迟任务系统惰性队列日志审计系统惰性队列磁盘优化八总结背诵版队列理论上没有固定消息数量上限但实际受限于内存磁盘和配置参数为防止消息堆积引发性能问题应设置队列上限使用惰性队列存储海量消息调整内存与磁盘阈值增加消费者并发使用死信队列转移过期或溢出消息最佳实践用于消息传递而非消息存储面试题队列的溢出行为含机制原理参数配置实战示例一面试速答模板高分版开场在中当队列的消息数量达到最大限制通过或设置时就会触发溢出行为提供了两种主要的溢出策略默认丢弃队列最前面的旧消息拒绝新的消息入队溢出策略通过队列参数控制它决定在消息超量时是丢旧消息还是拒绝新消息二队列溢出的触发条件队列会在以下两种情况下触发溢出行为触发条件描述消息条数超出上限当消息数超过指定的数量消息总字节数超出上限当消息体总大小超过指定的字节数一旦达到上限队列会按照指定的策略处理超出的消息三溢出策略参数详解参数值含义行为说明丢弃最旧的消息队首默认策略队列保持固定长度先进先出替换旧消息拒绝新的消息入队超出限制后生产者发送消息会被拒绝并抛出异常拒绝消息并转发到死信交换机结合死信机制可实现消息转移而非直接丢弃四配置示例限制最多条消息溢出时拒绝新消息当消息超过条时新消息将被拒绝生产者会收到异常五与死信队列联动使用如果希望溢出消息能被保存或后续处理可启用策略并绑定死信交换机当队列满时超出的消息将被投递到进入指定的死信队列中六三种策略的差异对比策略丢弃旧消息拒绝新消息是否支持转移适用场景是否否实时数据流保留最新数据如日志监控否是否保证消息完整性如订单系统否是是需保存超量消息如异常缓冲区七溢出策略的常见使用场景场景类型推荐策略说明日志监控类实时流保留最新数据丢弃旧数据即可交易订单系统拒绝新消息保证消息完整性异常缓冲流控保护超量消息转入死信队列以备后续处理八面试官常追问问题问题高分回答队列满了会怎样若设置则按策略丢弃或拒绝消息若未设置则持续堆积直到资源耗尽与区别前者丢旧消息保新消息后者拒绝新消息保旧消息如何防止消息丢失使用将溢出消息转移到死信队列可以同时设置和吗可以但任一条件触发都会执行溢出策略九总结背诵版队列溢出行为由参数控制当消息数量或字节数超出上限时触发主要三种策略丢弃最旧消息默认拒绝新消息拒绝并转移到死信队列应用时需结合业务需求选择实时流场景选强一致场景选异常缓冲场景选面试题如何确保消息正确发送到被消费者正确消费含可靠投递机制消费确认机制一面试速答模板高分版开场在分布式消息系统中消息的可靠投递与可靠消费是保证系统数据一致性的关键在中消息要经历生产交换机队列消费者要确保消息不丢失需要生产端保证消息可靠发送端保证消息持久化消费端保证消息可靠确认二确保消息正确发送至生产端可靠性提供三层保障机制确保生产端的消息能可靠送达发送确认机制生产者开启模式后会异步回调确认消息是否成功到达示例代码消息已到达消息未到达原理说明表示收到消息表示消息未到达可结合消息唯一实现消息重发机制路由失败回调若消息成功到达但未被路由到任何则会触发回调配置消息无法路由到常见原因不匹配队列未绑定消息持久化确保重启后消息不丢失三层持久化要点持久化对象配置项或参数说明交换机持久化队列持久化消息体持久化小结生产端三重保障机制阶段防丢手段消息未到消息未到异常宕机持久化三确保消息被消费者正确消费消费端可靠性手动机制默认是自动若消费异常则可能造成消息丢失因此建议开启手动模式在消息正确处理后再确认代码示例消费成功手动确认消费失败拒绝消息重新入队消息幂等性保证即使消息被重复投递也要保证业务执行结果不变常用方案使用唯一消息去重使用数据库唯一约束执行业务逻辑重复消息跳过消费消费失败重试死信队列避免消息消费异常时丢失配置死信队列当消息消费失败过期或被拒绝时会自动将其转发至小结消费端三重保障机制场景解决方案消费失败重试消息重复消费幂等性控制消息多次失败或超时死信队列保存四综合保障机制汇总阶段防丢方案说明生产端持久化确保消息成功入队端宕机后仍能恢复消费端手动幂等性防止消费失败或重复五面试高频追问与高分回答问题回答如何确保消息成功发送到开启并设置持久化如何防止消息在崩溃后丢失全部设置为如何保证消息只被消费一次开启手动幂等性校验消费失败如何不丢消息使用死信队列六总结背诵版的消息可靠性分为两部分发送端防丢确认消息到达确认消息路由到均设置持久化消费端防丢手动确认机制消息幂等性消费异常消息转入最终实现目标消息不丢不重不乱',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-11-05 10:28:49',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Wsk Blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" alt="微信" src="/./img/wechat.jpg"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/./img/alipay.jpg"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AOP/" style="font-size: 1.05rem;">AOP<sup>2</sup></a><a href="/tags/IO/" style="font-size: 1.05rem;">IO<sup>1</sup></a><a href="/tags/IOC/" style="font-size: 1.05rem;">IOC<sup>2</sup></a><a href="/tags/JVM/" style="font-size: 1.05rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 1.05rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 1.05rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 1.05rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.05rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 1.05rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.05rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 1.05rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.05rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 1.05rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 1.05rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" style="font-size: 1.05rem;">自动装配<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 1.05rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 1.05rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">十一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">9</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="anzhiyu.switchCommentBarrage()" title="热评开关"><a class="commentBarrage"><i class="anzhiyufont anzhiyu-icon-message"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a></span><span class="article-meta tags"></span></div></div><h1 class="post-title" itemprop="name headline">RabbitMQ</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-11-05T02:28:49.008Z" title="更新于 2025-11-05 10:28:49">2025-11-05</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="RabbitMQ"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为新乡"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>新乡</span><span class="post-meta-separator"></span><span class="post-meta-commentcount"><i class="anzhiyufont anzhiyu-icon-comments post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/b543ced0.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/posts/b543ced0.html" itemprop="commentCount"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></a></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=a2104e7b-bf4e-6220-ee12-24632747aec8"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://wsk0404.github.io/posts/b543ced0.html"><header><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a><h1 id="CrawlerTitle" itemprop="name headline">RabbitMQ</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Wsk</span><time itemprop="dateCreated datePublished" datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time><time itemprop="dateCreated datePublished" datetime="2025-11-05T02:28:49.008Z" title="更新于 2025-11-05 10:28:49">2025-11-05</time></header><h1 id="🎯-面试题：什么是-RabbitMQ？（消息队列核心原理-应用场景）"><a href="#🎯-面试题：什么是-RabbitMQ？（消息队列核心原理-应用场景）" class="headerlink" title="🎯 面试题：什么是 RabbitMQ？（消息队列核心原理 + 应用场景）"></a>🎯 <strong>面试题：什么是 RabbitMQ？（消息队列核心原理 + 应用场景）</strong></h1><hr>
+<h2 id="一、面试速答模板（高分开场）"><a href="#一、面试速答模板（高分开场）" class="headerlink" title="一、面试速答模板（高分开场）"></a>一、面试速答模板（高分开场）</h2><blockquote>
+<p>RabbitMQ 是一个基于 <strong>AMQP（Advanced Message Queuing Protocol，高级消息队列协议）</strong> 的<strong>开源消息中间件</strong>。<br> 它由 <strong>Erlang 语言</strong>开发，具有高可靠性、可扩展性和灵活的路由机制。</p>
+<p>RabbitMQ 的主要作用是实现<strong>应用解耦、异步通信、流量削峰与系统解耦</strong>，<br> 是分布式系统中常用的<strong>消息中间件解决方案</strong>之一。</p>
+</blockquote>
+<hr>
+<h2 id="二、RabbitMQ-的核心功能与作用"><a href="#二、RabbitMQ-的核心功能与作用" class="headerlink" title="二、RabbitMQ 的核心功能与作用"></a>二、RabbitMQ 的核心功能与作用</h2><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✅ <strong>异步处理</strong></td>
+<td>将耗时操作（如短信发送、图片处理）异步化，提高系统响应速度</td>
+</tr>
+<tr>
+<td>✅ <strong>应用解耦</strong></td>
+<td>发送方与接收方通过消息队列解耦，互不依赖</td>
+</tr>
+<tr>
+<td>✅ <strong>削峰填谷</strong></td>
+<td>在高并发场景下削峰缓冲，防止系统被瞬时流量压垮</td>
+</tr>
+<tr>
+<td>✅ <strong>可靠通信</strong></td>
+<td>通过消息确认机制与持久化机制，保证消息不丢失</td>
+</tr>
+<tr>
+<td>✅ <strong>广播分发</strong></td>
+<td>支持多消费者、多队列灵活绑定，实现一对多消息分发</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、RabbitMQ-核心组件（重点记忆）"><a href="#三、RabbitMQ-核心组件（重点记忆）" class="headerlink" title="三、RabbitMQ 核心组件（重点记忆）"></a>三、RabbitMQ 核心组件（重点记忆）</h2><p>RabbitMQ 的消息传递基于 5 大核心概念：</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>作用说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Producer（生产者）</strong></td>
+<td>负责发送消息的应用</td>
+</tr>
+<tr>
+<td><strong>Exchange（交换机）</strong></td>
+<td>接收生产者消息，并根据路由规则分发到队列</td>
+</tr>
+<tr>
+<td><strong>Queue（队列）</strong></td>
+<td>存储消息的缓冲区</td>
+</tr>
+<tr>
+<td><strong>Binding（绑定）</strong></td>
+<td>交换机与队列的绑定关系，包含路由规则</td>
+</tr>
+<tr>
+<td><strong>Consumer（消费者）</strong></td>
+<td>从队列中接收并处理消息</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、RabbitMQ-的工作原理（流程图理解）"><a href="#四、RabbitMQ-的工作原理（流程图理解）" class="headerlink" title="四、RabbitMQ 的工作原理（流程图理解）"></a>四、RabbitMQ 的工作原理（流程图理解）</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Producer → Exchange → Queue → Consumer</span><br><span class="line">              ↑</span><br><span class="line">          Binding(路由规则)</span><br></pre></td></tr></table></figure>
+
+<p>1️⃣ 生产者将消息发送到 <strong>Exchange（交换机）</strong><br> 2️⃣ 交换机根据绑定的 <strong>Routing Key（路由键）</strong> 和规则将消息分发到一个或多个 <strong>Queue（队列）</strong><br> 3️⃣ 消费者监听对应队列，从中取出消息进行业务处理</p>
+<hr>
+<h2 id="五、Exchange（交换机）类型（面试高频）"><a href="#五、Exchange（交换机）类型（面试高频）" class="headerlink" title="五、Exchange（交换机）类型（面试高频）"></a>五、Exchange（交换机）类型（面试高频）</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+<th>示例应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Direct Exchange</strong></td>
+<td>根据 RoutingKey 精确匹配路由</td>
+<td>点对点消息传递</td>
+</tr>
+<tr>
+<td><strong>Fanout Exchange</strong></td>
+<td>广播式，忽略 RoutingKey，发给所有绑定队列</td>
+<td>广播消息，如系统通知</td>
+</tr>
+<tr>
+<td><strong>Topic Exchange</strong></td>
+<td>模糊匹配 RoutingKey（支持通配符）</td>
+<td>分类消息，如日志级别</td>
+</tr>
+<tr>
+<td><strong>Headers Exchange</strong></td>
+<td>根据消息头属性匹配</td>
+<td>复杂匹配逻辑场景</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、消息可靠性机制（面试必问）"><a href="#六、消息可靠性机制（面试必问）" class="headerlink" title="六、消息可靠性机制（面试必问）"></a>六、消息可靠性机制（面试必问）</h2><table>
+<thead>
+<tr>
+<th>机制</th>
+<th>作用</th>
+<th>关键参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>消息确认（ACK）</strong></td>
+<td>确保消费者正确接收并处理消息</td>
+<td>manual &#x2F; auto ack</td>
+</tr>
+<tr>
+<td><strong>消息持久化（Durability）</strong></td>
+<td>防止消息丢失（交换机、队列、消息都可持久化）</td>
+<td>durable&#x3D;true</td>
+</tr>
+<tr>
+<td><strong>发布确认（Publisher Confirm）</strong></td>
+<td>确保消息成功发送到 Exchange</td>
+<td>confirmCallback</td>
+</tr>
+<tr>
+<td><strong>事务机制（Tx）</strong></td>
+<td>保证发送一致性（但性能低）</td>
+<td>txSelect &#x2F; txCommit</td>
+</tr>
+<tr>
+<td><strong>死信队列（DLX）</strong></td>
+<td>处理消费失败、过期或拒收的消息</td>
+<td>x-dead-letter-exchange</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、常见应用场景（实战型回答）"><a href="#七、常见应用场景（实战型回答）" class="headerlink" title="七、常见应用场景（实战型回答）"></a>七、常见应用场景（实战型回答）</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🧾 <strong>异步任务处理</strong></td>
+<td>注册成功后异步发送邮件、短信</td>
+</tr>
+<tr>
+<td>🚦 <strong>流量削峰</strong></td>
+<td>高并发下，队列充当缓冲层</td>
+</tr>
+<tr>
+<td>🔄 <strong>系统解耦</strong></td>
+<td>订单系统与库存系统通过 MQ 解耦</td>
+</tr>
+<tr>
+<td>🔔 <strong>消息广播</strong></td>
+<td>通知多个微服务，如更新缓存、同步配置</td>
+</tr>
+<tr>
+<td>♻️ <strong>日志收集与分析</strong></td>
+<td>统一收集日志，异步分析与存储</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、优缺点分析（面试官爱问）"><a href="#八、优缺点分析（面试官爱问）" class="headerlink" title="八、优缺点分析（面试官爱问）"></a>八、优缺点分析（面试官爱问）</h2><table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✔️ 高可靠性（支持 ACK、持久化）</td>
+<td>❌ 部署与维护复杂</td>
+</tr>
+<tr>
+<td>✔️ 灵活的路由机制（多种 Exchange）</td>
+<td>❌ 性能略低于 Kafka</td>
+</tr>
+<tr>
+<td>✔️ 完整的消息确认机制</td>
+<td>❌ 吞吐量不适合大规模日志系统</td>
+</tr>
+<tr>
+<td>✔️ 支持集群与高可用部署</td>
+<td>❌ Erlang 语言生态较小</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、集群模式（了解加分）"><a href="#九、集群模式（了解加分）" class="headerlink" title="九、集群模式（了解加分）"></a>九、集群模式（了解加分）</h2><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>普通集群模式（Cluster）</strong></td>
+<td>多节点共享元数据，队列元数据同步</td>
+</tr>
+<tr>
+<td><strong>镜像队列模式（Mirrored Queue）</strong></td>
+<td>队列在多个节点上复制，主从同步，保证高可用</td>
+</tr>
+<tr>
+<td><strong>联邦队列模式（Federation）</strong></td>
+<td>跨机房异地消息同步</td>
+</tr>
+<tr>
+<td><strong>Shovel 模式</strong></td>
+<td>消息跨集群复制</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔟-常见面试追问与答法"><a href="#🔟-常见面试追问与答法" class="headerlink" title="🔟 常见面试追问与答法"></a>🔟 常见面试追问与答法</h2><table>
+<thead>
+<tr>
+<th>面试官问题</th>
+<th>优秀回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ RabbitMQ 是单线程的吗？</td>
+<td>不是。RabbitMQ 基于 Erlang 实现，Erlang 的轻量级进程模型支持并发高、上下文切换成本低。</td>
+</tr>
+<tr>
+<td>❓ 如何保证消息不丢失？</td>
+<td>使用持久化（durable&#x3D;true）、ACK 确认机制、Publisher Confirm 和死信队列。</td>
+</tr>
+<tr>
+<td>❓ 如何实现延迟消息？</td>
+<td>借助 <code>x-delay-message</code> 插件或使用 TTL + 死信队列机制。</td>
+</tr>
+<tr>
+<td>❓ 如何防止消息重复消费？</td>
+<td>在消费者侧做幂等性控制（如 Redis Set、业务唯一 ID）。</td>
+</tr>
+<tr>
+<td>❓ RabbitMQ 与 Kafka 有什么区别？</td>
+<td>Kafka 吞吐量更高，适合日志流；RabbitMQ 可靠性更强，适合业务系统异步解耦。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="💡-十一、总结（背诵版）"><a href="#💡-十一、总结（背诵版）" class="headerlink" title="💡 十一、总结（背诵版）"></a>💡 十一、总结（背诵版）</h2><blockquote>
+<p>✅ RabbitMQ 是基于 AMQP 协议的高可靠消息中间件，<br> ✅ 核心组成包括：Producer、Exchange、Queue、Binding、Consumer；<br> ✅ 支持多种交换机类型（Direct、Fanout、Topic、Headers）；<br> ✅ 提供消息确认、持久化、死信队列等机制保证可靠性；<br> ✅ 广泛应用于异步解耦、削峰、日志、消息分发等场景。</p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-的工作原理（消息流转机制-核心组件-路由模型）"><a href="#🎯-面试题：RabbitMQ-的工作原理（消息流转机制-核心组件-路由模型）" class="headerlink" title="🎯 面试题：RabbitMQ 的工作原理（消息流转机制 + 核心组件 + 路由模型）"></a>🎯 <strong>面试题：RabbitMQ 的工作原理（消息流转机制 + 核心组件 + 路由模型）</strong></h1><hr>
+<p>一、面试速答模板（开场陈述）</p>
+<blockquote>
+<p>RabbitMQ 的工作原理基于 <strong>AMQP（Advanced Message Queuing Protocol，高级消息队列协议）</strong>。<br> 核心思想是：<br> <strong>生产者（Producer）</strong> 将消息发送到 <strong>交换机（Exchange）</strong>，<br> 由交换机根据 <strong>路由规则（Binding + RoutingKey）</strong> 将消息分发到一个或多个 <strong>队列（Queue）</strong>，<br> 最终由 <strong>消费者（Consumer）</strong> 从队列中接收并处理消息。</p>
+<p>整个过程实现了<strong>异步解耦、削峰填谷与高可靠消息传递</strong>。</p>
+</blockquote>
+<hr>
+<p>二、RabbitMQ 核心组件（面试高频考点）</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>说明</th>
+<th>关键点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Producer（生产者）</strong></td>
+<td>负责发送消息到 Exchange</td>
+<td>一般是业务系统中发出事件的模块</td>
+</tr>
+<tr>
+<td><strong>Exchange（交换机）</strong></td>
+<td>接收 Producer 发来的消息，并根据规则分发</td>
+<td>是消息路由的核心</td>
+</tr>
+<tr>
+<td><strong>Queue（队列）</strong></td>
+<td>存储消息的中间缓冲区</td>
+<td>实现消息的可靠传递</td>
+</tr>
+<tr>
+<td><strong>Binding（绑定）</strong></td>
+<td>定义 Exchange 与 Queue 的绑定关系</td>
+<td>通过 RoutingKey 实现路由规则</td>
+</tr>
+<tr>
+<td><strong>Consumer（消费者）</strong></td>
+<td>监听队列，从中取出并处理消息</td>
+<td>通常是异步消费的业务逻辑</td>
+</tr>
+</tbody></table>
+<hr>
+<p>三、RabbitMQ 的消息流转机制（核心流程）</p>
+<p>RabbitMQ 的消息传递过程可以抽象为 <strong>“生产 - 路由 - 存储 - 消费”</strong> 四个阶段：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Producer</span><br><span class="line">   ↓</span><br><span class="line">[Exchange] → (RoutingKey + Binding) → [Queue]</span><br><span class="line">                                             ↓</span><br><span class="line">                                        Consumer</span><br></pre></td></tr></table></figure>
+
+<p>🔹 步骤详解：</p>
+<p>1️⃣ <strong>生产者发送消息</strong></p>
+<ul>
+<li>生产者创建连接 <code>Connection</code> 与通道 <code>Channel</code>。</li>
+<li>调用 <code>basicPublish()</code> 向指定的 <code>Exchange</code> 发送消息，并携带 <code>RoutingKey</code>。</li>
+</ul>
+<p>2️⃣ <strong>交换机（Exchange）接收消息</strong></p>
+<ul>
+<li>交换机根据消息的 <strong>RoutingKey</strong> 和其类型（Direct、Fanout、Topic、Headers）<br> 判断该消息应该路由到哪些队列。</li>
+</ul>
+<p>3️⃣ <strong>消息路由到队列（Queue）</strong></p>
+<ul>
+<li>通过绑定关系（Binding），消息被分发到对应的一个或多个队列中。</li>
+<li>队列在 RabbitMQ 中是消息的真正存储载体。</li>
+</ul>
+<p>4️⃣ <strong>消费者（Consumer）订阅队列</strong></p>
+<ul>
+<li>消费者通过 <code>basicConsume()</code> 方法监听队列，异步接收消息。</li>
+<li>消费者处理完消息后，会发送 <strong>ACK（确认）</strong>，告诉 RabbitMQ 消息已被成功消费。</li>
+</ul>
+<p>5️⃣ <strong>RabbitMQ 删除已消费消息</strong></p>
+<ul>
+<li>如果开启了手动确认（<code>ackMode = manual</code>），RabbitMQ 在收到 ACK 后删除消息。</li>
+<li>若消费失败，可通过 <strong>NACK &#x2F; Requeue &#x2F; DLX（死信队列）</strong> 进行重新处理。</li>
+</ul>
+<hr>
+<p>四、Exchange（交换机）的类型（消息路由的关键）</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>路由规则</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Direct Exchange</strong></td>
+<td>精确匹配 RoutingKey</td>
+<td>一对一消息，如订单状态更新</td>
+</tr>
+<tr>
+<td><strong>Fanout Exchange</strong></td>
+<td>忽略 RoutingKey，广播消息到所有绑定队列</td>
+<td>一对多广播，如系统通知</td>
+</tr>
+<tr>
+<td><strong>Topic Exchange</strong></td>
+<td>模糊匹配 RoutingKey（支持通配符 <code>*</code>、<code>#</code>）</td>
+<td>分类订阅，如日志或事件流</td>
+</tr>
+<tr>
+<td><strong>Headers Exchange</strong></td>
+<td>根据消息头匹配规则（headers 属性）</td>
+<td>高级过滤场景</td>
+</tr>
+</tbody></table>
+<p>🔸 <strong>举例说明（Topic 模式）</strong><br> 假设生产者发送消息 RoutingKey 为 <code>&quot;order.create&quot;</code>,<br> 消费者可通过 <code>BindingKey = order.*</code> 来匹配所有订单相关消息。</p>
+<hr>
+<p>五、消息确认机制（保证可靠性）</p>
+<p>RabbitMQ 通过多层机制确保消息可靠传递：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>机制</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>生产阶段</strong></td>
+<td>Publisher Confirm</td>
+<td>保证消息成功发送到 Exchange</td>
+</tr>
+<tr>
+<td><strong>交换机阶段</strong></td>
+<td>ReturnCallback</td>
+<td>当消息未被正确路由时触发</td>
+</tr>
+<tr>
+<td><strong>消费阶段</strong></td>
+<td>ACK &#x2F; NACK</td>
+<td>确认消息是否被成功消费</td>
+</tr>
+<tr>
+<td><strong>存储阶段</strong></td>
+<td>Durable &#x2F; Persistent</td>
+<td>消息和队列持久化，防止宕机丢失</td>
+</tr>
+</tbody></table>
+<p>🔸 示例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.confirmSelect();</span><br><span class="line">channel.basicPublish(exchangeName, routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, messageBody);</span><br><span class="line">channel.waitForConfirms();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>说明：<code>confirmSelect()</code> 开启发布确认机制；<code>waitForConfirms()</code> 阻塞等待确认。</p>
+</blockquote>
+<hr>
+<p>六、RabbitMQ 工作原理的底层实现逻辑（面试深挖）</p>
+<p>RabbitMQ 基于 <strong>Erlang Actor 模型</strong> 实现高并发与高可靠消息分发，<br> 其核心原理包括：</p>
+<ol>
+<li><strong>每个队列 Queue 是独立的进程（轻量级进程）</strong><ul>
+<li>每个队列都维护自己的消息列表与消费者列表。</li>
+</ul>
+</li>
+<li><strong>消息路由由 Exchange 负责</strong><ul>
+<li>Exchange 内部使用 <strong>Binding 表（路由表）</strong> 维护绑定关系。</li>
+</ul>
+</li>
+<li><strong>消息存储</strong><ul>
+<li>持久化队列的消息会写入磁盘，非持久化仅存内存。</li>
+</ul>
+</li>
+<li><strong>消费者消费机制</strong><ul>
+<li>采用推送模型（push），消息通过 TCP 通道实时推送给消费者。</li>
+</ul>
+</li>
+<li><strong>ACK机制</strong><ul>
+<li>消费者处理完后手动 ACK，否则 RabbitMQ 会重投递消息。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>七、消息丢失与重复的防范机制（面试延伸）</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>潜在问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生产者 → Exchange</td>
+<td>消息发送失败</td>
+<td>使用 Publisher Confirm 机制</td>
+</tr>
+<tr>
+<td>Exchange → Queue</td>
+<td>路由失败</td>
+<td>使用 Mandatory 参数 + ReturnCallback</td>
+</tr>
+<tr>
+<td>Queue → Consumer</td>
+<td>消费失败 &#x2F; 宕机</td>
+<td>启用持久化、ACK机制、死信队列</td>
+</tr>
+<tr>
+<td>消费重复</td>
+<td>消费端异常重发</td>
+<td>实现业务幂等性（如唯一流水号、Redis Set）</td>
+</tr>
+</tbody></table>
+<hr>
+<p>八、RabbitMQ 工作原理流程图（逻辑视图）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─────────────────────────────┐</span><br><span class="line">│         Producer            │</span><br><span class="line">└────────────┬────────────────┘</span><br><span class="line">             │</span><br><span class="line">             ▼</span><br><span class="line">      [Exchange 交换机]</span><br><span class="line">             │ (RoutingKey + Binding)</span><br><span class="line">             ▼</span><br><span class="line">     ┌───────────────────────┐</span><br><span class="line">     │        Queue           │</span><br><span class="line">     └────────────┬───────────┘</span><br><span class="line">                  │</span><br><span class="line">                  ▼</span><br><span class="line">           [Consumer 消费者]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>九、面试追问与标准回答</p>
+<table>
+<thead>
+<tr>
+<th>面试官问题</th>
+<th>优秀回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ RabbitMQ 如何保证消息不丢失？</td>
+<td>持久化队列 + 持久化消息 + ACK 机制 + 发布确认机制。</td>
+</tr>
+<tr>
+<td>❓ 如何防止消息重复消费？</td>
+<td>消费端实现幂等性，如用 Redis 记录消息唯一 ID。</td>
+</tr>
+<tr>
+<td>❓ Exchange 路由失败时怎么办？</td>
+<td>开启 <code>mandatory=true</code> 并实现 <code>ReturnCallback</code>。</td>
+</tr>
+<tr>
+<td>❓ 什么是死信队列？</td>
+<td>当消息消费失败、过期或队列满时，被转发到死信交换机 DLX。</td>
+</tr>
+<tr>
+<td>❓ RabbitMQ 为什么性能高？</td>
+<td>Erlang 轻量级进程模型 + 异步非阻塞 IO + 内存队列。</td>
+</tr>
+</tbody></table>
+<hr>
+<p>🔟 总结（高分背诵版）</p>
+<blockquote>
+<p>RabbitMQ 的工作原理基于 AMQP 协议：<br> 生产者（Producer）→ 交换机（Exchange）→ 队列（Queue）→ 消费者（Consumer）。</p>
+<p>Exchange 根据 RoutingKey 与 Binding 规则将消息路由到队列中，<br> 消费者监听队列消费消息，并通过 ACK 确认机制实现可靠投递。</p>
+<p>通过持久化、发布确认、死信队列等机制，RabbitMQ 能保证消息的可靠性与可恢复性，<br> 是分布式系统中实现异步通信与系统解耦的重要中间件。</p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-消息丢失的几种情况（含原因分析-解决方案）"><a href="#🎯-面试题：RabbitMQ-消息丢失的几种情况（含原因分析-解决方案）" class="headerlink" title="🎯 面试题：RabbitMQ 消息丢失的几种情况（含原因分析 + 解决方案）"></a>🎯 面试题：RabbitMQ 消息丢失的几种情况（含原因分析 + 解决方案）</h1><hr>
+<p>一、面试速答模板（高分版开场）</p>
+<blockquote>
+<p>在 RabbitMQ 的消息传递过程中，消息从生产者发送到消费者要经过多个环节：<br> <strong>Producer → Exchange → Queue → Consumer</strong>。</p>
+<p>消息可能在任意一个环节出现丢失，一般分为三类：</p>
+<p>1️⃣ <strong>生产阶段消息丢失（Producer → Exchange）</strong><br> 2️⃣ <strong>存储阶段消息丢失（Exchange → Queue）</strong><br> 3️⃣ <strong>消费阶段消息丢失（Queue → Consumer）</strong></p>
+<p>因此，确保消息可靠性需要在生产端、Broker端、消费端都建立防丢机制。</p>
+</blockquote>
+<hr>
+<p>二、RabbitMQ 消息流转流程回顾</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Producer</span><br><span class="line">   ↓（发送消息）</span><br><span class="line">[Exchange]</span><br><span class="line">   ↓（路由）</span><br><span class="line">[Queue]</span><br><span class="line">   ↓（消费者消费）</span><br><span class="line">Consumer</span><br></pre></td></tr></table></figure>
+
+<p>丢失可能点：<br> 1️⃣ 生产者未成功发送到 Exchange；<br> 2️⃣ Exchange 路由失败或未持久化；<br> 3️⃣ 消费者未正确确认（ACK）。</p>
+<hr>
+<p>三、三大阶段消息丢失详解</p>
+<hr>
+<p>🔹 1. 生产阶段丢失（Producer → Exchange）</p>
+<p><strong>可能原因：</strong></p>
+<ul>
+<li>网络异常、Broker 崩溃；</li>
+<li>未开启 <strong>Publisher Confirm</strong>；</li>
+<li>RoutingKey 不匹配导致消息无法路由；</li>
+<li>Exchange 不存在。</li>
+</ul>
+<p><strong>解决方案：</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题场景</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息未到 Exchange</td>
+<td>启用 <strong>Publisher Confirm</strong> 模式并注册回调</td>
+</tr>
+<tr>
+<td>消息路由失败</td>
+<td>开启 <strong>Mandatory 模式</strong> + <strong>ReturnCallback</strong></td>
+</tr>
+<tr>
+<td>Exchange 不存在</td>
+<td>提前声明 Exchange 一致性配置</td>
+</tr>
+</tbody></table>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">rabbitTemplate.setMandatory(<span class="literal">true</span>);</span><br><span class="line">rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (!ack) log.error(<span class="string">&quot;消息未到达Exchange: &#123;&#125;&quot;</span>, cause);</span><br><span class="line">&#125;);</span><br><span class="line">rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) -&gt;</span><br><span class="line">    log.error(<span class="string">&quot;消息无法路由: &#123;&#125; &#123;&#125;&quot;</span>, replyText, message));</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>🔹 2. 存储阶段丢失（Exchange → Queue）</p>
+<p><strong>可能原因：</strong></p>
+<ul>
+<li>消息未绑定 Queue；</li>
+<li>消息、Exchange 或 Queue 未持久化；</li>
+<li>RabbitMQ 宕机导致内存数据丢失。</li>
+</ul>
+<p><strong>解决方案：</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>对应方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息未绑定队列</td>
+<td>检查 Binding 配置</td>
+</tr>
+<tr>
+<td>队列非持久化</td>
+<td><code>durable=true</code></td>
+</tr>
+<tr>
+<td>消息未持久化</td>
+<td><code>MessageProperties.PERSISTENT_TEXT_PLAIN</code></td>
+</tr>
+<tr>
+<td>Broker 宕机丢消息</td>
+<td>启用镜像队列或集群机制</td>
+</tr>
+<tr>
+<td>过期&#x2F;拒绝消息丢失</td>
+<td>使用 <strong>死信队列（DLX）</strong></td>
+</tr>
+</tbody></table>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.queueDeclare(<span class="string">&quot;orderQueue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">channel.basicPublish(<span class="string">&quot;orderExchange&quot;</span>, <span class="string">&quot;order.create&quot;</span>,</span><br><span class="line">    MessageProperties.PERSISTENT_TEXT_PLAIN, msg.getBytes());</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>🔹 3. 消费阶段丢失（Queue → Consumer）</p>
+<p><strong>可能原因：</strong></p>
+<ul>
+<li>使用自动 ACK（<code>autoAck=true</code>）；</li>
+<li>消费异常但未处理；</li>
+<li>消费者宕机导致 ACK 未发送；</li>
+<li>消息被错误确认或重复消费。</li>
+</ul>
+<p><strong>解决方案：</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自动ACK</td>
+<td>改为手动ACK确认机制</td>
+</tr>
+<tr>
+<td>消费异常</td>
+<td>使用 <code>try-catch</code> 并执行 <code>basicNack()</code></td>
+</tr>
+<tr>
+<td>消息重复消费</td>
+<td>保证幂等性（Redis、唯一ID）</td>
+</tr>
+<tr>
+<td>消息积压&#x2F;失败</td>
+<td>启用重试机制 + 死信队列</td>
+</tr>
+</tbody></table>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RabbitListener(queues = &quot;orderQueue&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">consume</span><span class="params">(Message message, Channel channel)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        processOrder(message);</span><br><span class="line">        channel.basicAck(message.getMessageProperties().getDeliveryTag(), <span class="literal">false</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        channel.basicNack(message.getMessageProperties().getDeliveryTag(), <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>四、综合防丢方案汇总</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>潜在问题</th>
+<th>推荐解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生产阶段</td>
+<td>消息未达 Exchange</td>
+<td>Publisher Confirm + ReturnCallback</td>
+</tr>
+<tr>
+<td>存储阶段</td>
+<td>未绑定&#x2F;未持久化</td>
+<td>Durable 队列 + Persistent 消息 + DLX</td>
+</tr>
+<tr>
+<td>消费阶段</td>
+<td>ACK 丢失或异常</td>
+<td>手动 ACK + 重试机制 + 幂等性</td>
+</tr>
+</tbody></table>
+<hr>
+<p>五、RabbitMQ 消息可靠性保障机制</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Publisher Confirm</td>
+<td>确认消息成功到达 Exchange</td>
+<td>异步回调机制</td>
+</tr>
+<tr>
+<td>ReturnCallback</td>
+<td>确认消息成功路由到 Queue</td>
+<td>mandatory 模式</td>
+</tr>
+<tr>
+<td>持久化</td>
+<td>防止 Broker 崩溃导致丢失</td>
+<td>durable + persistent</td>
+</tr>
+<tr>
+<td>手动 ACK</td>
+<td>确保消息正确消费</td>
+<td>消费成功后再确认</td>
+</tr>
+<tr>
+<td>死信队列 DLX</td>
+<td>保存异常或超时消息</td>
+<td>防止数据丢失</td>
+</tr>
+<tr>
+<td>镜像&#x2F;集群模式</td>
+<td>提升高可用性</td>
+<td>防止单节点宕机</td>
+</tr>
+</tbody></table>
+<hr>
+<p>六、面试高频追问与标准回答</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息在哪些阶段可能丢失？</td>
+<td>分别在生产阶段、存储阶段、消费阶段。</td>
+</tr>
+<tr>
+<td>如何保证消息可靠？</td>
+<td>Confirm + Callback + 持久化 + 手动ACK。</td>
+</tr>
+<tr>
+<td>RabbitMQ 重启会丢数据吗？</td>
+<td>不会，只要 Exchange、Queue、Message 均持久化。</td>
+</tr>
+<tr>
+<td>自动 ACK 有什么风险？</td>
+<td>未处理完就标记为成功，可能导致消息丢失。</td>
+</tr>
+<tr>
+<td>如何防止重复消费？</td>
+<td>通过唯一消息ID + Redis幂等校验。</td>
+</tr>
+</tbody></table>
+<hr>
+<p>七、总结（背诵版）</p>
+<blockquote>
+<p>RabbitMQ 消息丢失分为三类：<br> ① 生产阶段（消息未到 Exchange）；<br> ② 存储阶段（未路由或未持久化）；<br> ③ 消费阶段（ACK 丢失或异常）。</p>
+<p>解决方案包括：</p>
+<ul>
+<li>Publisher Confirm</li>
+<li>ReturnCallback</li>
+<li>持久化机制（Exchange、Queue、Message）</li>
+<li>手动 ACK + DLX + 幂等性</li>
+</ul>
+<p>只有做到生产、存储、消费三端可靠，才能实现消息 “<strong>不丢、不重、不乱</strong>”。</p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-消息持久化的条件（含原理-实践方案）"><a href="#🎯-面试题：RabbitMQ-消息持久化的条件（含原理-实践方案）" class="headerlink" title="🎯 面试题：RabbitMQ 消息持久化的条件（含原理 + 实践方案）"></a>🎯 面试题：RabbitMQ 消息持久化的条件（含原理 + 实践方案）</h1><hr>
+<p>一、面试速答模板（高分版开场）</p>
+<blockquote>
+<p>RabbitMQ 的持久化是指在 <strong>Broker 异常宕机或重启</strong> 后，消息仍然能够恢复不丢失。<br> 想要实现消息持久化，必须同时满足 <strong>三大条件</strong>：</p>
+<p>1️⃣ <strong>Exchange 必须持久化（durable&#x3D;true）</strong><br> 2️⃣ <strong>Queue 必须持久化（durable&#x3D;true）</strong><br> 3️⃣ <strong>消息本身必须持久化（deliveryMode&#x3D;2）</strong></p>
+<p>任意一环未设置，都会导致消息在系统重启后丢失。</p>
+</blockquote>
+<hr>
+<p>二、RabbitMQ 持久化原理</p>
+<blockquote>
+<p>RabbitMQ 将持久化相关的元数据（Exchange、Queue、Message）存储到磁盘上的 Mnesia 数据库或消息日志文件中。<br> 当 Broker 重启时，会从磁盘重新加载这些对象，从而实现消息恢复。</p>
+</blockquote>
+<p><strong>持久化路径：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Producer</span><br><span class="line">   ↓</span><br><span class="line">[Durable Exchange]</span><br><span class="line">   ↓</span><br><span class="line">[Durable Queue]</span><br><span class="line">   ↓</span><br><span class="line">Persistent Message (deliveryMode=2)</span><br><span class="line">   ↓</span><br><span class="line">磁盘存储（Mnesia / Log）</span><br></pre></td></tr></table></figure>
+
+<p>只有当三者都具备持久化属性时，RabbitMQ 才会将消息写入磁盘。</p>
+<hr>
+<p>三、RabbitMQ 持久化的三大条件</p>
+<hr>
+<p>🔹 1. Exchange 必须持久化</p>
+<ul>
+<li>声明交换机时设置：<code>durable=true</code></li>
+<li>否则 Broker 重启后，该交换机元数据会丢失。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.exchangeDeclare(<span class="string">&quot;orderExchange&quot;</span>, <span class="string">&quot;direct&quot;</span>, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>🔹 2. Queue 必须持久化</p>
+<ul>
+<li>队列声明时设置：<code>durable=true</code></li>
+<li>如果队列非持久化，即使消息是持久化的，也会在重启后丢失。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.queueDeclare(<span class="string">&quot;orderQueue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>🔹 3. 消息必须持久化</p>
+<ul>
+<li>发送消息时，必须设置 <code>deliveryMode=2</code>（持久化消息）。</li>
+<li><code>deliveryMode=1</code> 为非持久化，仅存在内存中。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.basicPublish(</span><br><span class="line">    <span class="string">&quot;orderExchange&quot;</span>,</span><br><span class="line">    <span class="string">&quot;order.create&quot;</span>,</span><br><span class="line">    MessageProperties.PERSISTENT_TEXT_PLAIN,</span><br><span class="line">    <span class="string">&quot;order data&quot;</span>.getBytes(StandardCharsets.UTF_8)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>四、持久化机制的工作过程</p>
+<ol>
+<li>生产者发送消息到 Broker；</li>
+<li>RabbitMQ 检测目标 Exchange、Queue、Message 是否均持久化；</li>
+<li>若三者都持久化，则将消息写入磁盘日志；</li>
+<li>当 RabbitMQ 重启时，从磁盘加载未消费的消息；</li>
+<li>消费者重新消费，确保消息可靠传递。</li>
+</ol>
+<hr>
+<p>五、持久化的优缺点</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Broker 宕机后消息不丢失</td>
+<td>写磁盘操作增加 I&#x2F;O 开销</td>
+</tr>
+<tr>
+<td>提高消息系统可靠性</td>
+<td>吞吐量比纯内存模式略有下降</td>
+</tr>
+<tr>
+<td>结合 ACK 确认，保证强一致性</td>
+<td>不适合极端高性能场景（如日志收集）</td>
+</tr>
+</tbody></table>
+<hr>
+<p>六、常见误区与面试陷阱</p>
+<table>
+<thead>
+<tr>
+<th>错误理解</th>
+<th>实际情况说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>只设置消息持久化就不会丢</td>
+<td>错！Exchange 或 Queue 非持久化依然会丢</td>
+</tr>
+<tr>
+<td>设置 durable&#x3D;true 消息立即落盘</td>
+<td>错！落盘时间由 RabbitMQ 自身批量刷盘策略决定</td>
+</tr>
+<tr>
+<td>持久化消息绝不会丢失</td>
+<td>错！RabbitMQ 崩溃前若尚未刷盘，仍可能丢失</td>
+</tr>
+<tr>
+<td>持久化影响性能，生产不建议开启</td>
+<td>错！关键业务（订单、支付、库存）必须持久化</td>
+</tr>
+</tbody></table>
+<hr>
+<p>七、最佳实践建议</p>
+<p>1️⃣ Exchange 与 Queue 都声明为 <code>durable=true</code>；<br> 2️⃣ 消息属性中设置 <code>deliveryMode=2</code>；<br> 3️⃣ 搭配 <strong>Publisher Confirm</strong> 确保消息写盘成功；<br> 4️⃣ 对关键队列使用 <strong>镜像队列（HA）</strong> 或 <strong>集群机制</strong>；<br> 5️⃣ 对于非关键实时消息（如日志），可关闭持久化以提升性能。</p>
+<hr>
+<blockquote>
+<p>RabbitMQ 的消息持久化只有在 <strong>Exchange、Queue、Message</strong> 三者都持久化时才真正生效。<br> 配合 Publisher Confirm 与手动 ACK，可实现消息 “<strong>不丢、不乱、可恢复</strong>” 的可靠传递。</p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-死信消息的来源（含机制原理-应用场景）"><a href="#🎯-面试题：RabbitMQ-死信消息的来源（含机制原理-应用场景）" class="headerlink" title="🎯 面试题：RabbitMQ 死信消息的来源（含机制原理 + 应用场景）"></a>🎯 面试题：RabbitMQ 死信消息的来源（含机制原理 + 应用场景）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>在 RabbitMQ 中，<strong>死信（Dead Letter）</strong> 指的是那些无法被正常消费的消息。<br> 当消息在队列中满足某些条件时，就会被 RabbitMQ 投递到一个专门的 <strong>死信交换机（DLX, Dead Letter Exchange）</strong>。</p>
+<p>死信的主要来源有三种情况：</p>
+<p>1️⃣ <strong>消息被消费者拒绝（basic.reject &#x2F; basic.nack）且未重新入队</strong><br> 2️⃣ <strong>消息在队列中存活时间超出 TTL（Time-To-Live）</strong><br> 3️⃣ <strong>队列达到最大长度限制（maxLength）导致消息被挤出</strong></p>
+<p>这些机制可用于实现 <strong>消息重试、延迟队列、异常追踪</strong> 等高级功能。</p>
+</blockquote>
+<hr>
+<p><strong>二、死信队列（DLX）工作原理</strong></p>
+<blockquote>
+<p>死信机制依赖于 DLX（Dead Letter Exchange）和 DLQ（Dead Letter Queue）。<br> 当普通队列中的消息变成死信后，会被 RabbitMQ 自动投递到绑定在 DLX 上的队列。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Producer</span><br><span class="line">   ↓</span><br><span class="line">[Normal Exchange]</span><br><span class="line">   ↓</span><br><span class="line">[Normal Queue]  ←（消息过期 / 拒绝 / 挤出）</span><br><span class="line">   ↓</span><br><span class="line">   → Dead Letter Exchange (DLX)</span><br><span class="line">       ↓</span><br><span class="line">       [Dead Letter Queue (DLQ)]</span><br><span class="line">       ↓</span><br><span class="line">       Consumer (死信处理)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>三、RabbitMQ 死信消息的三大来源</strong></p>
+<hr>
+<p>🔹 <strong>1. 消费者拒绝消息（Reject &#x2F; Nack）且不重新入队</strong></p>
+<p><strong>触发条件：</strong></p>
+<ul>
+<li><p>消费者调用：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.basicReject(deliveryTag, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+
+<p>或</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.basicNack(deliveryTag, <span class="literal">false</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>且 <code>requeue=false</code>（不重新放回原队列）。</p>
+</li>
+</ul>
+<p><strong>场景说明：</strong></p>
+<ul>
+<li>消费业务处理失败（如库存不足、参数错误）；</li>
+<li>不希望消息再次被消费；</li>
+<li>RabbitMQ 会将此消息发送到 <strong>DLX</strong>。</li>
+</ul>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    process(message);</span><br><span class="line">    channel.basicAck(deliveryTag, <span class="literal">false</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="comment">// 消费失败，拒绝消息且不重新入队</span></span><br><span class="line">    channel.basicReject(deliveryTag, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>🔹 <strong>2. 消息在队列中过期（TTL 过期）</strong></p>
+<p><strong>触发条件：</strong></p>
+<ul>
+<li>设置消息或队列 TTL（Time-To-Live）；</li>
+<li>超时未被消费。</li>
+</ul>
+<p><strong>设置方式：</strong></p>
+<ul>
+<li><p><strong>单条消息过期时间：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AMQP.<span class="type">BasicProperties</span> <span class="variable">properties</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AMQP</span>.BasicProperties.Builder()</span><br><span class="line">    .expiration(<span class="string">&quot;10000&quot;</span>) <span class="comment">// 单位：毫秒</span></span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>队列统一过期时间：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-message-ttl&quot;</span>, <span class="number">10000</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;normalQueue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>说明：</strong></p>
+<ul>
+<li>当 TTL 到期后，消息不会立即被删除；</li>
+<li>只有当消息位于队列头部时，RabbitMQ 才会检测是否过期；</li>
+<li>过期消息会自动进入死信交换机（若配置了 DLX）。</li>
+</ul>
+<hr>
+<p>🔹 <strong>3. 队列达到最大长度（MaxLength）</strong>**</p>
+<p><strong>触发条件：</strong></p>
+<ul>
+<li>队列设置了最大长度或最大字节数；</li>
+<li>新消息到达时，旧消息会被丢弃或转发至 DLX。</li>
+</ul>
+<p><strong>设置方式：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-max-length&quot;</span>, <span class="number">1000</span>); <span class="comment">// 最大存储1000条</span></span><br><span class="line">channel.queueDeclare(<span class="string">&quot;normalQueue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<p><strong>说明：</strong></p>
+<ul>
+<li>当队列满时，最旧的消息被移除；</li>
+<li>若绑定了 DLX，则这些被移除的消息会进入死信队列；</li>
+<li>否则直接被丢弃。</li>
+</ul>
+<hr>
+<p><strong>四、配置死信交换机（DLX）</strong></p>
+<p><strong>声明普通队列时配置参数：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-exchange&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>);</span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-routing-key&quot;</span>, <span class="string">&quot;dlx.key&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;normalQueue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<p><strong>绑定死信队列：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.exchangeDeclare(<span class="string">&quot;dlx.exchange&quot;</span>, <span class="string">&quot;direct&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;dlx.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">channel.queueBind(<span class="string">&quot;dlx.queue&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>, <span class="string">&quot;dlx.key&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>五、应用场景</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景类型</th>
+<th>应用说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>异常消息存储</td>
+<td>保存消费失败或拒绝的消息以便排查</td>
+</tr>
+<tr>
+<td>延迟队列</td>
+<td>利用 TTL + DLX 实现延迟消费</td>
+</tr>
+<tr>
+<td>消息重试机制</td>
+<td>异常消息先进入 DLQ，再人工或程序重发</td>
+</tr>
+<tr>
+<td>消息监控审计</td>
+<td>对死信队列消息进行告警与监控</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、总结（背诵版）</strong></p>
+<blockquote>
+<p>RabbitMQ 死信消息主要来源于三类场景：</p>
+<p>① 消费者拒绝消息且不重回队列（Reject&#x2F;Nack）；<br> ② 消息在队列中过期（TTL 到期未消费）；<br> ③ 队列达到最大长度（旧消息被挤出）。</p>
+<p>当普通队列配置了 <strong>死信交换机（DLX）</strong> 后，这些异常消息会自动转发至 <strong>死信队列（DLQ）</strong>。<br> 结合 DLX 可实现消息重试、延迟队列、异常监控等功能，是 RabbitMQ 高可靠机制的重要组成部分。</p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-死信队列的用处（含原理解析-实战应用）"><a href="#🎯-面试题：RabbitMQ-死信队列的用处（含原理解析-实战应用）" class="headerlink" title="🎯 面试题：RabbitMQ 死信队列的用处（含原理解析 + 实战应用）"></a>🎯 面试题：RabbitMQ 死信队列的用处（含原理解析 + 实战应用）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>在 RabbitMQ 中，<strong>死信队列（Dead Letter Queue，DLQ）</strong> 是用于存放无法被正常消费的消息的特殊队列。<br> 它依赖于 <strong>死信交换机（Dead Letter Exchange，DLX）</strong> 实现，用于保障消息系统的可靠性与可恢复性。</p>
+<p>死信队列的核心作用在于：<br> ✅ <strong>防止消息丢失</strong><br> ✅ <strong>实现延迟队列机制</strong><br> ✅ <strong>实现消息重试与补偿</strong><br> ✅ <strong>帮助定位与分析异常消息</strong></p>
+</blockquote>
+<hr>
+<p><strong>二、死信队列（DLQ）工作原理</strong></p>
+<blockquote>
+<p>当普通队列中的消息由于某种原因（拒绝、过期、队列满）无法被正常消费时，RabbitMQ 会将该消息“转发”到与该队列绑定的 <strong>死信交换机（DLX）</strong>。<br> 死信交换机会将这些异常消息投递到对应的 <strong>死信队列（DLQ）</strong>，供后续处理或分析。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Producer</span><br><span class="line">   ↓</span><br><span class="line">[Normal Exchange]</span><br><span class="line">   ↓</span><br><span class="line">[Normal Queue]  ← 消息拒绝/过期/队列满</span><br><span class="line">   ↓</span><br><span class="line">Dead Letter Exchange (DLX)</span><br><span class="line">   ↓</span><br><span class="line">[Dead Letter Queue (DLQ)]</span><br><span class="line">   ↓</span><br><span class="line">Consumer（监控/重试/分析）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>三、死信队列的常见用途</strong></p>
+<hr>
+<p>🔹 <strong>1. 防止消息丢失（消息安全兜底）</strong></p>
+<blockquote>
+<p>当系统出现异常时，如消费者宕机、消费失败、队列满等情况，普通队列的消息可能被丢弃。<br> 此时若配置了死信队列，这些“异常消息”会被保存到 DLQ 中，避免彻底丢失。</p>
+</blockquote>
+<p><strong>应用示例：</strong></p>
+<ul>
+<li>消费服务异常宕机时，未消费的消息可在 DLQ 中查找；</li>
+<li>运维人员可通过 DLQ 定位系统缺陷或消息积压问题。</li>
+</ul>
+<hr>
+<p>🔹 <strong>2. 实现延迟队列（TTL + DLX）</strong></p>
+<blockquote>
+<p>RabbitMQ 本身不直接支持延迟队列，但可通过 <strong>TTL（消息过期时间） + 死信队列</strong> 机制实现。</p>
+</blockquote>
+<p><strong>原理：</strong></p>
+<ol>
+<li>将消息发送到“延迟队列”，并设置 TTL；</li>
+<li>当 TTL 到期后，消息成为死信；</li>
+<li>死信队列接收该消息，即为“延迟到达”的消息。</li>
+</ol>
+<p><strong>示例：</strong></p>
+<ul>
+<li>支付订单 30 分钟未支付自动取消；</li>
+<li>秒杀系统中商品库存释放延迟处理。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-message-ttl&quot;</span>, <span class="number">300000</span>); <span class="comment">// 5分钟</span></span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-exchange&quot;</span>, <span class="string">&quot;order.dlx&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;order.delay.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>🔹 <strong>3. 消息重试机制</strong></p>
+<blockquote>
+<p>当消息消费失败时，可通过死信队列实现<strong>延迟重试</strong>或<strong>人工补偿机制</strong>。</p>
+</blockquote>
+<p><strong>典型方案：</strong></p>
+<ol>
+<li>消费失败 → 消息拒绝（不重回原队列） → 进入 DLQ；</li>
+<li>定时任务监听 DLQ；</li>
+<li>判断错误类型后，重新转发消息到原队列进行再次消费。</li>
+</ol>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>网络波动导致消费失败；</li>
+<li>第三方接口超时，可重试；</li>
+<li>临时异常不希望直接丢弃消息。</li>
+</ul>
+<hr>
+<p>🔹 <strong>4. 异常消息监控与审计</strong></p>
+<blockquote>
+<p>死信队列还可作为<strong>系统告警与分析渠道</strong>。<br> 运维系统可定期扫描 DLQ 并发送告警通知，帮助快速定位业务异常。</p>
+</blockquote>
+<p><strong>应用示例：</strong></p>
+<ul>
+<li>DLQ 超过阈值触发报警；</li>
+<li>将 DLQ 数据持久化分析，识别重复失败或数据格式问题。</li>
+</ul>
+<hr>
+<p>🔹 <strong>5. 消息削峰与异步处理的保护机制</strong></p>
+<blockquote>
+<p>在高并发环境下，死信队列能作为一种“异常缓冲区”，防止因临时高负载造成消息积压或丢失。</p>
+</blockquote>
+<p><strong>例如：</strong></p>
+<ul>
+<li>秒杀活动中若消费者处理能力不足，消息先进入 DLQ；</li>
+<li>稍后人工或自动系统进行重放，避免系统雪崩。</li>
+</ul>
+<hr>
+<p><strong>四、死信队列配置示例</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明普通队列并绑定 DLX</span></span><br><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-exchange&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>);</span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-routing-key&quot;</span>, <span class="string">&quot;dlx.key&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;normal.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 声明死信队列</span></span><br><span class="line">channel.exchangeDeclare(<span class="string">&quot;dlx.exchange&quot;</span>, <span class="string">&quot;direct&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;dlx.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">channel.queueBind(<span class="string">&quot;dlx.queue&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>, <span class="string">&quot;dlx.key&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>五、面试官常追问问题与高分回答</strong></p>
+<table>
+<thead>
+<tr>
+<th>面试官提问</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>死信队列的作用是什么？</td>
+<td>用于保存无法被正常消费的消息，实现消息重试、延迟、异常分析等机制。</td>
+</tr>
+<tr>
+<td>死信消息从哪里来？</td>
+<td>拒绝（Reject&#x2F;Nack）、过期（TTL）、队列满（MaxLength）。</td>
+</tr>
+<tr>
+<td>RabbitMQ 支持延迟队列吗？</td>
+<td>原生不支持，但可通过 TTL + DLX 组合实现延迟队列。</td>
+</tr>
+<tr>
+<td>如何防止消息丢失？</td>
+<td>为关键业务队列配置死信队列，并定期消费 DLQ 中的消息。</td>
+</tr>
+<tr>
+<td>死信队列消息太多怎么办？</td>
+<td>定期清理、持久化落库分析、配合自动补偿或报警系统使用。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、总结（背诵版）</strong></p>
+<blockquote>
+<p>死信队列（DLQ）是 RabbitMQ 中处理异常消息的关键机制。<br> 它的主要作用包括：</p>
+<p>✅ 防止消息丢失（兜底保护）<br> ✅ 实现延迟队列（TTL + DLX）<br> ✅ 实现消费重试机制<br> ✅ 进行异常消息监控与分析</p>
+<p>死信队列是消息系统高可用与可靠性的核心保障之一，<br> 也是企业级消息中间件中最常考察的面试知识点之一。</p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-支持延迟队列吗？实现延迟队列的条件是什么？（含原理-实战讲解）"><a href="#🎯-面试题：RabbitMQ-支持延迟队列吗？实现延迟队列的条件是什么？（含原理-实战讲解）" class="headerlink" title="🎯 面试题：RabbitMQ 支持延迟队列吗？实现延迟队列的条件是什么？（含原理 + 实战讲解）"></a>🎯 面试题：RabbitMQ 支持延迟队列吗？实现延迟队列的条件是什么？（含原理 + 实战讲解）</h1><hr>
+<p><strong>一、面试速答模板（高分开场）</strong></p>
+<blockquote>
+<p>RabbitMQ <strong>原生并不直接支持延迟队列（Delay Queue）</strong>，但可以通过以下两种方式实现：</p>
+<p>✅ <strong>方式一：TTL（过期时间） + 死信交换机（DLX）机制</strong>（最常见方案）<br> ✅ <strong>方式二：使用官方插件 rabbitmq_delayed_message_exchange</strong></p>
+<p>两者的本质都是让消息在一段时间后再被消费，实现“延迟投递”效果。</p>
+</blockquote>
+<hr>
+<p><strong>二、延迟队列的概念</strong></p>
+<blockquote>
+<p>延迟队列（Delay Queue）指消息发送到队列后，并不会立即被消费，而是<strong>等待一段时间（delay）后才进入正常消费流程</strong>。</p>
+<p><strong>典型应用场景：</strong></p>
+<ul>
+<li>订单 30 分钟未支付自动取消；</li>
+<li>用户注册后 5 分钟发送欢迎邮件；</li>
+<li>秒杀活动到时间才生效；</li>
+<li>定时任务或延迟重试机制。</li>
+</ul>
+</blockquote>
+<hr>
+<p><strong>三、方式一：TTL + DLX 实现延迟队列（推荐）</strong></p>
+<blockquote>
+<p>TTL（Time-To-Live）机制可以为消息或队列设置“生存时间”，一旦超时未被消费，消息会变成<strong>死信消息（Dead Letter）</strong>。<br> 若配置了 <strong>死信交换机（DLX）</strong>，则超时消息会自动转发到另一个队列——即我们的“延迟队列”。</p>
+</blockquote>
+<hr>
+<p>✅ 实现原理</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">生产者 → 延迟交换机 (Exchange)</span><br><span class="line">          ↓</span><br><span class="line">        延迟队列 (TTL 设置)</span><br><span class="line">          ↓ （消息过期）</span><br><span class="line">      死信交换机 (DLX)</span><br><span class="line">          ↓</span><br><span class="line">        死信队列（实际消费队列）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>✅ 核心配置代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1️⃣ 普通延迟队列配置</span></span><br><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-message-ttl&quot;</span>, <span class="number">30000</span>); <span class="comment">// 消息TTL：30秒</span></span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-exchange&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>); <span class="comment">// 过期后转发到 DLX</span></span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-routing-key&quot;</span>, <span class="string">&quot;dlx.key&quot;</span>);   <span class="comment">// 指定路由键</span></span><br><span class="line"></span><br><span class="line">channel.queueDeclare(<span class="string">&quot;delay.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2️⃣ 死信交换机和死信队列配置</span></span><br><span class="line">channel.exchangeDeclare(<span class="string">&quot;dlx.exchange&quot;</span>, <span class="string">&quot;direct&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;dlx.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">channel.queueBind(<span class="string">&quot;dlx.queue&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>, <span class="string">&quot;dlx.key&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>逻辑说明：</strong></p>
+<ul>
+<li>消息先进入 <code>delay.queue</code>；</li>
+<li>等待 TTL 到期后，RabbitMQ 自动将消息转发到 <code>dlx.exchange</code>；</li>
+<li>最终进入 <code>dlx.queue</code> 被消费者正常消费。</li>
+</ul>
+<hr>
+<p>✅ 优点与缺点</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实现简单，无需插件</td>
+<td>TTL 只能按队列或消息固定设定</td>
+</tr>
+<tr>
+<td>可靠稳定，兼容性好</td>
+<td>无法对单条消息动态设置不同延迟时间</td>
+</tr>
+<tr>
+<td>适合延迟固定的场景</td>
+<td>大量延迟消息可能堆积占内存</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>典型应用：</strong></p>
+<ul>
+<li>订单支付超时自动取消；</li>
+<li>延迟通知、定时任务；</li>
+<li>消息重试延迟投递。</li>
+</ul>
+<hr>
+<p><strong>四、方式二：使用 RabbitMQ 官方延迟插件</strong></p>
+<blockquote>
+<p>从 RabbitMQ 3.6.x 起，官方提供了插件：<br> <strong>rabbitmq_delayed_message_exchange</strong><br> 允许直接为每条消息设置不同的延迟时间（毫秒级）。</p>
+</blockquote>
+<hr>
+<p>✅ 插件启用步骤</p>
+<p>1️⃣ 下载并安装插件（需 RabbitMQ 3.8+）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rabbitmq-plugins <span class="built_in">enable</span> rabbitmq_delayed_message_exchange</span><br></pre></td></tr></table></figure>
+
+<p>2️⃣ 声明延迟交换机：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-delayed-type&quot;</span>, <span class="string">&quot;direct&quot;</span>);</span><br><span class="line">channel.exchangeDeclare(<span class="string">&quot;delay.exchange&quot;</span>, <span class="string">&quot;x-delayed-message&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<p>3️⃣ 发送消息时设置延迟时间：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AMQP.<span class="type">BasicProperties</span> <span class="variable">props</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AMQP</span>.BasicProperties.Builder()</span><br><span class="line">    .headers(Map.of(<span class="string">&quot;x-delay&quot;</span>, <span class="number">10000</span>)) <span class="comment">// 延迟10秒</span></span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">channel.basicPublish(<span class="string">&quot;delay.exchange&quot;</span>, <span class="string">&quot;delay.key&quot;</span>, props, <span class="string">&quot;延迟消息&quot;</span>.getBytes());</span><br></pre></td></tr></table></figure>
+
+<p>4️⃣ 消费者正常从绑定队列接收消息：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.queueBind(<span class="string">&quot;delay.queue&quot;</span>, <span class="string">&quot;delay.exchange&quot;</span>, <span class="string">&quot;delay.key&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>✅ 优点与缺点</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>支持每条消息自定义延迟</td>
+<td>需安装额外插件</td>
+</tr>
+<tr>
+<td>无需 TTL + DLX 组合</td>
+<td>插件需运维团队支持</td>
+</tr>
+<tr>
+<td>更灵活，性能优于方案一</td>
+<td>对集群升级兼容性要求高</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>每条消息延迟时间不同；</li>
+<li>精确控制延迟（毫秒级）；</li>
+<li>高级延迟队列系统、消息调度系统。</li>
+</ul>
+<hr>
+<p><strong>五、两种方案对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>TTL + DLX 实现</th>
+<th>延迟插件实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否原生支持</td>
+<td>✅ 支持</td>
+<td>🔧 需插件</td>
+</tr>
+<tr>
+<td>延迟粒度</td>
+<td>队列级 &#x2F; 消息级</td>
+<td>每条消息可自定义</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>简单</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>灵活性</td>
+<td>一般</td>
+<td>高</td>
+</tr>
+<tr>
+<td>运维要求</td>
+<td>无</td>
+<td>需部署插件</td>
+</tr>
+<tr>
+<td>性能表现</td>
+<td>较好</td>
+<td>更优</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、总结（背诵版）</strong></p>
+<blockquote>
+<p>✅ RabbitMQ <strong>原生不支持延迟队列</strong>，但可通过以下两种方式实现：</p>
+<p>① <strong>TTL + DLX（死信交换机）</strong>：常用于固定延迟场景，简单稳定；<br> ② <strong>延迟消息插件（rabbitmq_delayed_message_exchange）</strong>：支持灵活的消息级延迟。</p>
+<p>通过这两种方式，RabbitMQ 能够实现订单超时取消、延迟任务、消息重试等多种延迟场景，<br> 是企业级消息中间件面试中高频考点之一。</p>
+</blockquote>
+<h1 id="🎯-面试题：哪些情况下推荐使用-RabbitMQ-的惰性队列（含原理-实战分析）"><a href="#🎯-面试题：哪些情况下推荐使用-RabbitMQ-的惰性队列（含原理-实战分析）" class="headerlink" title="🎯 面试题：哪些情况下推荐使用 RabbitMQ 的惰性队列（含原理 + 实战分析）"></a>🎯 面试题：哪些情况下推荐使用 RabbitMQ 的惰性队列（含原理 + 实战分析）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>在 RabbitMQ 中，<strong>惰性队列（Lazy Queue）</strong> 是一种<strong>将消息优先存储到磁盘而非内存</strong>的队列模式。<br> 它的设计目标是为了应对<strong>海量消息堆积场景</strong>，有效降低内存压力、提高系统稳定性。</p>
+<p>🚀 <strong>推荐使用惰性队列的典型场景：</strong></p>
+<p>1️⃣ 消息量巨大、堆积严重的业务场景<br> 2️⃣ 消费速率远低于生产速率<br> 3️⃣ 系统内存有限但磁盘空间充足<br> 4️⃣ 需要保证消息长期可靠存储（如日志、延迟任务）<br> 5️⃣ 对实时性要求不高的异步任务场景</p>
+</blockquote>
+<hr>
+<p><strong>二、惰性队列的核心原理</strong></p>
+<blockquote>
+<p>默认情况下，RabbitMQ 的队列是 <strong>内存优先（memory-first）</strong> 的：<br> 消息先存放在内存中，只有内存紧张时才会被换出到磁盘。</p>
+</blockquote>
+<p>🧠 而惰性队列（Lazy Queue）机制改变了这一逻辑：</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>普通队列（default）</th>
+<th>惰性队列（lazy）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息存储位置</td>
+<td>内存优先</td>
+<td>磁盘优先</td>
+</tr>
+<tr>
+<td>读取方式</td>
+<td>消费时从内存读取</td>
+<td>消费时从磁盘加载</td>
+</tr>
+<tr>
+<td>内存占用</td>
+<td>高</td>
+<td>极低</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>高实时性场景</td>
+<td>大量堆积场景</td>
+</tr>
+<tr>
+<td>启动性能</td>
+<td>快</td>
+<td>相对较慢（需磁盘 I&#x2F;O）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>其本质是将消息<strong>延迟加载（lazy load）</strong>，即只有当消费者真正需要消费时，消息才被加载到内存。</p>
+</blockquote>
+<hr>
+<p><strong>三、惰性队列的配置方式</strong></p>
+<p>✅ 方式一：声明时设置参数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-queue-mode&quot;</span>, <span class="string">&quot;lazy&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;lazy.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<p>✅ 方式二：修改已有队列模式</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rabbitmqctl set_policy Lazy <span class="string">&quot;.*&quot;</span> <span class="string">&#x27;&#123;&quot;queue-mode&quot;:&quot;lazy&quot;&#125;&#x27;</span> --apply-to queues</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>此命令会将所有匹配的队列改为惰性模式。</p>
+</blockquote>
+<hr>
+<p><strong>四、惰性队列的工作机制</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Producer</span><br><span class="line">   ↓</span><br><span class="line"> [Lazy Queue] → 消息写入磁盘（非内存）</span><br><span class="line">   ↓</span><br><span class="line">Consumer → 消费时再从磁盘读取消息</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>🧩 机制要点：</p>
+<ul>
+<li>消息一旦进入队列立即写入磁盘；</li>
+<li>内存仅保存最少的元数据；</li>
+<li>消费时会触发磁盘读取操作；</li>
+<li>当消息堆积过多时，系统仍保持稳定，不会因内存爆炸导致崩溃。</li>
+</ul>
+</blockquote>
+<hr>
+<p><strong>五、推荐使用惰性队列的典型场景</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ 大量消息堆积</strong></td>
+<td>例如订单延迟队列、日志收集队列、补偿任务队列等，消息堆积量极大但实时性要求不高。</td>
+</tr>
+<tr>
+<td><strong>2️⃣ 消费速度较慢</strong></td>
+<td>生产者持续高频发送，消费者处理速度有限（如批处理任务）。</td>
+</tr>
+<tr>
+<td><strong>3️⃣ 低频消费任务</strong></td>
+<td>消息可能在队列中停留较久，如数据同步、离线计算任务。</td>
+</tr>
+<tr>
+<td><strong>4️⃣ 节省内存资源</strong></td>
+<td>当 RabbitMQ 部署在内存有限的服务器上，可防止 OOM。</td>
+</tr>
+<tr>
+<td><strong>5️⃣ 延迟消息或死信消息场景</strong></td>
+<td>消息需等待较长时间后再消费，适合惰性存储。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、不推荐使用惰性队列的场景</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景类型</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ 高实时性业务</strong></td>
+<td>惰性队列读取消息需磁盘 I&#x2F;O，会降低响应速度。</td>
+</tr>
+<tr>
+<td><strong>2️⃣ 高频消费场景</strong></td>
+<td>大量磁盘读写会增加延迟，影响吞吐性能。</td>
+</tr>
+<tr>
+<td><strong>3️⃣ 小消息高并发系统</strong></td>
+<td>频繁磁盘操作开销较大，反而降低整体效率。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>七、性能分析</strong></p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>普通队列</th>
+<th>惰性队列</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内存使用率</td>
+<td>高</td>
+<td>极低</td>
+</tr>
+<tr>
+<td>磁盘 I&#x2F;O</td>
+<td>少</td>
+<td>较多</td>
+</tr>
+<tr>
+<td>吞吐性能</td>
+<td>高</td>
+<td>稍低</td>
+</tr>
+<tr>
+<td>可靠性</td>
+<td>一般</td>
+<td>高（持久化）</td>
+</tr>
+<tr>
+<td>系统稳定性</td>
+<td>差（堆积易崩）</td>
+<td>高（磁盘缓存）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>✅ 结论：惰性队列更适合 <strong>高可靠、低实时、大堆积</strong> 场景。</p>
+</blockquote>
+<hr>
+<p><strong>八、惰性队列应用示例</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-queue-mode&quot;</span>, <span class="string">&quot;lazy&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;lazy_order_queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<p>应用场景示例：</p>
+<ul>
+<li>订单取消延迟队列（30分钟后自动过期）；</li>
+<li>用户任务重试队列；</li>
+<li>异步补偿任务队列；</li>
+<li>大规模日志堆积（ELK异步处理）。</li>
+</ul>
+<hr>
+<p><strong>九、总结（背诵版）</strong></p>
+<blockquote>
+<p>✅ RabbitMQ 惰性队列（Lazy Queue）通过<strong>将消息直接持久化到磁盘</strong>，解决了消息堆积导致内存溢出的问题。</p>
+<p>推荐使用场景包括：</p>
+<ul>
+<li>大量消息堆积；</li>
+<li>消费速率低；</li>
+<li>内存受限；</li>
+<li>延迟消费、低实时性业务；</li>
+<li>长期存储或重试任务。</li>
+</ul>
+<p>惰性队列牺牲部分性能，换取系统稳定性与可扩展性，是<strong>高可靠消息系统中的重要优化手段</strong>。</p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-队列中存放的-Message-是否有数量限制（含机制原理-调优建议）"><a href="#🎯-面试题：RabbitMQ-队列中存放的-Message-是否有数量限制（含机制原理-调优建议）" class="headerlink" title="🎯 面试题：RabbitMQ 队列中存放的 Message 是否有数量限制（含机制原理 + 调优建议）"></a>🎯 面试题：RabbitMQ 队列中存放的 Message 是否有数量限制（含机制原理 + 调优建议）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>严格来说，RabbitMQ <strong>队列中的消息数量没有固定上限</strong>，理论上可以无限堆积。<br> 但实际上，受限于 <strong>服务器内存、磁盘容量</strong> 以及 <strong>系统参数配置</strong>，<br> 队列中的消息数量会受到多种因素约束。</p>
+<p>因此，在设计高并发系统时，<strong>不建议让消息在队列中长期堆积</strong>，<br> 否则容易引发性能下降甚至 RabbitMQ 宕机。</p>
+</blockquote>
+<hr>
+<p><strong>二、理论上：无硬性数量限制</strong></p>
+<p>RabbitMQ 的 AMQP 协议并没有为队列设置“消息条数上限”，<br> 它可以根据硬件资源动态扩展。</p>
+<p>但是：</p>
+<ul>
+<li>每条消息都会占用内存（元数据、指针、索引）；</li>
+<li>RabbitMQ 需要维护每个队列的<strong>消息元信息（metadata）</strong>；</li>
+<li>当消息量巨大时（如上千万条），会引发性能和稳定性问题。</li>
+</ul>
+<p>🧠 <strong>结论：</strong></p>
+<blockquote>
+<p>理论上无限制，<br> 实际上受资源和配置限制，<br> 超过一定量后性能会明显下降。</p>
+</blockquote>
+<hr>
+<p><strong>三、影响消息数量上限的关键因素</strong></p>
+<table>
+<thead>
+<tr>
+<th>影响因素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🧩 <strong>内存大小</strong></td>
+<td>RabbitMQ 默认会把消息放在内存中，当内存超出阈值后才写入磁盘（内存限流机制）。</td>
+</tr>
+<tr>
+<td>💾 <strong>磁盘容量</strong></td>
+<td>若使用持久化（durable + persistent），磁盘空间不足会导致无法写入新消息。</td>
+</tr>
+<tr>
+<td>⚙️ <strong>系统参数</strong></td>
+<td>如 <code>vm_memory_high_watermark</code>、<code>disk_free_limit</code> 等限制了 Broker 的资源使用上限。</td>
+</tr>
+<tr>
+<td>🧱 <strong>队列模式</strong></td>
+<td>普通队列会优先使用内存；惰性队列（lazy）会直接写磁盘，可存更多消息。</td>
+</tr>
+<tr>
+<td>🧵 <strong>消费者速率</strong></td>
+<td>若消费速度低于生产速度，消息会持续堆积，最终触发内存保护或磁盘限流。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>四、RabbitMQ 的资源保护机制</strong></p>
+<p>RabbitMQ 为了防止内存和磁盘资源被占满，引入了两种保护机制：</p>
+<p>1️⃣ 内存水位保护（Memory Watermark）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vm_memory_high_watermark = 0.4</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>当 RabbitMQ 使用的内存超过 40% 时，会阻塞所有生产者连接（流控机制），<br> 暂停接收新消息，直到内存降至安全线。</p>
+</blockquote>
+<hr>
+<p>2️⃣ 磁盘保护（Disk Free Limit）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">disk_free_limit.absolute = 50MB</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>当磁盘可用空间低于该值时，RabbitMQ 同样会暂停接收新消息，<br> 防止写入失败或系统崩溃。</p>
+</blockquote>
+<hr>
+<p><strong>五、控制消息数量的配置参数</strong></p>
+<p>如果希望显式控制队列容量，可以通过队列参数：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-max-length&quot;</span>, <span class="number">100000</span>); <span class="comment">// 队列最多存放10万条消息</span></span><br><span class="line">args.put(<span class="string">&quot;x-overflow&quot;</span>, <span class="string">&quot;reject-publish&quot;</span>); <span class="comment">// 超出时拒绝生产者</span></span><br><span class="line">channel.queueDeclare(<span class="string">&quot;orderQueue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>x-max-length</code></td>
+<td>队列最大消息条数</td>
+</tr>
+<tr>
+<td><code>x-max-length-bytes</code></td>
+<td>队列最大字节数（总大小）</td>
+</tr>
+<tr>
+<td><code>x-overflow</code></td>
+<td>溢出策略（<code>drop-head</code> 或 <code>reject-publish</code>）</td>
+</tr>
+</tbody></table>
+<p>🧠 <strong>小技巧：</strong></p>
+<blockquote>
+<p>生产环境建议启用 <strong>x-max-length</strong> 限制，避免消息无限堆积。</p>
+</blockquote>
+<hr>
+<p><strong>六、优化与调优建议</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题现象</th>
+<th>调优建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息堆积导致内存暴涨</td>
+<td>使用惰性队列（lazy queue）+ 限流机制</td>
+</tr>
+<tr>
+<td>磁盘写入速度过慢</td>
+<td>使用 SSD 提高 I&#x2F;O 性能</td>
+</tr>
+<tr>
+<td>消费端处理速度慢</td>
+<td>增加消费者实例数，提高并发消费能力</td>
+</tr>
+<tr>
+<td>消息堆积无上限</td>
+<td>配置 <code>x-max-length</code> 或使用死信队列（DLX）</td>
+</tr>
+<tr>
+<td>延迟消息占用资源</td>
+<td>使用 TTL + DLX 实现延迟转移</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>七、典型实践场景</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>大量堆积、低实时性</td>
+<td>惰性队列 + x-max-length 限制</td>
+</tr>
+<tr>
+<td>高频交易系统</td>
+<td>普通队列 + 实时消费 + 限流控制</td>
+</tr>
+<tr>
+<td>延迟任务系统</td>
+<td>TTL + DLX + 惰性队列</td>
+</tr>
+<tr>
+<td>日志&#x2F;审计系统</td>
+<td>惰性队列 + 磁盘优化</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>八、总结（背诵版）</strong></p>
+<blockquote>
+<p>✅ RabbitMQ 队列 <strong>理论上没有固定消息数量上限</strong>，<br> 但实际受限于内存、磁盘和配置参数。</p>
+<p>为防止消息堆积引发性能问题，应：</p>
+<ul>
+<li>设置队列上限（x-max-length &#x2F; x-max-length-bytes）；</li>
+<li>使用惰性队列存储海量消息；</li>
+<li>调整内存与磁盘阈值；</li>
+<li>增加消费者并发；</li>
+<li>使用死信队列转移过期或溢出消息。</li>
+</ul>
+<p>⚙️ 最佳实践：<strong>RabbitMQ 用于消息传递，而非消息存储。</strong></p>
+</blockquote>
+<h1 id="🎯-面试题：RabbitMQ-队列的溢出行为（含机制原理-参数配置-实战示例）"><a href="#🎯-面试题：RabbitMQ-队列的溢出行为（含机制原理-参数配置-实战示例）" class="headerlink" title="🎯 面试题：RabbitMQ 队列的溢出行为（含机制原理 + 参数配置 + 实战示例）"></a>🎯 面试题：RabbitMQ 队列的溢出行为（含机制原理 + 参数配置 + 实战示例）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>在 RabbitMQ 中，当队列的消息数量达到最大限制（通过 <code>x-max-length</code> 或 <code>x-max-length-bytes</code> 设置）时，<br> 就会触发 <strong>溢出行为（Overflow Behavior）</strong>。</p>
+<p>RabbitMQ 提供了两种主要的溢出策略：</p>
+<p>1️⃣ <strong>drop-head（默认）</strong> —— 丢弃队列最前面的旧消息；<br> 2️⃣ <strong>reject-publish &#x2F; reject-publish-dlx</strong> —— 拒绝新的消息入队。</p>
+<p>溢出策略通过队列参数 <code>x-overflow</code> 控制，<br> 它决定 RabbitMQ 在“消息超量”时是 <strong>丢旧消息</strong> 还是 <strong>拒绝新消息</strong>。</p>
+</blockquote>
+<hr>
+<p><strong>二、队列溢出的触发条件</strong></p>
+<p>RabbitMQ 队列会在以下两种情况下触发溢出行为：</p>
+<table>
+<thead>
+<tr>
+<th>触发条件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>消息条数超出上限</strong></td>
+<td>当消息数超过 <code>x-max-length</code> 指定的数量。</td>
+</tr>
+<tr>
+<td><strong>消息总字节数超出上限</strong></td>
+<td>当消息体总大小超过 <code>x-max-length-bytes</code> 指定的字节数。</td>
+</tr>
+</tbody></table>
+<p>👉 一旦达到上限，队列会按照 <code>x-overflow</code> 指定的策略处理超出的消息。</p>
+<hr>
+<p><strong>三、溢出策略（x-overflow 参数详解）</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数值</th>
+<th>含义</th>
+<th>行为说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>drop-head</code></td>
+<td>丢弃最旧的消息（队首）</td>
+<td>默认策略，队列保持固定长度，先进先出替换旧消息。</td>
+</tr>
+<tr>
+<td><code>reject-publish</code></td>
+<td>拒绝新的消息入队</td>
+<td>超出限制后，生产者发送消息会被拒绝并抛出异常。</td>
+</tr>
+<tr>
+<td><code>reject-publish-dlx</code></td>
+<td>拒绝消息并转发到死信交换机（DLX）</td>
+<td>结合死信机制可实现“消息转移”而非直接丢弃。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>四、配置示例</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-max-length&quot;</span>, <span class="number">1000</span>);          <span class="comment">// 限制最多1000条消息</span></span><br><span class="line">args.put(<span class="string">&quot;x-overflow&quot;</span>, <span class="string">&quot;reject-publish&quot;</span>); <span class="comment">// 溢出时拒绝新消息</span></span><br><span class="line">channel.queueDeclare(<span class="string">&quot;order.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<p>✅ 当消息超过 1000 条时，新消息将被拒绝，生产者会收到异常。</p>
+<hr>
+<p><strong>五、与死信队列（DLX）联动使用</strong></p>
+<p>如果希望“溢出消息”能被保存或后续处理，可启用 <strong>reject-publish-dlx</strong> 策略并绑定死信交换机：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, Object&gt; args = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">args.put(<span class="string">&quot;x-max-length&quot;</span>, <span class="number">1000</span>);</span><br><span class="line">args.put(<span class="string">&quot;x-overflow&quot;</span>, <span class="string">&quot;reject-publish-dlx&quot;</span>);</span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-exchange&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>);</span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-routing-key&quot;</span>, <span class="string">&quot;overflow.key&quot;</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;order.queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, args);</span><br></pre></td></tr></table></figure>
+
+<p>👉 当队列满时，超出的消息将被投递到 <code>dlx.exchange</code>，进入指定的死信队列中。</p>
+<hr>
+<p><strong>六、三种策略的差异对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>丢弃旧消息</th>
+<th>拒绝新消息</th>
+<th>是否支持 DLX 转移</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>drop-head</code></td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+<td>❌ 否</td>
+<td>实时数据流，保留最新数据（如日志、监控）</td>
+</tr>
+<tr>
+<td><code>reject-publish</code></td>
+<td>❌ 否</td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+<td>保证消息完整性（如订单系统）</td>
+</tr>
+<tr>
+<td><code>reject-publish-dlx</code></td>
+<td>❌ 否</td>
+<td>✅ 是</td>
+<td>✅ 是</td>
+<td>需保存超量消息（如异常缓冲区）</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>七、溢出策略的常见使用场景</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景类型</th>
+<th>推荐策略</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>日志、监控类实时流</td>
+<td><code>drop-head</code></td>
+<td>保留最新数据，丢弃旧数据即可</td>
+</tr>
+<tr>
+<td>交易、订单系统</td>
+<td><code>reject-publish</code></td>
+<td>拒绝新消息，保证消息完整性</td>
+</tr>
+<tr>
+<td>异常缓冲、流控保护</td>
+<td><code>reject-publish-dlx</code></td>
+<td>超量消息转入死信队列以备后续处理</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>八、面试官常追问问题</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RabbitMQ 队列满了会怎样？</td>
+<td>若设置 <code>x-overflow</code>，则按策略丢弃或拒绝消息；若未设置，则持续堆积直到资源耗尽。</td>
+</tr>
+<tr>
+<td><code>drop-head</code> 与 <code>reject-publish</code> 区别？</td>
+<td>前者丢旧消息保新消息，后者拒绝新消息保旧消息。</td>
+</tr>
+<tr>
+<td>如何防止消息丢失？</td>
+<td>使用 <code>reject-publish-dlx</code>，将溢出消息转移到死信队列。</td>
+</tr>
+<tr>
+<td>可以同时设置 <code>x-max-length</code> 和 <code>x-max-length-bytes</code> 吗？</td>
+<td>可以，但任一条件触发都会执行溢出策略。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>九、总结（背诵版）</strong></p>
+<blockquote>
+<p>RabbitMQ 队列溢出行为由参数 <code>x-overflow</code> 控制，<br> 当消息数量或字节数超出上限时触发。</p>
+<p>主要三种策略：</p>
+<ul>
+<li><strong>drop-head</strong>：丢弃最旧消息（默认）；</li>
+<li><strong>reject-publish</strong>：拒绝新消息；</li>
+<li><strong>reject-publish-dlx</strong>：拒绝并转移到死信队列。</li>
+</ul>
+<p>应用时需结合业务需求选择：</p>
+<ul>
+<li>实时流场景选 <strong>drop-head</strong>；</li>
+<li>强一致场景选 <strong>reject-publish</strong>；</li>
+<li>异常缓冲场景选 <strong>reject-publish-dlx</strong>。</li>
+</ul>
+</blockquote>
+<h1 id="🎯-面试题：如何确保消息正确发送到-RabbitMQ-被消费者正确消费（含可靠投递机制-消费确认机制）"><a href="#🎯-面试题：如何确保消息正确发送到-RabbitMQ-被消费者正确消费（含可靠投递机制-消费确认机制）" class="headerlink" title="🎯 面试题：如何确保消息正确发送到 RabbitMQ &amp; 被消费者正确消费（含可靠投递机制 + 消费确认机制）"></a>🎯 面试题：如何确保消息正确发送到 RabbitMQ &amp; 被消费者正确消费（含可靠投递机制 + 消费确认机制）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>在分布式消息系统中，消息的“<strong>可靠投递</strong>”与“<strong>可靠消费</strong>”是保证系统数据一致性的关键。</p>
+<p>在 RabbitMQ 中，消息要经历：<br> <strong>生产 → 交换机（Exchange）→ 队列（Queue）→ 消费者（Consumer）</strong>。</p>
+<p>要确保消息不丢失，需要：</p>
+<ul>
+<li><strong>生产端保证消息可靠发送；</strong></li>
+<li><strong>Broker 端保证消息持久化；</strong></li>
+<li><strong>消费端保证消息可靠确认。</strong></li>
+</ul>
+</blockquote>
+<hr>
+<p><strong>二、确保消息正确发送至 RabbitMQ（生产端可靠性）</strong></p>
+<p>RabbitMQ 提供 <strong>三层保障机制</strong> 确保生产端的消息能可靠送达。</p>
+<hr>
+<p>✅ 1️⃣ 发送确认机制（Publisher Confirm）</p>
+<blockquote>
+<p>生产者开启 <code>publisher-confirm</code> 模式后，Broker 会异步回调确认消息是否成功到达 Exchange。</p>
+</blockquote>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (ack) &#123;</span><br><span class="line">        log.info(<span class="string">&quot;✅ 消息已到达 Exchange&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        log.error(<span class="string">&quot;❌ 消息未到达 Exchange: &#123;&#125;&quot;</span>, cause);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>原理说明：</strong></p>
+<ul>
+<li><code>ack=true</code> 表示 Broker 收到消息；</li>
+<li><code>ack=false</code> 表示消息未到达 Exchange；</li>
+<li>可结合消息唯一 ID 实现消息重发机制。</li>
+</ul>
+<hr>
+<p>✅ 2️⃣ 路由失败回调（ReturnCallback）</p>
+<blockquote>
+<p>若消息成功到达 Exchange，但未被路由到任何 Queue，则会触发回调。</p>
+</blockquote>
+<p><strong>配置：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">rabbitTemplate.setMandatory(<span class="literal">true</span>);</span><br><span class="line">rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) -&gt; &#123;</span><br><span class="line">    log.error(<span class="string">&quot;❌ 消息无法路由到 Queue：&#123;&#125;&quot;</span>, replyText);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>常见原因：</strong></p>
+<ul>
+<li>RoutingKey 不匹配；</li>
+<li>队列未绑定 Exchange。</li>
+</ul>
+<hr>
+<p>✅ 3️⃣ 消息持久化（Persistence）</p>
+<blockquote>
+<p>确保 RabbitMQ 重启后消息不丢失。</p>
+</blockquote>
+<p><strong>三层持久化要点：</strong></p>
+<table>
+<thead>
+<tr>
+<th>持久化对象</th>
+<th>配置项或参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Exchange</td>
+<td><code>durable=true</code></td>
+<td>交换机持久化</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td><code>durable=true</code></td>
+<td>队列持久化</td>
+</tr>
+<tr>
+<td>Message</td>
+<td><code>MessageProperties.PERSISTENT_TEXT_PLAIN</code></td>
+<td>消息体持久化</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">channel.exchangeDeclare(<span class="string">&quot;order-ex&quot;</span>, <span class="string">&quot;direct&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">channel.queueDeclare(<span class="string">&quot;order-queue&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">channel.basicPublish(<span class="string">&quot;order-ex&quot;</span>, <span class="string">&quot;order.key&quot;</span>, MessageProperties.PERSISTENT_TEXT_PLAIN, msg.getBytes());</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>🧠 小结：生产端三重保障机制</strong></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>防丢手段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消息未到 Exchange</td>
+<td>ConfirmCallback</td>
+</tr>
+<tr>
+<td>消息未到 Queue</td>
+<td>ReturnCallback + mandatory&#x3D;true</td>
+</tr>
+<tr>
+<td>Broker 异常宕机</td>
+<td>Exchange&#x2F;Queue&#x2F;Message 持久化</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>三、确保消息被消费者正确消费（消费端可靠性）</strong></p>
+<hr>
+<p>✅ 1️⃣ 手动 ACK 机制（Manual ACK）</p>
+<blockquote>
+<p>RabbitMQ 默认是自动 ACK（<code>autoAck=true</code>），若消费异常则可能造成消息丢失。</p>
+<p>因此建议开启 <strong>手动 ACK 模式</strong>，在消息正确处理后再确认。</p>
+</blockquote>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RabbitListener(queues = &quot;orderQueue&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">consume</span><span class="params">(Message message, Channel channel)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        processOrder(message);</span><br><span class="line">        <span class="comment">// 消费成功，手动确认</span></span><br><span class="line">        channel.basicAck(message.getMessageProperties().getDeliveryTag(), <span class="literal">false</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="comment">// 消费失败，拒绝消息，重新入队</span></span><br><span class="line">        channel.basicNack(message.getMessageProperties().getDeliveryTag(), <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>✅ 2️⃣ 消息幂等性保证</p>
+<blockquote>
+<p>即使消息被重复投递，也要保证业务执行结果不变。</p>
+<p>常用方案：</p>
+<ul>
+<li>使用 <strong>唯一消息ID + Redis去重</strong></li>
+<li>使用 <strong>数据库唯一约束</strong></li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (redisTemplate.opsForValue().setIfAbsent(msgId, <span class="string">&quot;1&quot;</span>, <span class="number">5</span>, TimeUnit.MINUTES)) &#123;</span><br><span class="line">    <span class="comment">// 执行业务逻辑</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    log.warn(<span class="string">&quot;重复消息，跳过消费&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>✅ 3️⃣ 消费失败重试 + 死信队列（DLX）</p>
+<blockquote>
+<p>避免消息消费异常时丢失。</p>
+</blockquote>
+<p>配置死信队列：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">args.put(<span class="string">&quot;x-dead-letter-exchange&quot;</span>, <span class="string">&quot;dlx.exchange&quot;</span>);</span><br><span class="line">args.put(<span class="string">&quot;x-dead-letter-routing-key&quot;</span>, <span class="string">&quot;dlx.key&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>当消息消费失败、TTL过期或被拒绝时，RabbitMQ 会自动将其转发至 DLX。</p>
+<hr>
+<p><strong>🧠 小结：消费端三重保障机制</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>消费失败</td>
+<td>try-catch + Nack 重试</td>
+</tr>
+<tr>
+<td>消息重复消费</td>
+<td>Redis 幂等性控制</td>
+</tr>
+<tr>
+<td>消息多次失败或超时</td>
+<td>死信队列（DLX）保存</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>四、综合保障机制汇总</strong></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>防丢方案</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生产端</td>
+<td>Confirm + Return + 持久化</td>
+<td>确保消息成功入队</td>
+</tr>
+<tr>
+<td>Broker端</td>
+<td>Durable Exchange + Queue + Message Persistence</td>
+<td>RabbitMQ 宕机后仍能恢复</td>
+</tr>
+<tr>
+<td>消费端</td>
+<td>手动ACK + 幂等性 + DLX</td>
+<td>防止消费失败或重复</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>五、面试高频追问与高分回答</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>如何确保消息成功发送到 RabbitMQ？</td>
+<td>开启 <code>Publisher Confirm</code>、<code>ReturnCallback</code> 并设置持久化。</td>
+</tr>
+<tr>
+<td>如何防止消息在 Broker 崩溃后丢失？</td>
+<td>Exchange、Queue、Message 全部设置为 <code>durable=true</code>。</td>
+</tr>
+<tr>
+<td>如何保证消息只被消费一次？</td>
+<td>开启手动 ACK + 幂等性校验。</td>
+</tr>
+<tr>
+<td>消费失败如何不丢消息？</td>
+<td>使用 <code>basicNack()</code> + DLX 死信队列。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、总结（背诵版）</strong></p>
+<blockquote>
+<p>RabbitMQ 的消息可靠性分为两部分：</p>
+<p><strong>发送端防丢</strong>：</p>
+<ul>
+<li>Publisher Confirm 确认消息到达 Exchange；</li>
+<li>ReturnCallback 确认消息路由到 Queue；</li>
+<li>Exchange、Queue、Message 均设置持久化。</li>
+</ul>
+<p><strong>消费端防丢</strong>：</p>
+<ul>
+<li>手动 ACK 确认机制；</li>
+<li>消息幂等性（Redis&#x2F;DB）；</li>
+<li>消费异常消息转入 DLX。</li>
+</ul>
+<p>🔹 最终实现目标：消息 <strong>“不丢、不重、不乱”</strong>。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Wsk</div><div class="post-copyright__author_desc">Believe in yourself</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://wsk0404.github.io/posts/b543ced0.html">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://wsk0404.github.io/posts/b543ced0.html')">RabbitMQ</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div><div class="reward-link mode"><a class="reward-link-button" href="/wecaht/"><i class="anzhiyufont anzhiyu-icon-plant-fill"></i>运营模式与责任</a></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://wsk0404.github.io/posts/b543ced0.html"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=RabbitMQ&amp;url=https://wsk0404.github.io/posts/b543ced0.html&amp;pic=https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=a2104e7b-bf4e-6220-ee12-24632747aec8" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="rm.copyPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wsk0404.github.io" target="_blank">Wsk Blog</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"></div></div></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2025/10/23/g4UkwyDri9BWZtE.jpg?_r_=81e3deca-d1c9-10cb-0cc1-db8547b0cab5" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/bae4ff13.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=074bc0c5-cbdb-014a-6059-f5cdc68ff64a" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Redis</div></div></a></div><div class="next-post pull-right"><a href="/posts/f7ede91d.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=c264fbf4-ae88-7a4b-9c0f-ea2c2aa8d41c" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java基础</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/zc998800/cdn/face/gif/m17.gif" ait="status"/></div></div><div class="author-info__description">路慢其修远兮 吾将上下而求索</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Wsk</h1><div class="author-info__desc">Believe in yourself</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/gukeyang" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/1542898061" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://s2.loli.net/2023/10/19/vNio4QGBSX9x5lO.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF-RabbitMQ%EF%BC%9F%EF%BC%88%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">🎯 面试题：什么是 RabbitMQ？（消息队列核心原理 + 应用场景）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%A2%E8%AF%95%E9%80%9F%E7%AD%94%E6%A8%A1%E6%9D%BF%EF%BC%88%E9%AB%98%E5%88%86%E5%BC%80%E5%9C%BA%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">一、面试速答模板（高分开场）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81RabbitMQ-%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E4%B8%8E%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">二、RabbitMQ 的核心功能与作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81RabbitMQ-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%EF%BC%88%E9%87%8D%E7%82%B9%E8%AE%B0%E5%BF%86%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">三、RabbitMQ 核心组件（重点记忆）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81RabbitMQ-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%EF%BC%88%E6%B5%81%E7%A8%8B%E5%9B%BE%E7%90%86%E8%A7%A3%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">四、RabbitMQ 的工作原理（流程图理解）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81Exchange%EF%BC%88%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%89%E7%B1%BB%E5%9E%8B%EF%BC%88%E9%9D%A2%E8%AF%95%E9%AB%98%E9%A2%91%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">五、Exchange（交换机）类型（面试高频）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7%E6%9C%BA%E5%88%B6%EF%BC%88%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">六、消息可靠性机制（面试必问）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%88%E5%AE%9E%E6%88%98%E5%9E%8B%E5%9B%9E%E7%AD%94%EF%BC%89"><span class="toc-number">1.7.</span> <span class="toc-text">七、常见应用场景（实战型回答）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E4%BC%98%E7%BC%BA%E7%82%B9%E5%88%86%E6%9E%90%EF%BC%88%E9%9D%A2%E8%AF%95%E5%AE%98%E7%88%B1%E9%97%AE%EF%BC%89"><span class="toc-number">1.8.</span> <span class="toc-text">八、优缺点分析（面试官爱问）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%86%E8%A7%A3%E5%8A%A0%E5%88%86%EF%BC%89"><span class="toc-number">1.9.</span> <span class="toc-text">九、集群模式（了解加分）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%9F-%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%E4%B8%8E%E7%AD%94%E6%B3%95"><span class="toc-number">1.10.</span> <span class="toc-text">🔟 常见面试追问与答法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%92%A1-%E5%8D%81%E4%B8%80%E3%80%81%E6%80%BB%E7%BB%93%EF%BC%88%E8%83%8C%E8%AF%B5%E7%89%88%EF%BC%89"><span class="toc-number">1.11.</span> <span class="toc-text">💡 十一、总结（背诵版）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%EF%BC%88%E6%B6%88%E6%81%AF%E6%B5%81%E8%BD%AC%E6%9C%BA%E5%88%B6-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6-%E8%B7%AF%E7%94%B1%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">🎯 面试题：RabbitMQ 的工作原理（消息流转机制 + 核心组件 + 路由模型）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5%EF%BC%88%E5%90%AB%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">🎯 面试题：RabbitMQ 消息丢失的几种情况（含原因分析 + 解决方案）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E6%B6%88%E6%81%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E6%9D%A1%E4%BB%B6%EF%BC%88%E5%90%AB%E5%8E%9F%E7%90%86-%E5%AE%9E%E8%B7%B5%E6%96%B9%E6%A1%88%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">🎯 面试题：RabbitMQ 消息持久化的条件（含原理 + 实践方案）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E6%AD%BB%E4%BF%A1%E6%B6%88%E6%81%AF%E7%9A%84%E6%9D%A5%E6%BA%90%EF%BC%88%E5%90%AB%E6%9C%BA%E5%88%B6%E5%8E%9F%E7%90%86-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">🎯 面试题：RabbitMQ 死信消息的来源（含机制原理 + 应用场景）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97%E7%9A%84%E7%94%A8%E5%A4%84%EF%BC%88%E5%90%AB%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90-%E5%AE%9E%E6%88%98%E5%BA%94%E7%94%A8%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">🎯 面试题：RabbitMQ 死信队列的用处（含原理解析 + 实战应用）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E6%94%AF%E6%8C%81%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97%E5%90%97%EF%BC%9F%E5%AE%9E%E7%8E%B0%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%EF%BC%88%E5%90%AB%E5%8E%9F%E7%90%86-%E5%AE%9E%E6%88%98%E8%AE%B2%E8%A7%A3%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">🎯 面试题：RabbitMQ 支持延迟队列吗？实现延迟队列的条件是什么？（含原理 + 实战讲解）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E5%93%AA%E4%BA%9B%E6%83%85%E5%86%B5%E4%B8%8B%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8-RabbitMQ-%E7%9A%84%E6%83%B0%E6%80%A7%E9%98%9F%E5%88%97%EF%BC%88%E5%90%AB%E5%8E%9F%E7%90%86-%E5%AE%9E%E6%88%98%E5%88%86%E6%9E%90%EF%BC%89"><span class="toc-number">8.</span> <span class="toc-text">🎯 面试题：哪些情况下推荐使用 RabbitMQ 的惰性队列（含原理 + 实战分析）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E9%98%9F%E5%88%97%E4%B8%AD%E5%AD%98%E6%94%BE%E7%9A%84-Message-%E6%98%AF%E5%90%A6%E6%9C%89%E6%95%B0%E9%87%8F%E9%99%90%E5%88%B6%EF%BC%88%E5%90%AB%E6%9C%BA%E5%88%B6%E5%8E%9F%E7%90%86-%E8%B0%83%E4%BC%98%E5%BB%BA%E8%AE%AE%EF%BC%89"><span class="toc-number">9.</span> <span class="toc-text">🎯 面试题：RabbitMQ 队列中存放的 Message 是否有数量限制（含机制原理 + 调优建议）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ARabbitMQ-%E9%98%9F%E5%88%97%E7%9A%84%E6%BA%A2%E5%87%BA%E8%A1%8C%E4%B8%BA%EF%BC%88%E5%90%AB%E6%9C%BA%E5%88%B6%E5%8E%9F%E7%90%86-%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE-%E5%AE%9E%E6%88%98%E7%A4%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">10.</span> <span class="toc-text">🎯 面试题：RabbitMQ 队列的溢出行为（含机制原理 + 参数配置 + 实战示例）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E5%A6%82%E4%BD%95%E7%A1%AE%E4%BF%9D%E6%B6%88%E6%81%AF%E6%AD%A3%E7%A1%AE%E5%8F%91%E9%80%81%E5%88%B0-RabbitMQ-%E8%A2%AB%E6%B6%88%E8%B4%B9%E8%80%85%E6%AD%A3%E7%A1%AE%E6%B6%88%E8%B4%B9%EF%BC%88%E5%90%AB%E5%8F%AF%E9%9D%A0%E6%8A%95%E9%80%92%E6%9C%BA%E5%88%B6-%E6%B6%88%E8%B4%B9%E7%A1%AE%E8%AE%A4%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="toc-number">11.</span> <span class="toc-text">🎯 面试题：如何确保消息正确发送到 RabbitMQ &amp; 被消费者正确消费（含可靠投递机制 + 消费确认机制）</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/162c3636.html" title="IO 与序列化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=de966035-80c8-3ca7-6ae1-7ba75e465f44" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IO 与序列化"/></a><div class="content"><a class="title" href="/posts/162c3636.html" title="IO 与序列化">IO 与序列化</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/aa8deaab.html" title="多线程与并发"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/g4UkwyDri9BWZtE.jpg?_r_=81e3deca-d1c9-10cb-0cc1-db8547b0cab5" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="多线程与并发"/></a><div class="content"><a class="title" href="/posts/aa8deaab.html" title="多线程与并发">多线程与并发</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/86c7f0f3.html" title="集合与泛型"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/YUHOf5MZEItlGd3.jpg?_r_=2397ddbd-177f-15e3-4f39-e52fe378d9b3" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="集合与泛型"/></a><div class="content"><a class="title" href="/posts/86c7f0f3.html" title="集合与泛型">集合与泛型</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/f7ede91d.html" title="Java基础"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=c264fbf4-ae88-7a4b-9c0f-ea2c2aa8d41c" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java基础"/></a><div class="content"><a class="title" href="/posts/f7ede91d.html" title="Java基础">Java基础</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b543ced0.html" title="RabbitMQ"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/pH7DOX5rqdLCk4b.jpg?_r_=a2104e7b-bf4e-6220-ee12-24632747aec8" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RabbitMQ"/></a><div class="content"><a class="title" href="/posts/b543ced0.html" title="RabbitMQ">RabbitMQ</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-上班摸鱼中.svg" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title="博客框架为Hexo_v5.4.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a class="github-badge" target="_blank" href="https://blog.anheyu.com/" style="margin-inline:5px" data-title="本站使用AnZhiYu主题" title="本站使用AnZhiYu主题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.9/img/Theme-AnZhiYu-2E67D3.svg" alt="本站使用AnZhiYu主题"/></a><a class="github-badge" target="_blank" href="https://www.dogecloud.com/" style="margin-inline:5px" data-title="本站使用多吉云为静态资源提供CDN加速" title="本站使用多吉云为静态资源提供CDN加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/CDN-多吉云-3693F3.svg" alt="本站使用多吉云为静态资源提供CDN加速"/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title="本站项目由Github托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Source-Github.svg" alt="本站项目由Github托管"/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg" alt="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"/></a></p></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Wsk" target="_blank">Wsk</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.png" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AOP/" style="font-size: 0.88rem;">AOP<sup>2</sup></a><a href="/tags/IO/" style="font-size: 0.88rem;">IO<sup>1</sup></a><a href="/tags/IOC/" style="font-size: 0.88rem;">IOC<sup>2</sup></a><a href="/tags/JVM/" style="font-size: 0.88rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 0.88rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 0.88rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 0.88rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 0.88rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 0.88rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 0.88rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 0.88rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 0.88rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 0.88rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 0.88rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" style="font-size: 0.88rem;">自动装配<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 0.88rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 0.88rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="chat-btn" type="button" title="聊天"><i class="anzhiyufont anzhiyu-icon-comment-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><a id="switch-commentBarrage" href="javascript:anzhiyu.switchCommentBarrage();" title="开关弹幕"><i class="anzhiyufont anzhiyu-icon-danmu"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8152976493&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.4/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2023 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2020 By 安知鱼 V1.6.8",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Wsk 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("04/01/2023 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      img.src = "";
+      img.title = "";
+      img.alt = "";
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+      appKey: 'TjKeHNK7GJrGTYuKYzGzh8yg',
+      avatar: 'mp',
+      serverURLs: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_亲亲":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再见":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_发怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_发财":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可爱":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_呕吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_坏笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尴尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_惊吓":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.cbd.int/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) anzhiyu.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script src="https://cdn.cbd.int/blueimp-md5@2.19.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=mp'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://4GK2IcRZ.api.lncldglobal.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+        "X-LC-Key": 'TjKeHNK7GJrGTYuKYzGzh8yg',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script>var visitorMail = "visitor@anheyu.com";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="//code.tidio.co/4nifo6zdbrmyjsngh2yzxwbnlhrvshrf.js" async="async"></script><script>(() => {
+  const isChatBtn = true
+  const isChatHideShow = true
+
+  if (isChatBtn) {
+    let isShow = false
+    const close = () => {
+      window.tidioChatApi.hide()
+      isShow = false
+    }
+    
+    const open = () => {
+      window.tidioChatApi.open()
+      window.tidioChatApi.show()
+      isShow = true
+    }
+
+    const onTidioChatApiReady = () => {
+      window.tidioChatApi.hide()
+      window.tidioChatApi.on("close", close)
+    }
+    if (window.tidioChatApi) {
+      window.tidioChatApi.on("ready", onTidioChatApiReady)
+    } else {
+      document.addEventListener("tidioChat-ready", onTidioChatApiReady)
+    }
+
+    window.chatBtnFn = () => {
+      if (!window.tidioChatApi) return
+      isShow ? close() : open()
+    }
+  } else if (isChatHideShow) {
+    window.chatBtn = {
+      hide: () => {
+        window.tidioChatApi && window.tidioChatApi.hide()
+      },
+      show: () => {
+        window.tidioChatApi && window.tidioChatApi.show()
+      }
+    }
+  }
+})()</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
