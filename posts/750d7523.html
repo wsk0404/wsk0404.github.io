@@ -1,0 +1,2048 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>Spring Cloud | Wsk Blog</title><meta name="keywords" content="博客,笔记,学习"><meta name="author" content="Wsk,2047891093@qq.com"><meta name="copyright" content="Wsk"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="Spring Cloud"><meta name="application-name" content="Spring Cloud"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="Spring Cloud"><meta property="og:url" content="https://wsk0404.github.io/posts/750d7523.html"><meta property="og:site_name" content="Wsk Blog"><meta property="og:description" content="🎯 面试题：什么是 Spring Cloud？它解决了微服务中的哪些问题（含架构剖析 + 面试高分答法） 一、面试速答模板（高分版开场）  Spring Cloud 是一套基于 Spring Boot 的 微服务治理框架， 用于构建分布式系统的完整生态。 它提供了 注册发现、负载均衡、配置中心、熔"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=091b2caa-3dd7-0f39-d111-d11126a28a1f"><meta property="article:author" content="Wsk"><meta property="article:tag" content="博客,笔记,学习"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=091b2caa-3dd7-0f39-d111-d11126a28a1f"><meta name="description" content="🎯 面试题：什么是 Spring Cloud？它解决了微服务中的哪些问题（含架构剖析 + 面试高分答法） 一、面试速答模板（高分版开场）  Spring Cloud 是一套基于 Spring Boot 的 微服务治理框架， 用于构建分布式系统的完整生态。 它提供了 注册发现、负载均衡、配置中心、熔"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://wsk0404.github.io/posts/750d7523"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2023/09/03/125766904/ee23df8517f3c3e3efc4145658269c06_5714860933110284659.png"},
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:{"enable":true,"maxBarrage":1,"barrageTime":4000,"accessToken":"","mailMd5":"3932F24FA213E964B6B1B0FD091F88CE"},
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: {"apiurl":"https://friends.anheyu.com/"},
+  navMusic: true,
+  mainTone: {"mode":"both","api":"https://img2color-go.vercel.app/api?img=","cover_change":true},
+  authorStatus: {"skills":["🤖️ 数码科技爱好者","🔍 分享与热心帮助","🔨 设计开发一条龙","🏃 脚踏实地行动派"]},
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    simplehomepage: false,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":true,"limitCount":50,"languages":{"author":"作者: Wsk","link":"链接: ","source":"来源: Wsk Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Wsk Blog',
+  title: 'Spring Cloud',
+  postAI: '',
+  pageFillDescription: '🎯 面试题：什么是 Spring Cloud？它解决了微服务中的哪些问题（含架构剖析 + 面试高分答法）, 🎯 面试题：Spring Cloud 服务注册与发现原理（含机制解析 + 核心流程 + 高分答法）, 🎯 面试题：Spring Cloud 负载均衡（含机制原理 + 组件演进 + 答题模板）, 🎯 面试题：Spring Cloud Gateway 是什么（含原理机制 + 架构详解 + 面试追问）, 🎯 面试题：分布式事务中的 2PC 与 3PC（含原理机制 + 流程图解 + 面试延伸）, 🎯 面试题：Spring Cloud Seata 是什么（含分布式事务原理 + 模式详解 + 实战场景）, 🎯 面试题：分布式事务 TCC 模式详解（含执行流程 + 业务示例 + 面试扩展）面试题什么是它解决了微服务中的哪些问题含架构剖析面试高分答法一面试速答模板高分版开场是一套基于的微服务治理框架用于构建分布式系统的完整生态它提供了注册发现负载均衡配置中心熔断限流网关路由链路追踪消息总线等基础组件的核心目标是简化微服务的分布式系统开发屏蔽复杂的中间件交互细节提高服务的弹性与可观测性二的核心组成模块功能领域核心组件旧版主要作用服务注册与发现让服务之间自动注册和发现负载均衡客户端侧负载均衡服务调用声明式调用熔断与限流防止服务雪崩与过载配置中心外部化配置统一管理网关路由请求路由与过滤消息驱动实现事件驱动与配置广播链路追踪追踪分布式请求调用链安全认证统一认证与授权管理三解决了微服务的哪些核心问题问题类型传统微服务痛点解决方案服务注册与发现服务地址动态变化手动配置困难实现自动注册与发现服务通信与负载均衡服务调用难维护难扩展实现声明式调用与负载均衡配置管理多环境配置分散修改困难统一配置中心服务容错与降级服务间依赖导致雪崩实现熔断隔离限流路由与网关多服务对外暴露复杂统一路由入口鉴权日志过滤分布式日志与链路追踪请求跨服务难排查问题实现全链路追踪消息通知与配置刷新配置改动需手动重启服务实现配置自动刷新与事件广播安全认证多服务单点登录复杂实现统一认证授权四的架构示意图注册中心配置中心服务调用负载均衡熔断限流网关路由链路追踪消息总线提供了微服务全生命周期管理开发期服务拆分接口声明运行期注册路由熔断追踪运维期配置中心监控动态刷新五的设计理念约定优于配置提供统一标准与默认集成方案轻量化与组件化各模块松耦合可按需选择组件与无缝集成一行依赖即可启用分布式能力云原生支持原生适配等环境六与的关系对比项定位微服务框架基础快速开发微服务治理框架分布式协作作用简化单个服务开发管理多个服务协作侧重点服务内部结构服务间通信与治理依赖关系独立运行基于构建简而言之解决的是一个服务怎么跑起来解决的是多个服务如何协同工作七的版本演进版本代号主要特性代表组件版早期版本依赖版新一代云原生微服务与兼容当前主流选型国产化生态完善八面试官高频追问问题高分回答与有什么区别是一站式微服务治理框架专注于调用前者偏生态整合后者偏高性能通信为什么需要注册中心实现服务动态注册与发现避免硬编码地址提高弹性扩展性熔断和限流的区别熔断是防止调用失败蔓延限流是控制请求量防止过载为什么推荐使用支持国产中间件组件更轻量兼容性更好维护活跃九总结背诵版是一个微服务治理生态体系提供注册发现配置中心负载均衡熔断限流网关链路追踪等一站式能力它解决了传统分布式系统中服务注册与通信困难配置与部署复杂故障传播与降级缺失缺乏统一网关与监控使开发者能专注于业务逻辑而将分布式基础能力交给来托管面试题服务注册与发现原理含机制解析核心流程高分答法一面试速答模板高分版开场服务注册与发现是微服务架构的核心机制它用于让服务实例能够自动注册自己的网络位置端口并让其他服务动态发现并调用它们而无需硬编码地址在中常见的注册中心包括等核心思想是通过一个注册中心来维护所有服务实例的实时健康清单实现服务自动注册服务自动发现动态负载均衡二服务注册与发现的核心流程注册中心注册心跳上报服务调用服务提供者服务消费者服务发现拉取整体流程分为三步服务注册服务提供者在启动时向注册中心上报自身信息服务名端口元数据等服务发现服务消费者从注册中心拉取可用实例列表实现动态调用心跳检测注册中心周期性检查服务是否存活及时剔除故障节点三服务注册的原理以为例服务启动时会向注册中心发送一个请求注册中心保存该实例到内存注册表每个服务需定期发送心跳请求若超时未收到心跳默认秒后剔除该实例四服务发现的原理服务消费者调用前先从注册中心获取目标服务的地址列表注册中心返回所有可用实例信息客户端在本地缓存并基于策略如轮询选择实例发起请求客户端每隔秒自动更新注册表增量同步五客户端缓存机制默认采用客户端负载均衡模式客户端本地维护一份服务列表服务调用时不经过注册中心而是本地选择目标实例优点调用性能高注册中心压力小缺点客户端实现复杂需要定期更新缓存对应组件六的自我保护机制当网络波动导致大量服务心跳丢失时会触发自我保护模式注册中心不会立即下线这些服务等待一段时间后再重新评估确保分布式环境中误剔除减少这也是与其他注册中心如的区别之一它更偏向可用性而非一致性七的改进机制对比项一致性模型高可用可选注册协议健康检测客户端心跳主动探测客户端上报动态配置中心无内置临时实例永久实例无支持服务权重与分组无支持通过模式通道能实时感知服务变更并可结合配置中心实现注册配置一体化八服务注册与发现的核心组件角度组件职责注册中心服务端维护实例列表服务端与客户端共同使用负责注册与拉取统一抽象接口屏蔽不同注册中心差异启用客户端功能启用负载均衡调用九代码示例启动类服务提供者注册服务消费者调用当启动后会自动向注册其他服务通过直接调用即可无需关心和端口十面试官常追问问题高分回答服务注册表如何保持一致使用心跳续约增量同步使用协议保持一致性注册中心挂了怎么办客户端缓存自我保护机制保证短期可用服务如何下线服务关闭时主动发送请求与区别集成配置中心支持临时实例模式通知是纯注册中心十一总结背诵版服务注册与发现是微服务架构的基础能力通过注册中心服务可自动注册自身信息并实现动态发现调用通过等组件实现服务注册上报元数据服务发现动态拉取实例心跳检测保持健康状态自我保护防止误剔除偏向高可用支持一致性与高可用切换是当前微服务架构的主流选择面试题负载均衡含机制原理组件演进答题模板一面试速答模板高分版开场在微服务架构中负载均衡是指将客户端的请求按照一定算法分发到多个服务实例上以实现高可用高并发与流量均衡的目标的负载均衡经历了两个主要阶段早期版本官方替代的新组件两者都属于客户端负载均衡模式即在客户端侧完成服务选择与请求分发而非依赖中心代理二负载均衡的两种模式模式类型说明特点客户端负载均衡客户端从注册中心拉取所有可用实例自行选择目标服务调用性能高无中心瓶颈默认服务端负载均衡请求先发到负载均衡代理如由代理转发请求简单易维护但存在单点压力属于第一种模式三工作原理是提供的一个客户端负载均衡器它通过维护一份服务实例列表并基于策略算法从中选择一个服务进行调用核心流程服务消费者从注册中心拉取实例列表将列表缓存到本地每次调用时根据负载均衡策略选择目标实例通过或发起请求调用方式自动解析对应的实例并发起请求四的常见负载均衡策略策略类策略说明轮询默认策略依次选择服务实例随机选择失败重试机制根据响应时间分配权重选择最小并发量的实例综合区域与可用性策略自定义配置使用随机策略五新一代替代者在之后逐步弃用官方推荐使用它是一个轻量级本地负载均衡框架特点特性说明官方维护已停止更新与无缝整合支持异步调用可插拔策略机制支持等多种注册中心示例配置策略自定义规则六与对比对比项维护状态已停止维护官方长期支持模式客户端负载均衡客户端负载均衡架构基于基于体系响应式支持不支持支持可扩展性较差更强可自定义过滤器策略性能较低同步阻塞更高异步轻量七负载均衡策略扩展机制允许开发者扩展策略例如基于权重元数据或可用区可实现根据元数据选择特定实例可与的元数据路由结合使用实现灰度发布或多环境流量分流八面试官常追问问题面试题高分回答和有什么区别是客户端负载均衡是服务端代理负载均衡如何保证高可用本地缓存服务列表定期刷新重试机制为什么弃用停止维护不支持响应式新组件更轻量更灵活负载均衡策略可以自定义吗可以通过实现是如何实现负载均衡的底层集成或实现实例选择九总结背诵版的负载均衡机制属于客户端负载均衡模式服务调用方从注册中心拉取实例列表在本地根据策略选取目标服务早期通过实现提供多种策略轮询随机权重等后期由替代支持异步调用与可插拔扩展老牌组件基于同步调用新一代组件响应式轻量高性能在分布式微服务架构中负载均衡是实现高可用与高性能服务治理的关键基础面试题是什么含原理机制架构详解面试追问一面试速答模板高分版开场是官方推出的第二代网关框架取代了早期的基于与响应式编程模型构建它是微服务架构的统一流量入口用于请求路由过滤限流鉴权监控等跨服务功能支撑高并发低延迟的网关转发场景一句话概括是基于的高性能响应式网关组件用于构建微服务系统的统一访问层二的主要功能功能模块说明路由决定请求被转发到哪个目标服务断言匹配请求条件如路径参数等过滤器在请求前或响应后执行逻辑如鉴权日志限流等服务发现自动从注册中心如拉取服务列表实现动态路由负载均衡支持形式的自动负载均衡转发统一安全控制可结合实现认证与鉴权限流熔断支持集成实现限流熔断与降级三核心架构原理请求入口匹配判断链处理请求转发目标微服务实例请求处理流程客户端发送请求到路由系统根据断言判断应由哪个路由处理经过一系列过滤器执行前置或后置逻辑最终将请求转发至目标微服务响应返回时再次经过后置过滤器可进行日志记录或响应加工四典型配置示例版使用服务发现负载均衡匹配路径前缀代码配置五的优势优势点说明高性能非阻塞基于与支持高并发响应式编程无缝集成生态与无缝兼容动态路由与服务发现自动感知注册中心变化可扩展性强可自定义限流认证模块支持微服务治理集成熔断限流灰度发布等能力六与对比面试高频考点对比项架构模型响应式阻塞性能高性能非阻塞较低阻塞式扩展性高模型中等仅动态路由原生支持需手动扩展推荐程度官方推荐已过时七典型使用场景场景功能微服务统一网关提供统一访问入口与流量控制鉴权与认证中心实现或认证日志与监控采集在中记录请求数据限流与熔断保护防止接口过载或雪崩动态灰度发布根据请求头或用户维度动态路由八面试官高频追问与标准回答面试官问题高分回答的底层技术栈基于和的执行顺序先断言匹配再执行过滤器链如何实现全局过滤实现接口并注册为如何动态刷新路由可结合实现动态路由更新如何做限流可用实现全局或局部限流九总结背诵版是基于的响应式高性能网关取代成为官方推荐网关它具备统一入口路由转发过滤器链服务发现限流鉴权等核心能力能够有效提升微服务系统的可维护性安全性与性能记忆口诀统一入口断言匹配过滤控制动态路由高性能响应面试题分布式事务中的与含原理机制流程图解面试延伸一面试速答模板高分版开场在分布式系统中事务需要跨多个节点保持一致性两阶段提交和三阶段提交是早期经典的分布式事务一致性协议协调者通过准备阶段提交阶段确保参与者一致执行在基础上增加预提交阶段进一步降低阻塞风险并提高容错性二原理详解是分布式事务中最经典的实现协议之一由协调者与参与者两类节点共同完成阶段一准备阶段协调者发送请求给所有参与者参与者执行事务操作但不提交写入本地日志参与者向协调者返回响应若执行成功返回同意提交若执行失败返回拒绝提交阶段二提交阶段若所有参与者都返回协调者发送指令各参与者正式提交事务若任意一个返回协调者发送指令所有参与者回滚事务示意图阶段一准备阶段二提交优点实现简单能保证强一致性缺点阻塞问题若协调者宕机参与者会陷入等待状态单点问题协调者故障会导致系统无法决策无法容忍网络分区节点间通信异常时无法达成一致三机制原理是对的改进协议引入了一个额外的阶段预提交阶段让系统在出现异常时能更灵活地处理事务阶段一阶段协调者询问各参与者是否可以提交参与者检查事务可行性返回阶段二阶段预提交如果所有参与者返回则协调者发出通知参与者执行事务操作写入预提交日志并立即返回确认给协调者阶段三阶段正式提交若协调者收到所有发出指令所有参与者正式提交若超时或部分失败发出指令各参与者回滚事务改进点在每个阶段都设置了超时机制允许参与者在超时后自主提交或回滚减少阻塞相比具备更好的容错性与可恢复性优缺点对比对比项阶段数量阻塞问题存在通过超时机制部分缓解一致性保障强一致性但易阻塞一致性稍弱但可用性更高容错能力低协调者挂则卡死较高参与者可超时自决实现复杂度较低较高示意图流程阶段一询问是否可提交阶段二预提交写日志阶段三提交或回滚四与在实际系统中的应用系统类型典型实现方案传统分布式数据库协议基于消息事务系统事务消息思想微服务事务可靠消息最终一致性等分布式协调服务思想演化与的关系可视为的业务层实现对应对应对应区别在于由业务方控制资源粒度更细可编程五面试官常追问问题问题高分回答的最大问题是什么协调者单点故障导致参与者阻塞系统无法自动恢复如何优化引入预提交阶段与超时机制减少阻塞提升可用性是否绝对安全否网络分区下仍可能造成数据不一致冲突实际系统中还会用吗很少直接使用更多采用基于其思想的改进协议如你在项目中如何实现分布式事务结合业务特征使用可靠消息本地事务或机制实现最终一致性六总结背诵版两阶段提交准备提交优点实现简单保证强一致缺点阻塞严重协调者单点三阶段提交优点引入超时机制减少阻塞缺点一致性略弱复杂度高实际分布式系统中通常不直接使用而是采用基于其思想的业务可控补偿事务长事务补偿消息事务最终一致性核心记忆保证一致但易阻塞提升可用但弱一致现代系统以最终一致性为主流面试题是什么含分布式事务原理模式详解实战场景一面试速答模板高分版开场是阿里巴巴开源的分布式事务解决方案用于解决微服务架构下跨服务多数据源操作时的数据一致性问题它通过事务协调者事务管理者和资源管理者的协调机制实现全局事务的开启提交与回滚确保在分布式环境下特性仍然部分成立一句话概括是一个高性能的分布式事务协调框架用来在微服务系统中保持多服务间的数据一致性二为什么需要在微服务架构中业务通常拆分为多个独立服务如订单服务库存服务支付服务当一个业务操作需要同时调用多个服务时如果中途出现异常如库存扣减失败就会导致数据不一致问题传统的本地事务如事务只能保证单库内一致性无法解决跨服务事务正是为了解决这种跨服务分布式事务问题而生三的三大核心角色组件全称职责事务协调者维护全局事务的状态协调分支事务的提交与回滚事务管理者负责开启提交回滚全局事务资源管理者管理分支事务的本地资源数据库连接等并向注册运行机制图订单服务库存服务协调提交或回滚四的工作原理开启全局事务通过注解标记业务方法向注册全局事务获取唯一的全局事务注册分支事务每个参与的微服务数据库操作向注册分支事务记录事务的前镜像和后镜像执行业务逻辑各执行本地操作但不提交只保留在本地提交或回滚如果所有分支执行成功通知各提交若任何分支失败通知所有回滚操作恢复到前镜像状态五支持的事务模式模式简述适用场景模式基于数据库本地事务实现自动回滚强一致性操作数据库场景模式手动编写三阶段方法高性能需自定义业务逻辑模式补偿事务机制长事务场景跨系统异步流程如支付流程模式基于协议的分布式两阶段提交强一致性高可靠但性能较低六模式详解最常用核心原理自动拦截业务在执行前后分别记录前镜像和后镜像若事务失败通过恢复到原始状态示例代码若任意步骤失败如余额不足会自动触发全局回滚七的集成步骤引入依赖配置注册中心启动服务在业务服务中添加八的优缺点分析优点缺点支持多种事务模式是单点依赖与无缝集成模式依赖数据库表减少开发复杂度模式自动回滚跨库性能略低于本地事务支持多语言客户端大事务场景下回滚成本高九面试官高频追问与标准回答面试官问题高分回答模式的回滚机制通过保存数据快照失败时根据前镜像回滚与区别自动管理事务手动定义如何防止幂等问题在阶段使用事务日志或状态标识控制幂等性与事务消息的区别用于分布式数据库事务事务用于消息投递一致性十总结背诵版是分布式事务协调框架解决微服务下的跨库一致性问题核心角色常用模式自动事务模式模式自动生成失败自动回滚模式通过实现手动补偿模式用于长事务补偿机制一句话总结让分布式事务像本地事务一样简单可靠面试题分布式事务模式详解含执行流程业务示例面试扩展一面试速答模板高分版开场模式是分布式事务中一种业务层面的补偿型事务方案它通过将每个操作拆分为三个阶段来保证最终一致性尝试预留资源确认正式提交取消回滚补偿模式由业务方控制资源与回滚逻辑属于一种业务可编程事务能在保持高性能的同时实现柔性事务最终一致性二的三阶段机制详解模式并不依赖数据库层事务而是由应用服务显式实现事务控制逻辑阶段一预留资源作用检查业务可行性并预留资源示例冻结账户余额锁定库存设计要求操作要幂等不可对外产生副作用必须确保资源可确认或可回滚阶段二确认提交作用在所有子事务的都成功后执行业务的正式提交示例扣减账户余额扣除库存特点必须保证幂等操作通常不再进行任何校验一旦执行事务进入最终完成状态阶段三取消补偿作用当任意失败或部分失败时执行补偿操作示例解冻余额释放库存特点必须保证幂等逻辑与逻辑相反若未执行成功则应该能识别并忽略三执行流程示意图事务协调者账户服务库存服务积分服务成功成功成功若任一失败事务管理器调用各服务的方法回滚补偿四实际应用示例案例电商下单扣库存扣余额阶段账户服务库存服务冻结余额锁定库存扣减余额扣减库存解冻余额解锁库存伪代码示例阶段阶段阶段五模式的关键设计要点关键点说明幂等性每个阶段可能被重复调用必须保证幂等操作空回滚空补偿当未执行成功时不应误回滚悬挂问题先于执行时需判断防止误回滚事务协调器控制的全局调用与状态管理六与其他事务方案对比方案类型一致性性能实现复杂度典型场景强一致性低中分布式数据库最终一致性高高金融电商支付系统最终一致性高中长事务业务消息事务最终一致性高低异步消息场景适用于强业务耦合可编程控制执行较快的场景七的常见问题与解决方案问题类型说明解决方式幂等问题接口可能被重复调用使用事务状态表或唯一业务号空回滚先于执行增加状态校验悬挂问题执行后才到在本地事务表中记录执行状态网络超时某个超时使用消息补偿或定时任务重试机制八框架与实现框架特点模式阿里开源分布式事务框架支持国内成熟开源方案支持轻量级高性能框架自研结合业务规则设计接口九面试官常追问问题问题高分回答与的区别是数据库层协议是业务层补偿机制更灵活但一致性较弱如何保证幂等通过全局事务本地幂等表防止重复执行如何处理阶段失败使用重试机制或补偿任务确保最终一致性与的区别用反向事务补偿用显式接口实时性更高哪些业务适合用支付转账扣库存积分发放等可控资源型事务十总结背诵版模式核心三阶段补偿机制预留资源提交事务回滚资源特点由业务方实现粒度细可控性高具备幂等性空回滚防悬挂机制实现最终一致性性能优于口诀记忆试探锁资源确认定乾坤回滚保一致',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-11-05 15:05:37',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Wsk Blog</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" alt="微信" src="/./img/wechat.jpg"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/./img/alipay.jpg"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AOP/" style="font-size: 1.05rem;">AOP<sup>2</sup></a><a href="/tags/IO/" style="font-size: 1.05rem;">IO<sup>1</sup></a><a href="/tags/IOC/" style="font-size: 1.05rem;">IOC<sup>2</sup></a><a href="/tags/JVM/" style="font-size: 1.05rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 1.05rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 1.05rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 1.05rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.05rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 1.05rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.05rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 1.05rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.05rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 1.05rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 1.05rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" style="font-size: 1.05rem;">自动装配<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 1.05rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 1.05rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">十一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">10</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="anzhiyu.switchCommentBarrage()" title="热评开关"><a class="commentBarrage"><i class="anzhiyufont anzhiyu-icon-message"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a></span><span class="article-meta tags"></span></div></div><h1 class="post-title" itemprop="name headline">Spring Cloud</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-11-05T07:05:37.620Z" title="更新于 2025-11-05 15:05:37">2025-11-05</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="Spring Cloud"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为新乡"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>新乡</span><span class="post-meta-separator"></span><span class="post-meta-commentcount"><i class="anzhiyufont anzhiyu-icon-comments post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/750d7523.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/posts/750d7523.html" itemprop="commentCount"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></a></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=091b2caa-3dd7-0f39-d111-d11126a28a1f"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://wsk0404.github.io/posts/750d7523.html"><header><a class="post-meta-categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url">面试题</a><h1 id="CrawlerTitle" itemprop="name headline">Spring Cloud</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Wsk</span><time itemprop="dateCreated datePublished" datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time><time itemprop="dateCreated datePublished" datetime="2025-11-05T07:05:37.620Z" title="更新于 2025-11-05 15:05:37">2025-11-05</time></header><h1 id="🎯-面试题：什么是-Spring-Cloud？它解决了微服务中的哪些问题（含架构剖析-面试高分答法）"><a href="#🎯-面试题：什么是-Spring-Cloud？它解决了微服务中的哪些问题（含架构剖析-面试高分答法）" class="headerlink" title="🎯 面试题：什么是 Spring Cloud？它解决了微服务中的哪些问题（含架构剖析 + 面试高分答法）"></a>🎯 面试题：什么是 Spring Cloud？它解决了微服务中的哪些问题（含架构剖析 + 面试高分答法）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p><strong>Spring Cloud</strong> 是一套基于 <strong>Spring Boot</strong> 的 <strong>微服务治理框架</strong>，<br> 用于构建分布式系统的完整生态。<br> 它提供了 <strong>注册发现、负载均衡、配置中心、熔断限流、网关路由、链路追踪、消息总线</strong> 等基础组件。</p>
+<p>Spring Cloud 的核心目标是：<br> ✅ <strong>简化微服务的分布式系统开发</strong>，<br> ✅ <strong>屏蔽复杂的中间件交互细节</strong>，<br> ✅ <strong>提高服务的弹性与可观测性</strong>。</p>
+</blockquote>
+<hr>
+<p><strong>二、Spring Cloud 的核心组成模块</strong></p>
+<table>
+<thead>
+<tr>
+<th>功能领域</th>
+<th>核心组件（旧版）</th>
+<th>主要作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>服务注册与发现</strong></td>
+<td>Eureka &#x2F; Consul &#x2F; Nacos</td>
+<td>让服务之间自动注册和发现</td>
+</tr>
+<tr>
+<td><strong>负载均衡</strong></td>
+<td>Ribbon &#x2F; Spring Cloud LoadBalancer</td>
+<td>客户端侧负载均衡</td>
+</tr>
+<tr>
+<td><strong>服务调用</strong></td>
+<td>Feign &#x2F; OpenFeign</td>
+<td>声明式 HTTP 调用</td>
+</tr>
+<tr>
+<td><strong>熔断与限流</strong></td>
+<td>Hystrix &#x2F; Resilience4j &#x2F; Sentinel</td>
+<td>防止服务雪崩与过载</td>
+</tr>
+<tr>
+<td><strong>配置中心</strong></td>
+<td>Spring Cloud Config &#x2F; Nacos Config</td>
+<td>外部化配置统一管理</td>
+</tr>
+<tr>
+<td><strong>网关路由</strong></td>
+<td>Zuul &#x2F; Gateway</td>
+<td>请求路由与过滤</td>
+</tr>
+<tr>
+<td><strong>消息驱动</strong></td>
+<td>Spring Cloud Stream &#x2F; Bus</td>
+<td>实现事件驱动与配置广播</td>
+</tr>
+<tr>
+<td><strong>链路追踪</strong></td>
+<td>Sleuth + Zipkin</td>
+<td>追踪分布式请求调用链</td>
+</tr>
+<tr>
+<td><strong>安全认证</strong></td>
+<td>Spring Cloud Security &#x2F; OAuth2</td>
+<td>统一认证与授权管理</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>三、Spring Cloud 解决了微服务的哪些核心问题</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题类型</th>
+<th>传统微服务痛点</th>
+<th>Spring Cloud 解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1️⃣ 服务注册与发现</strong></td>
+<td>服务地址动态变化、手动配置困难</td>
+<td>Eureka &#x2F; Nacos 实现自动注册与发现</td>
+</tr>
+<tr>
+<td><strong>2️⃣ 服务通信与负载均衡</strong></td>
+<td>服务调用难维护，难扩展</td>
+<td>Feign + Ribbon 实现声明式调用与负载均衡</td>
+</tr>
+<tr>
+<td><strong>3️⃣ 配置管理</strong></td>
+<td>多环境配置分散、修改困难</td>
+<td>Config &#x2F; Nacos Config 统一配置中心</td>
+</tr>
+<tr>
+<td><strong>4️⃣ 服务容错与降级</strong></td>
+<td>服务间依赖导致雪崩</td>
+<td>Hystrix &#x2F; Sentinel 实现熔断、隔离、限流</td>
+</tr>
+<tr>
+<td><strong>5️⃣ 路由与网关</strong></td>
+<td>多服务对外暴露复杂</td>
+<td>Gateway 统一路由入口、鉴权、日志过滤</td>
+</tr>
+<tr>
+<td><strong>6️⃣ 分布式日志与链路追踪</strong></td>
+<td>请求跨服务难排查问题</td>
+<td>Sleuth + Zipkin 实现全链路追踪</td>
+</tr>
+<tr>
+<td><strong>7️⃣ 消息通知与配置刷新</strong></td>
+<td>配置改动需手动重启服务</td>
+<td>Bus 实现配置自动刷新与事件广播</td>
+</tr>
+<tr>
+<td><strong>8️⃣ 安全认证</strong></td>
+<td>多服务单点登录复杂</td>
+<td>OAuth2 + Gateway 实现统一认证授权</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>四、Spring Cloud 的架构示意图</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">                  ┌────────────────────────────┐</span><br><span class="line">                  │       Spring Cloud          │</span><br><span class="line">                  │ ─────────────────────────── │</span><br><span class="line">                  │                            │</span><br><span class="line">                  │  注册中心(Eureka/Nacos)     │</span><br><span class="line">                  │  配置中心(Config/Nacos)     │</span><br><span class="line">                  │  服务调用(Feign)            │</span><br><span class="line">Client Request →  │  负载均衡(Ribbon)          │</span><br><span class="line">                  │  熔断限流(Sentinel)         │</span><br><span class="line">                  │  网关路由(Gateway)          │</span><br><span class="line">                  │  链路追踪(Sleuth + Zipkin) │</span><br><span class="line">                  │  消息总线(Bus)             │</span><br><span class="line">                  └────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Spring Cloud 提供了微服务全生命周期管理：</p>
+<ul>
+<li><strong>开发期</strong>：服务拆分、接口声明；</li>
+<li><strong>运行期</strong>：注册、路由、熔断、追踪；</li>
+<li><strong>运维期</strong>：配置中心、监控、动态刷新。</li>
+</ul>
+</blockquote>
+<hr>
+<p><strong>五、Spring Cloud 的设计理念</strong></p>
+<ol>
+<li><strong>约定优于配置（Convention over Configuration）</strong><br> → 提供统一标准与默认集成方案。</li>
+<li><strong>轻量化与组件化</strong><br> → 各模块松耦合，可按需选择组件。</li>
+<li><strong>与 Spring Boot 无缝集成</strong><br> → 一行依赖即可启用分布式能力。</li>
+<li><strong>云原生支持（Cloud Native）</strong><br> → 原生适配 Kubernetes、Docker 等环境。</li>
+</ol>
+<hr>
+<p><strong>六、Spring Cloud 与 Spring Boot 的关系</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Spring Boot</th>
+<th>Spring Cloud</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>定位</td>
+<td>微服务框架基础（快速开发）</td>
+<td>微服务治理框架（分布式协作）</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>简化单个服务开发</td>
+<td>管理多个服务协作</td>
+</tr>
+<tr>
+<td>侧重点</td>
+<td>服务内部结构</td>
+<td>服务间通信与治理</td>
+</tr>
+<tr>
+<td>依赖关系</td>
+<td>独立运行</td>
+<td>基于 Spring Boot 构建</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>简而言之：<br> <strong>Spring Boot 解决的是“一个服务怎么跑起来”，</strong><br> <strong>Spring Cloud 解决的是“多个服务如何协同工作”。</strong></p>
+</blockquote>
+<hr>
+<p><strong>七、Spring Cloud 的版本演进</strong></p>
+<table>
+<thead>
+<tr>
+<th>版本代号</th>
+<th>主要特性</th>
+<th>代表组件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Netflix 版</strong></td>
+<td>早期版本，依赖 Netflix OSS</td>
+<td>Eureka、Ribbon、Hystrix、Zuul</td>
+</tr>
+<tr>
+<td><strong>Alibaba 版</strong></td>
+<td>新一代云原生微服务</td>
+<td>Nacos、Sentinel、Gateway、Seata</td>
+</tr>
+<tr>
+<td><strong>Hoxton &#x2F; 2020+</strong></td>
+<td>与 Spring Boot 2.x &#x2F; 3.x 兼容</td>
+<td>Gateway、OpenFeign、Resilience4j</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>当前主流选型：<strong>Spring Cloud Alibaba</strong>（国产化生态完善，Nacos + Sentinel + Seata）</p>
+</blockquote>
+<hr>
+<p><strong>八、面试官高频追问</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Spring Cloud 与 Dubbo 有什么区别？</td>
+<td>Spring Cloud 是一站式微服务治理框架，Dubbo 专注于 RPC 调用。前者偏生态整合，后者偏高性能通信。</td>
+</tr>
+<tr>
+<td>Spring Cloud 为什么需要注册中心？</td>
+<td>实现服务动态注册与发现，避免硬编码地址，提高弹性扩展性。</td>
+</tr>
+<tr>
+<td>熔断和限流的区别？</td>
+<td>熔断是防止调用失败蔓延，限流是控制请求量防止过载。</td>
+</tr>
+<tr>
+<td>为什么推荐使用 Spring Cloud Alibaba？</td>
+<td>支持国产中间件，组件更轻量、兼容性更好、维护活跃。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>九、总结（背诵版）</strong></p>
+<blockquote>
+<p><strong>Spring Cloud 是一个微服务治理生态体系</strong>，<br> 提供注册发现、配置中心、负载均衡、熔断限流、网关、链路追踪等一站式能力。</p>
+<p>它解决了传统分布式系统中：</p>
+<ul>
+<li>服务注册与通信困难；</li>
+<li>配置与部署复杂；</li>
+<li>故障传播与降级缺失；</li>
+<li>缺乏统一网关与监控；</li>
+</ul>
+<p>使开发者能 <strong>专注于业务逻辑</strong>，而将分布式基础能力交给 Spring Cloud 来托管。</p>
+</blockquote>
+<h1 id="🎯-面试题：Spring-Cloud-服务注册与发现原理（含机制解析-核心流程-高分答法）"><a href="#🎯-面试题：Spring-Cloud-服务注册与发现原理（含机制解析-核心流程-高分答法）" class="headerlink" title="🎯 面试题：Spring Cloud 服务注册与发现原理（含机制解析 + 核心流程 + 高分答法）"></a>🎯 面试题：Spring Cloud 服务注册与发现原理（含机制解析 + 核心流程 + 高分答法）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>服务注册与发现（Service Registry &amp; Discovery）是微服务架构的核心机制，<br> 它用于让服务实例能够<strong>自动注册自己的网络位置</strong>（IP + 端口），<br> 并让其他服务<strong>动态发现并调用</strong>它们，而无需硬编码地址。</p>
+<p>在 Spring Cloud 中，常见的注册中心包括：<br> <strong>Eureka、Nacos、Consul、Zookeeper</strong> 等。</p>
+<p>核心思想是通过一个 <strong>注册中心（Registry Server）</strong> 来维护所有服务实例的“实时健康清单”，<br> 实现“<strong>服务自动注册、服务自动发现、动态负载均衡</strong>”。</p>
+</blockquote>
+<hr>
+<p><strong>二、服务注册与发现的核心流程</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">        ┌─────────────┐</span><br><span class="line">        │ 注册中心（Eureka/Nacos）│</span><br><span class="line">        └──────┬────────┘</span><br><span class="line">               ▲</span><br><span class="line">    注册       │ 心跳上报</span><br><span class="line">               │</span><br><span class="line">┌────────────┐  服务调用  ┌────────────┐</span><br><span class="line">│ 服务提供者A │──────────▶│ 服务消费者B │</span><br><span class="line">└────────────┘            └────────────┘</span><br><span class="line">    ▲                                  │</span><br><span class="line">    │&lt;────────服务发现/拉取─────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>整体流程分为三步：</strong></p>
+<p>1️⃣ <strong>服务注册（Register）</strong><br> 服务提供者在启动时向注册中心上报自身信息（服务名、IP、端口、元数据等）。</p>
+<p>2️⃣ <strong>服务发现（Discovery）</strong><br> 服务消费者从注册中心拉取可用实例列表，实现动态调用。</p>
+<p>3️⃣ <strong>心跳检测（Heartbeat）</strong><br> 注册中心周期性检查服务是否存活，及时剔除故障节点。</p>
+<hr>
+<p><strong>三、服务注册的原理</strong></p>
+<p>以 <strong>Eureka &#x2F; Nacos</strong> 为例：</p>
+<ul>
+<li><p>服务启动时，会向注册中心发送一个 <code>REST API</code> 请求：</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">POST /eureka/apps/ORDER-SERVICE</span><br><span class="line">&#123;</span><br><span class="line">  &quot;instance&quot;: &#123;</span><br><span class="line">    &quot;instanceId&quot;: &quot;order-service:8080&quot;,</span><br><span class="line">    &quot;hostName&quot;: &quot;192.168.1.10&quot;,</span><br><span class="line">    &quot;ipAddr&quot;: &quot;192.168.1.10&quot;,</span><br><span class="line">    &quot;port&quot;: 8080,</span><br><span class="line">    &quot;status&quot;: &quot;UP&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注册中心保存该实例到内存注册表（<code>registry</code>）。</p>
+</li>
+<li><p>每个服务需定期发送 <strong>心跳请求</strong>：</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">PUT /eureka/apps/ORDER-SERVICE/order-service:8080</span><br></pre></td></tr></table></figure>
+
+<p>若超时未收到心跳，Eureka 默认 90 秒后剔除该实例。</p>
+</li>
+</ul>
+<hr>
+<p><strong>四、服务发现的原理</strong></p>
+<ul>
+<li><p>服务消费者调用前，先从注册中心获取目标服务的地址列表：</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">GET /eureka/apps/ORDER-SERVICE</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注册中心返回所有可用实例信息；</p>
+</li>
+<li><p>客户端（Ribbon &#x2F; LoadBalancer）在本地缓存并基于策略（如轮询）选择实例发起请求；</p>
+</li>
+<li><p>Eureka 客户端每隔 <strong>30 秒</strong> 自动更新注册表（增量同步）。</p>
+</li>
+</ul>
+<hr>
+<p><strong>五、客户端缓存机制（Client-Side Discovery）</strong></p>
+<p>Spring Cloud 默认采用 <strong>客户端负载均衡模式（Client Side Load Balancing）</strong>：</p>
+<ul>
+<li>客户端本地维护一份服务列表；</li>
+<li>服务调用时，不经过注册中心，而是本地选择目标实例；</li>
+<li>优点：调用性能高、注册中心压力小；</li>
+<li>缺点：客户端实现复杂，需要定期更新缓存。</li>
+</ul>
+<blockquote>
+<p>对应组件：Ribbon &#x2F; Spring Cloud LoadBalancer</p>
+</blockquote>
+<hr>
+<p><strong>六、Eureka 的自我保护机制</strong></p>
+<p>当网络波动导致大量服务心跳丢失时，Eureka 会触发<strong>自我保护模式（Self-Preservation）</strong>：</p>
+<ul>
+<li>注册中心不会立即下线这些服务；</li>
+<li>等待一段时间后再重新评估；</li>
+<li>确保分布式环境中“误剔除”减少。</li>
+</ul>
+<blockquote>
+<p>这也是 Eureka 与其他注册中心（如 Consul、Zookeeper）的区别之一：<br> 它<strong>更偏向可用性（Availability）</strong>，而非一致性。</p>
+</blockquote>
+<hr>
+<p><strong>七、Nacos 的改进机制</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Eureka</th>
+<th>Nacos</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>一致性模型</strong></td>
+<td>AP（高可用）</td>
+<td>CP + AP 可选</td>
+</tr>
+<tr>
+<td><strong>注册协议</strong></td>
+<td>HTTP</td>
+<td>HTTP + gRPC</td>
+</tr>
+<tr>
+<td><strong>健康检测</strong></td>
+<td>客户端心跳</td>
+<td>主动探测 + 客户端上报</td>
+</tr>
+<tr>
+<td><strong>动态配置中心</strong></td>
+<td>❌ 无</td>
+<td>✅ 内置</td>
+</tr>
+<tr>
+<td><strong>临时实例 &#x2F; 永久实例</strong></td>
+<td>❌ 无</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td><strong>服务权重与分组</strong></td>
+<td>❌ 无</td>
+<td>✅ 支持</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Nacos 通过 <strong>Push 模式 + gRPC 通道</strong>，能实时感知服务变更，<br> 并可结合配置中心，实现“注册 + 配置”一体化。</p>
+</blockquote>
+<hr>
+<p><strong>八、服务注册与发现的核心组件（Spring Cloud 角度）</strong></p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Eureka Server</code></td>
+<td>注册中心服务端，维护实例列表</td>
+</tr>
+<tr>
+<td><code>Eureka Client</code></td>
+<td>服务端与客户端共同使用，负责注册与拉取</td>
+</tr>
+<tr>
+<td><code>DiscoveryClient</code></td>
+<td>统一抽象接口，屏蔽不同注册中心差异</td>
+</tr>
+<tr>
+<td><code>@EnableEurekaClient</code></td>
+<td>启用 Eureka 客户端功能</td>
+</tr>
+<tr>
+<td><code>@LoadBalanced RestTemplate</code></td>
+<td>启用负载均衡调用</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>九、代码示例</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 启动类：服务提供者注册</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaClient</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderServiceApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(OrderServiceApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 服务消费者调用</span></span><br><span class="line"><span class="meta">@FeignClient(&quot;order-service&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OrderFeign</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/order/&#123;id&#125;&quot;)</span></span><br><span class="line">    String <span class="title function_">getOrder</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>当 <code>order-service</code> 启动后，会自动向 Eureka 注册；<br> 其他服务通过 <code>Feign</code> 直接调用即可，无需关心 IP 和端口。</p>
+</blockquote>
+<hr>
+<p><strong>十、面试官常追问</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务注册表如何保持一致？</td>
+<td>Eureka 使用心跳续约 + 增量同步；Nacos 使用 Raft 协议保持一致性。</td>
+</tr>
+<tr>
+<td>注册中心挂了怎么办？</td>
+<td>客户端缓存 + 自我保护机制保证短期可用。</td>
+</tr>
+<tr>
+<td>服务如何下线？</td>
+<td>服务关闭时主动发送 <code>DELETE /eureka/apps/&#123;app&#125;/&#123;instance&#125;</code> 请求。</td>
+</tr>
+<tr>
+<td>Nacos 与 Eureka 区别？</td>
+<td>Nacos 集成配置中心、支持临时实例、Push 模式通知；Eureka 是纯注册中心。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>十一、总结（背诵版）</strong></p>
+<blockquote>
+<p>服务注册与发现是微服务架构的基础能力。<br> 通过注册中心，服务可自动注册自身信息并实现动态发现调用。</p>
+<p>Spring Cloud 通过 <strong>Eureka &#x2F; Nacos</strong> 等组件实现：</p>
+<ul>
+<li>服务注册（上报元数据）；</li>
+<li>服务发现（动态拉取实例）；</li>
+<li>心跳检测（保持健康状态）；</li>
+<li>自我保护（防止误剔除）。</li>
+</ul>
+<p>Eureka 偏向 <strong>高可用（AP）</strong>，<br> Nacos 支持 <strong>一致性与高可用切换（CP + AP）</strong>，<br> 是当前微服务架构的主流选择。</p>
+</blockquote>
+<h1 id="🎯-面试题：Spring-Cloud-负载均衡（含机制原理-组件演进-答题模板）"><a href="#🎯-面试题：Spring-Cloud-负载均衡（含机制原理-组件演进-答题模板）" class="headerlink" title="🎯 面试题：Spring Cloud 负载均衡（含机制原理 + 组件演进 + 答题模板）"></a>🎯 面试题：Spring Cloud 负载均衡（含机制原理 + 组件演进 + 答题模板）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>在 Spring Cloud 微服务架构中，<strong>负载均衡（Load Balancing）</strong> 是指将客户端的请求<strong>按照一定算法</strong>分发到多个服务实例上，<br> 以实现 <strong>高可用、高并发与流量均衡</strong> 的目标。</p>
+<p>Spring Cloud 的负载均衡经历了两个主要阶段：</p>
+<ul>
+<li>✅ <strong>Ribbon（Spring Cloud Netflix 早期版本）</strong></li>
+<li>✅ <strong>Spring Cloud LoadBalancer（官方替代 Ribbon 的新组件）</strong></li>
+</ul>
+<p>两者都属于 <strong>客户端负载均衡（Client-Side Load Balancing）</strong> 模式，<br> 即：<strong>在客户端侧完成服务选择与请求分发，而非依赖中心代理。</strong></p>
+</blockquote>
+<hr>
+<p><strong>二、负载均衡的两种模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>模式类型</th>
+<th>说明</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>客户端负载均衡</strong></td>
+<td>客户端从注册中心拉取所有可用实例，自行选择目标服务调用。</td>
+<td>性能高、无中心瓶颈（Spring Cloud 默认）</td>
+</tr>
+<tr>
+<td><strong>服务端负载均衡</strong></td>
+<td>请求先发到负载均衡代理（如 Nginx），由代理转发请求。</td>
+<td>简单易维护，但存在单点压力</td>
+</tr>
+</tbody></table>
+<p><strong>Spring Cloud 属于第一种：Client-Side 模式。</strong></p>
+<hr>
+<p><strong>三、Ribbon 工作原理</strong></p>
+<blockquote>
+<p>Ribbon 是 Netflix 提供的一个客户端负载均衡器，<br> 它通过维护一份 <strong>服务实例列表</strong>，并基于策略算法从中选择一个服务进行调用。</p>
+</blockquote>
+<p>🔹 <strong>核心流程</strong></p>
+<p>1️⃣ 服务消费者从注册中心（Eureka&#x2F;Nacos）拉取实例列表；<br> 2️⃣ Ribbon 将列表缓存到本地；<br> 3️⃣ 每次调用时，根据负载均衡策略选择目标实例；<br> 4️⃣ 通过 <code>RestTemplate</code> 或 <code>Feign</code> 发起 HTTP 请求。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@LoadBalanced</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RestTemplate</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用方式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> restTemplate.getForObject(<span class="string">&quot;http://order-service/order/1&quot;</span>, String.class);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Ribbon 自动解析 <code>order-service</code> 对应的实例，并发起请求。</p>
+</blockquote>
+<hr>
+<p><strong>四、Ribbon 的常见负载均衡策略</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略类</th>
+<th>策略说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RoundRobinRule</code></td>
+<td><strong>轮询</strong>（默认策略）依次选择服务实例</td>
+</tr>
+<tr>
+<td><code>RandomRule</code></td>
+<td>随机选择</td>
+</tr>
+<tr>
+<td><code>RetryRule</code></td>
+<td>失败重试机制</td>
+</tr>
+<tr>
+<td><code>WeightedResponseTimeRule</code></td>
+<td>根据响应时间分配权重</td>
+</tr>
+<tr>
+<td><code>BestAvailableRule</code></td>
+<td>选择最小并发量的实例</td>
+</tr>
+<tr>
+<td><code>ZoneAvoidanceRule</code></td>
+<td>综合区域与可用性策略</td>
+</tr>
+</tbody></table>
+<p><strong>自定义配置：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> IRule <span class="title function_">myRule</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RandomRule</span>(); <span class="comment">// 使用随机策略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>五、Spring Cloud LoadBalancer（新一代替代者）</strong></p>
+<blockquote>
+<p>Spring Cloud 在 Hoxton 之后逐步弃用 Ribbon，<br> 官方推荐使用 <strong>Spring Cloud LoadBalancer</strong>，它是一个轻量级、本地负载均衡框架。</p>
+</blockquote>
+<p>🔹 <strong>特点</strong></p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✅ 官方维护</td>
+<td>Ribbon 已停止更新</td>
+</tr>
+<tr>
+<td>✅ 与 WebClient、RestTemplate、Feign 无缝整合</td>
+<td></td>
+</tr>
+<tr>
+<td>✅ 支持 Reactor 异步调用</td>
+<td></td>
+</tr>
+<tr>
+<td>✅ 可插拔策略机制</td>
+<td></td>
+</tr>
+<tr>
+<td>✅ 支持 Nacos、Consul 等多种注册中心</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@LoadBalanced</span></span><br><span class="line"><span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RestTemplate</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置策略：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">loadbalancer:</span></span><br><span class="line">      <span class="attr">configurations:</span> <span class="string">zone-preference</span></span><br><span class="line">      <span class="attr">retry:</span></span><br><span class="line">        <span class="attr">enabled:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>自定义规则：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">ReactorLoadBalancer&lt;ServiceInstance&gt; <span class="title function_">loadBalancer</span><span class="params">(Environment env, LoadBalancerClientFactory factory)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> env.getProperty(LoadBalancerClientFactory.PROPERTY_NAME);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RandomLoadBalancer</span>(factory.getLazyProvider(name, ServiceInstanceListSupplier.class), name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>六、Ribbon 与 LoadBalancer 对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Ribbon</th>
+<th>Spring Cloud LoadBalancer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>维护状态</td>
+<td>❌ 已停止维护</td>
+<td>✅ 官方长期支持</td>
+</tr>
+<tr>
+<td>模式</td>
+<td>客户端负载均衡</td>
+<td>客户端负载均衡</td>
+</tr>
+<tr>
+<td>架构</td>
+<td>基于 Netflix Ribbon</td>
+<td>基于 Reactor + Spring 体系</td>
+</tr>
+<tr>
+<td>响应式支持</td>
+<td>❌ 不支持</td>
+<td>✅ 支持 WebFlux</td>
+</tr>
+<tr>
+<td>可扩展性</td>
+<td>较差</td>
+<td>更强（可自定义过滤器、策略）</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>较低（同步阻塞）</td>
+<td>更高（异步、轻量）</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>七、负载均衡策略扩展机制</strong></p>
+<p>Spring Cloud LoadBalancer 允许开发者扩展策略，例如基于权重、元数据或可用区：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MetadataAwareLoadBalancer</span> <span class="keyword">implements</span> <span class="title class_">ReactorServiceInstanceLoadBalancer</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Mono&lt;Response&lt;ServiceInstance&gt;&gt; <span class="title function_">choose</span><span class="params">(Request request)</span> &#123;</span><br><span class="line">        <span class="comment">// 可实现：根据元数据选择特定实例</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>👉 可与 Nacos 的“元数据路由”结合使用，实现灰度发布或多环境流量分流。</p>
+<hr>
+<p><strong>八、面试官常追问问题</strong></p>
+<table>
+<thead>
+<tr>
+<th>面试题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ribbon 和 Nginx 有什么区别？</td>
+<td>Ribbon 是客户端负载均衡；Nginx 是服务端代理负载均衡。</td>
+</tr>
+<tr>
+<td>Ribbon 如何保证高可用？</td>
+<td>本地缓存服务列表 + 定期刷新 + 重试机制。</td>
+</tr>
+<tr>
+<td>Spring Cloud 为什么弃用 Ribbon？</td>
+<td>Ribbon 停止维护，不支持响应式；新组件 LoadBalancer 更轻量、更灵活。</td>
+</tr>
+<tr>
+<td>负载均衡策略可以自定义吗？</td>
+<td>可以，通过实现 <code>ReactorServiceInstanceLoadBalancer</code>。</td>
+</tr>
+<tr>
+<td>Feign 是如何实现负载均衡的？</td>
+<td>Feign 底层集成 Ribbon 或 LoadBalancer 实现实例选择。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>九、总结（背诵版）</strong></p>
+<blockquote>
+<p>Spring Cloud 的负载均衡机制属于 <strong>客户端负载均衡模式</strong>，<br> 服务调用方从注册中心拉取实例列表，在本地根据策略选取目标服务。</p>
+<p>早期通过 <strong>Ribbon</strong> 实现，提供多种策略（轮询、随机、权重等）；<br> 后期由 <strong>Spring Cloud LoadBalancer</strong> 替代，支持异步调用与可插拔扩展。</p>
+<p>✅ Ribbon：老牌组件，基于同步调用；<br> ✅ LoadBalancer：新一代组件，响应式、轻量、高性能。</p>
+<p>在分布式微服务架构中，负载均衡是实现<strong>高可用与高性能服务治理</strong>的关键基础。</p>
+</blockquote>
+<h1 id="🎯-面试题：Spring-Cloud-Gateway-是什么（含原理机制-架构详解-面试追问）"><a href="#🎯-面试题：Spring-Cloud-Gateway-是什么（含原理机制-架构详解-面试追问）" class="headerlink" title="🎯 面试题：Spring Cloud Gateway 是什么（含原理机制 + 架构详解 + 面试追问）"></a>🎯 面试题：Spring Cloud Gateway 是什么（含原理机制 + 架构详解 + 面试追问）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>Spring Cloud Gateway 是 Spring 官方推出的 <strong>第二代 API 网关框架</strong>，<br> 取代了早期的 Netflix Zuul 1.x，基于 <strong>Spring Boot 2.x</strong> 与 <strong>Spring WebFlux（响应式编程模型）</strong> 构建。</p>
+<p>它是微服务架构的<strong>统一流量入口</strong>，用于请求路由、过滤、限流、鉴权、监控等跨服务功能，<br> 支撑高并发、低延迟的网关转发场景。</p>
+<p><strong>一句话概括：</strong><br> Spring Cloud Gateway 是基于 WebFlux 的 <strong>高性能、响应式网关组件</strong>，<br> 用于构建微服务系统的 <strong>统一 API 访问层</strong>。</p>
+</blockquote>
+<hr>
+<p><strong>二、Spring Cloud Gateway 的主要功能</strong></p>
+<table>
+<thead>
+<tr>
+<th>功能模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>路由（Route）</strong></td>
+<td>决定请求被转发到哪个目标服务。</td>
+</tr>
+<tr>
+<td><strong>断言（Predicate）</strong></td>
+<td>匹配请求条件，如路径、Header、参数等。</td>
+</tr>
+<tr>
+<td><strong>过滤器（Filter）</strong></td>
+<td>在请求前或响应后执行逻辑，如鉴权、日志、限流等。</td>
+</tr>
+<tr>
+<td><strong>服务发现（Discovery）</strong></td>
+<td>自动从注册中心（如 Nacos&#x2F;Eureka）拉取服务列表，实现动态路由。</td>
+</tr>
+<tr>
+<td><strong>负载均衡（LoadBalance）</strong></td>
+<td>支持 <code>lb://service-name</code> 形式的自动负载均衡转发。</td>
+</tr>
+<tr>
+<td><strong>统一安全控制</strong></td>
+<td>可结合 OAuth2、JWT 实现认证与鉴权。</td>
+</tr>
+<tr>
+<td><strong>限流熔断支持</strong></td>
+<td>集成 Resilience4j、Redis 实现限流、熔断与降级。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>三、核心架构原理</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   ┌────────────────────┐</span><br><span class="line">   │   Client 请求入口   │</span><br><span class="line">   └────────┬───────────┘</span><br><span class="line">            │</span><br><span class="line">┌───────────▼───────────┐</span><br><span class="line">│  Spring Cloud Gateway │</span><br><span class="line">│ ───────────────────── │</span><br><span class="line">│ ① Route 匹配          │</span><br><span class="line">│ ② Predicate 判断       │</span><br><span class="line">│ ③ Filter 链处理        │</span><br><span class="line">│ ④ 请求转发             │</span><br><span class="line">└───────────┬───────────┘</span><br><span class="line">            │</span><br><span class="line">   ┌────────▼────────┐</span><br><span class="line">   │  目标微服务实例  │</span><br><span class="line">   └─────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>请求处理流程：<br> 1️⃣ 客户端发送请求到 Gateway；<br> 2️⃣ 路由系统根据 <strong>断言（Predicate）</strong> 判断应由哪个路由处理；<br> 3️⃣ 经过一系列 <strong>过滤器（Filter）</strong> 执行前置或后置逻辑；<br> 4️⃣ 最终将请求转发至目标微服务；<br> 5️⃣ 响应返回时再次经过后置过滤器，可进行日志记录或响应加工。</p>
+<hr>
+<p><strong>四、典型配置示例（YAML版）</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">user-service</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://USER-SERVICE</span>     <span class="comment"># 使用服务发现负载均衡</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/user/**</span>          <span class="comment"># 匹配路径前缀</span></span><br><span class="line">          <span class="attr">filters:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">AddRequestHeader=X-Request-From,</span> <span class="string">Gateway</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Java 代码配置：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> RouteLocator <span class="title function_">customRouteLocator</span><span class="params">(RouteLocatorBuilder builder)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> builder.routes()</span><br><span class="line">        .route(<span class="string">&quot;user_route&quot;</span>, r -&gt; r.path(<span class="string">&quot;/user/**&quot;</span>)</span><br><span class="line">            .filters(f -&gt; f.addRequestHeader(<span class="string">&quot;Gateway-Tag&quot;</span>, <span class="string">&quot;SpringCloudGateway&quot;</span>))</span><br><span class="line">            .uri(<span class="string">&quot;lb://USER-SERVICE&quot;</span>))</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>五、Spring Cloud Gateway 的优势</strong></p>
+<table>
+<thead>
+<tr>
+<th>优势点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✅ <strong>高性能非阻塞</strong></td>
+<td>基于 Reactor 与 Netty，支持高并发响应式编程。</td>
+</tr>
+<tr>
+<td>✅ <strong>无缝集成 Spring 生态</strong></td>
+<td>与 Spring Boot、Spring Cloud 无缝兼容。</td>
+</tr>
+<tr>
+<td>✅ <strong>动态路由与服务发现</strong></td>
+<td>自动感知注册中心变化。</td>
+</tr>
+<tr>
+<td>✅ <strong>可扩展性强</strong></td>
+<td>可自定义 Filter、Predicate、限流、认证模块。</td>
+</tr>
+<tr>
+<td>✅ <strong>支持微服务治理</strong></td>
+<td>集成熔断、限流、灰度发布等能力。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、Gateway 与 Zuul 对比（面试高频考点）</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Spring Cloud Gateway</th>
+<th>Zuul 1.x</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>架构模型</td>
+<td>WebFlux（响应式）</td>
+<td>Servlet（阻塞）</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>高性能、非阻塞 I&#x2F;O</td>
+<td>较低，阻塞式 I&#x2F;O</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>高，Filter + Predicate 模型</td>
+<td>中等，仅 Filter</td>
+</tr>
+<tr>
+<td>动态路由</td>
+<td>原生支持</td>
+<td>需手动扩展</td>
+</tr>
+<tr>
+<td>推荐程度</td>
+<td>✅ 官方推荐</td>
+<td>❌ 已过时</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>七、典型使用场景</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🔹 微服务统一网关</td>
+<td>提供统一访问入口与流量控制</td>
+</tr>
+<tr>
+<td>🔹 鉴权与认证中心</td>
+<td>实现 JWT 或 OAuth2 认证</td>
+</tr>
+<tr>
+<td>🔹 日志与监控采集</td>
+<td>在 Filter 中记录请求数据</td>
+</tr>
+<tr>
+<td>🔹 限流与熔断保护</td>
+<td>防止接口过载或雪崩</td>
+</tr>
+<tr>
+<td>🔹 动态灰度发布</td>
+<td>根据请求头或用户维度动态路由</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>八、面试官高频追问与标准回答</strong></p>
+<table>
+<thead>
+<tr>
+<th>面试官问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ Gateway 的底层技术栈？</td>
+<td>基于 Spring Boot + Spring WebFlux + Reactor + Netty。</td>
+</tr>
+<tr>
+<td>❓ Predicate 和 Filter 的执行顺序？</td>
+<td>先断言匹配（Predicate），再执行过滤器链（pre → route → post）。</td>
+</tr>
+<tr>
+<td>❓ 如何实现全局过滤？</td>
+<td>实现 <code>GlobalFilter</code> 接口并注册为 Bean。</td>
+</tr>
+<tr>
+<td>❓ 如何动态刷新路由？</td>
+<td>可结合 Nacos&#x2F;Config Server 实现动态路由更新。</td>
+</tr>
+<tr>
+<td>❓ 如何做限流？</td>
+<td>可用 Redis + TokenBucket 实现全局或局部限流。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>九、总结（背诵版）</strong></p>
+<blockquote>
+<p>Spring Cloud Gateway 是基于 <strong>WebFlux + Netty</strong> 的响应式高性能网关，<br> 取代 Zuul 成为 Spring Cloud 官方推荐网关。</p>
+<p>它具备 <strong>统一入口、路由转发、过滤器链、服务发现、限流鉴权</strong> 等核心能力，<br> 能够有效提升微服务系统的可维护性、安全性与性能。</p>
+<p>✅ 记忆口诀：<br> “统一入口、断言匹配、过滤控制、动态路由、高性能响应。”</p>
+</blockquote>
+<h1 id="🎯-面试题：分布式事务中的-2PC-与-3PC（含原理机制-流程图解-面试延伸）"><a href="#🎯-面试题：分布式事务中的-2PC-与-3PC（含原理机制-流程图解-面试延伸）" class="headerlink" title="🎯 面试题：分布式事务中的 2PC 与 3PC（含原理机制 + 流程图解 + 面试延伸）"></a>🎯 面试题：分布式事务中的 2PC 与 3PC（含原理机制 + 流程图解 + 面试延伸）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p>在分布式系统中，事务需要跨多个节点保持一致性。<br> <strong>两阶段提交（2PC, Two-Phase Commit）</strong> 和 <strong>三阶段提交（3PC, Three-Phase Commit）</strong> 是早期经典的<strong>分布式事务一致性协议</strong>。</p>
+<ul>
+<li><strong>2PC</strong>：协调者通过“准备阶段 + 提交阶段”确保参与者一致执行；</li>
+<li><strong>3PC</strong>：在 2PC 基础上增加“预提交阶段”，进一步降低阻塞风险并提高容错性。</li>
+</ul>
+</blockquote>
+<hr>
+<p><strong>二、2PC（Two-Phase Commit）原理详解</strong></p>
+<p>2PC 是分布式事务中最经典的实现协议之一，由 <strong>协调者（Coordinator）</strong> 与 <strong>参与者（Participant）</strong> 两类节点共同完成。</p>
+<hr>
+<p><strong>阶段一：准备阶段（Prepare Phase）</strong></p>
+<ol>
+<li><strong>协调者发送 prepare 请求</strong> 给所有参与者；</li>
+<li><strong>参与者执行事务操作但不提交</strong>，写入本地日志；</li>
+<li><strong>参与者向协调者返回响应</strong>：<ul>
+<li>若执行成功 → 返回 “Yes（同意提交）”；</li>
+<li>若执行失败 → 返回 “No（拒绝提交）”。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>阶段二：提交阶段（Commit Phase）</strong></p>
+<ul>
+<li>若所有参与者都返回 “Yes”：<ul>
+<li>协调者发送 <strong>commit</strong> 指令；</li>
+<li>各参与者正式提交事务；</li>
+</ul>
+</li>
+<li>若任意一个返回 “No”：<ul>
+<li>协调者发送 <strong>rollback</strong> 指令；</li>
+<li>所有参与者回滚事务。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>示意图：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">阶段一（准备）：</span><br><span class="line">Coordinator → all Participants：Prepare</span><br><span class="line">Participants → Coordinator：Yes / No</span><br><span class="line"></span><br><span class="line">阶段二（提交）：</span><br><span class="line">Coordinator → all Participants：Commit / Rollback</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>优点：</strong></p>
+<ul>
+<li>实现简单；</li>
+<li>能保证强一致性（ACID）。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li><strong>阻塞问题</strong>：若协调者宕机，参与者会陷入等待状态；</li>
+<li><strong>单点问题</strong>：协调者故障会导致系统无法决策；</li>
+<li><strong>无法容忍网络分区</strong>：节点间通信异常时无法达成一致。</li>
+</ul>
+<hr>
+<p><strong>三、3PC（Three-Phase Commit）机制原理</strong></p>
+<blockquote>
+<p>3PC 是对 2PC 的改进协议，引入了一个额外的阶段——<strong>预提交阶段（Pre-Commit Phase）</strong>，让系统在出现异常时能更灵活地处理事务。</p>
+</blockquote>
+<hr>
+<p><strong>阶段一：CanCommit 阶段</strong></p>
+<ol>
+<li>协调者询问各参与者：“是否可以提交？”</li>
+<li>参与者检查事务可行性，返回 <strong>Yes&#x2F;No</strong>。</li>
+</ol>
+<hr>
+<p><strong>阶段二：PreCommit 阶段（预提交）</strong></p>
+<ul>
+<li>如果所有参与者返回 “Yes”，则协调者发出 <strong>PreCommit</strong> 通知：<ol>
+<li>参与者执行事务操作；</li>
+<li>写入 <strong>预提交日志</strong>；</li>
+<li>并立即返回 “ACK（确认）” 给协调者。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<p><strong>阶段三：DoCommit 阶段（正式提交）</strong></p>
+<ul>
+<li>若协调者收到所有 ACK：<ul>
+<li>发出 <strong>DoCommit</strong> 指令，所有参与者正式提交；</li>
+</ul>
+</li>
+<li>若超时或部分失败：<ul>
+<li>发出 <strong>Abort</strong> 指令，各参与者回滚事务。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>改进点：</strong></p>
+<ul>
+<li>3PC 在每个阶段都设置了超时机制；</li>
+<li>允许参与者在超时后 <strong>自主提交或回滚</strong>，减少阻塞；</li>
+<li>相比 2PC，具备 <strong>更好的容错性</strong> 与 <strong>可恢复性</strong>。</li>
+</ul>
+<hr>
+<p><strong>优缺点对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>2PC</th>
+<th>3PC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阶段数量</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>阻塞问题</td>
+<td>存在</td>
+<td>通过超时机制部分缓解</td>
+</tr>
+<tr>
+<td>一致性保障</td>
+<td>强一致性（但易阻塞）</td>
+<td>一致性稍弱，但可用性更高</td>
+</tr>
+<tr>
+<td>容错能力</td>
+<td>低（协调者挂则卡死）</td>
+<td>较高（参与者可超时自决）</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>较低</td>
+<td>较高</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>示意图（3PC 流程）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">阶段一：CanCommit</span><br><span class="line">Coordinator → Participants：询问是否可提交</span><br><span class="line">Participants → Coordinator：Yes / No</span><br><span class="line"></span><br><span class="line">阶段二：PreCommit</span><br><span class="line">Coordinator → Participants：预提交</span><br><span class="line">Participants → Coordinator：ACK（写日志）</span><br><span class="line"></span><br><span class="line">阶段三：DoCommit</span><br><span class="line">Coordinator → Participants：提交或回滚</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>四、2PC 与 3PC 在实际系统中的应用</strong></p>
+<table>
+<thead>
+<tr>
+<th>系统类型</th>
+<th>典型实现方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>传统分布式数据库</td>
+<td>XA 协议（基于 2PC）</td>
+</tr>
+<tr>
+<td>消息事务系统</td>
+<td>RocketMQ 事务消息（2PC思想）</td>
+</tr>
+<tr>
+<td>微服务事务</td>
+<td>TCC、Saga、可靠消息最终一致性等</td>
+</tr>
+<tr>
+<td>分布式协调服务</td>
+<td>Zookeeper、Etcd（3PC思想演化）</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>TCC 与 2PC 的关系：</strong></p>
+<ul>
+<li>TCC（Try-Confirm-Cancel）可视为 2PC 的业务层实现；</li>
+<li>Try 对应 Prepare；</li>
+<li>Confirm 对应 Commit；</li>
+<li>Cancel 对应 Rollback；</li>
+<li>区别在于：TCC 由业务方控制资源，粒度更细、可编程。</li>
+</ul>
+<hr>
+<p><strong>五、面试官常追问问题</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2PC 的最大问题是什么？</td>
+<td>协调者单点故障导致参与者阻塞，系统无法自动恢复。</td>
+</tr>
+<tr>
+<td>3PC 如何优化 2PC？</td>
+<td>引入预提交阶段与超时机制，减少阻塞、提升可用性。</td>
+</tr>
+<tr>
+<td>3PC 是否绝对安全？</td>
+<td>否，网络分区下仍可能造成数据不一致（CAP 冲突）。</td>
+</tr>
+<tr>
+<td>实际系统中还会用 3PC 吗？</td>
+<td>很少直接使用，更多采用基于其思想的改进协议（如 Paxos、Raft、TCC）。</td>
+</tr>
+<tr>
+<td>你在项目中如何实现分布式事务？</td>
+<td>结合业务特征，使用可靠消息 + 本地事务 或 TCC 机制实现最终一致性。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、总结（背诵版）</strong></p>
+<blockquote>
+<ul>
+<li><strong>2PC（两阶段提交）</strong>：准备 + 提交；<ul>
+<li>优点：实现简单，保证强一致；</li>
+<li>缺点：阻塞严重、协调者单点。</li>
+</ul>
+</li>
+<li><strong>3PC（三阶段提交）</strong>：CanCommit + PreCommit + DoCommit；<ul>
+<li>优点：引入超时机制，减少阻塞；</li>
+<li>缺点：一致性略弱，复杂度高。</li>
+</ul>
+</li>
+</ul>
+<p>实际分布式系统中通常不直接使用 2PC&#x2F;3PC，而是采用基于其思想的：</p>
+<ul>
+<li><strong>TCC（业务可控补偿事务）</strong></li>
+<li><strong>Saga（长事务补偿）</strong></li>
+<li><strong>消息事务（最终一致性）</strong></li>
+</ul>
+<p>✅ 核心记忆：<br> <strong>2PC 保证一致但易阻塞；3PC 提升可用但弱一致；现代系统以最终一致性为主流。</strong></p>
+</blockquote>
+<h1 id="🎯-面试题：Spring-Cloud-Seata-是什么（含分布式事务原理-模式详解-实战场景）"><a href="#🎯-面试题：Spring-Cloud-Seata-是什么（含分布式事务原理-模式详解-实战场景）" class="headerlink" title="🎯 面试题：Spring Cloud Seata 是什么（含分布式事务原理 + 模式详解 + 实战场景）"></a>🎯 面试题：Spring Cloud Seata 是什么（含分布式事务原理 + 模式详解 + 实战场景）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p><strong>Spring Cloud Seata</strong> 是阿里巴巴开源的 <strong>分布式事务解决方案</strong>，<br> 用于解决微服务架构下 <strong>跨服务、多数据源操作时的数据一致性问题</strong>。</p>
+<p>它通过 <strong>TC（事务协调者）</strong>、<strong>TM（事务管理者）</strong> 和 <strong>RM（资源管理者）</strong> 的协调机制，<br> 实现全局事务的开启、提交与回滚，确保在分布式环境下 ACID 特性仍然部分成立。</p>
+</blockquote>
+<p><strong>一句话概括：</strong><br> 👉 <em>Seata 是一个高性能的分布式事务协调框架，用来在微服务系统中保持多服务间的数据一致性。</em></p>
+<hr>
+<p><strong>二、为什么需要 Seata？</strong></p>
+<p>在微服务架构中，业务通常拆分为多个独立服务，如：</p>
+<ul>
+<li>订单服务（Order）</li>
+<li>库存服务（Stock）</li>
+<li>支付服务（Pay）</li>
+</ul>
+<p>当一个业务操作需要同时调用多个服务时，如果中途出现异常（如库存扣减失败），就会导致<strong>数据不一致问题</strong>。</p>
+<p>传统的本地事务（如 MySQL 事务）只能保证单库内一致性，无法解决跨服务事务。</p>
+<p>💡 <strong>Seata 正是为了解决这种“跨服务分布式事务”问题而生。</strong></p>
+<hr>
+<p><strong>三、Seata 的三大核心角色</strong></p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>全称</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TC（Transaction Coordinator）</strong></td>
+<td>事务协调者</td>
+<td>维护全局事务的状态，协调分支事务的提交与回滚。</td>
+</tr>
+<tr>
+<td><strong>TM（Transaction Manager）</strong></td>
+<td>事务管理者</td>
+<td>负责开启、提交、回滚全局事务。</td>
+</tr>
+<tr>
+<td><strong>RM（Resource Manager）</strong></td>
+<td>资源管理者</td>
+<td>管理分支事务的本地资源（数据库连接等），并向 TC 注册。</td>
+</tr>
+</tbody></table>
+<p>运行机制图：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌────────────┐       ┌────────────┐</span><br><span class="line">│  TM（订单服务） │ → ├  TC（Seata Server） │</span><br><span class="line">└────────────┘       └────────────┘</span><br><span class="line">      ↓                       ↑</span><br><span class="line">┌────────────┐       ┌────────────┐</span><br><span class="line">│ RM（库存服务） │ ←───┤  TC 协调提交或回滚 │</span><br><span class="line">└────────────┘       └────────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>四、Seata 的工作原理</strong></p>
+<p>1️⃣ <strong>TM 开启全局事务</strong></p>
+<ul>
+<li>通过 <code>@GlobalTransactional</code> 注解标记业务方法；</li>
+<li>向 TC 注册全局事务，获取唯一的全局事务 ID（XID）。</li>
+</ul>
+<p>2️⃣ <strong>RM 注册分支事务</strong></p>
+<ul>
+<li>每个参与的微服务（数据库操作）向 TC 注册分支事务；</li>
+<li>记录事务的“前镜像”和“后镜像”。</li>
+</ul>
+<p>3️⃣ <strong>执行业务逻辑</strong></p>
+<ul>
+<li>各 RM 执行本地 SQL 操作，但不提交，只保留在本地。</li>
+</ul>
+<p>4️⃣ <strong>TM 提交或回滚</strong></p>
+<ul>
+<li>如果所有分支执行成功 → TC 通知各 RM 提交；</li>
+<li>若任何分支失败 → TC 通知所有 RM 回滚操作，恢复到前镜像状态。</li>
+</ul>
+<hr>
+<p><strong>五、Seata 支持的事务模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>简述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>AT 模式（Automatic Transaction）</strong></td>
+<td>基于数据库本地事务 + UndoLog 实现自动回滚</td>
+<td>强一致性、操作数据库场景</td>
+</tr>
+<tr>
+<td><strong>TCC 模式（Try-Confirm-Cancel）</strong></td>
+<td>手动编写 Try&#x2F;Confirm&#x2F;Cancel 三阶段方法</td>
+<td>高性能、需自定义业务逻辑</td>
+</tr>
+<tr>
+<td><strong>SAGA 模式</strong></td>
+<td>补偿事务机制（长事务场景）</td>
+<td>跨系统、异步流程，如支付流程</td>
+</tr>
+<tr>
+<td><strong>XA 模式</strong></td>
+<td>基于 XA 协议的分布式两阶段提交</td>
+<td>强一致性、高可靠但性能较低</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、AT 模式详解（最常用）</strong></p>
+<p><strong>核心原理：</strong></p>
+<ul>
+<li>自动拦截业务 SQL；</li>
+<li>在执行前后分别记录“前镜像”和“后镜像”；</li>
+<li>若事务失败，Seata 通过 UndoLog 恢复到原始状态。</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GlobalTransactional(name = &quot;create-order&quot;, rollbackFor = Exception.class)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        orderDao.save(order);</span><br><span class="line">        stockService.reduceStock(order.getProductId());</span><br><span class="line">        accountService.decreaseBalance(order.getUserId(), order.getAmount());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>若任意步骤失败（如余额不足），Seata 会自动触发全局回滚。</p>
+<hr>
+<p><strong>七、Spring Cloud Seata 的集成步骤</strong></p>
+<p>1️⃣ <strong>引入依赖</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.seata<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.x.x<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2️⃣ <strong>配置 Nacos 注册中心</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">seata:</span></span><br><span class="line">  <span class="attr">registry:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">nacos</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="string">localhost:8848</span></span><br><span class="line">      <span class="attr">group:</span> <span class="string">SEATA_GROUP</span></span><br><span class="line">      <span class="attr">application:</span> <span class="string">seata-server</span></span><br></pre></td></tr></table></figure>
+
+<p>3️⃣ <strong>启动 TC 服务（Seata Server）</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./seata-server.sh -p 8091 -m file</span><br></pre></td></tr></table></figure>
+
+<p>4️⃣ <strong>在业务服务中添加 @GlobalTransactional</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GlobalTransactional</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">processOrder</span><span class="params">()</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>八、Seata 的优缺点分析</strong></p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✅ 支持多种事务模式（AT&#x2F;TCC&#x2F;SAGA&#x2F;XA）</td>
+<td>❌ Seata Server 是单点依赖</td>
+</tr>
+<tr>
+<td>✅ 与 Spring Cloud&#x2F;Nacos 无缝集成</td>
+<td>❌ AT 模式依赖数据库 UndoLog 表</td>
+</tr>
+<tr>
+<td>✅ 减少开发复杂度（AT 模式自动回滚）</td>
+<td>❌ 跨库性能略低于本地事务</td>
+</tr>
+<tr>
+<td>✅ 支持多语言客户端</td>
+<td>❌ 大事务场景下回滚成本高</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>九、面试官高频追问与标准回答</strong></p>
+<table>
+<thead>
+<tr>
+<th>面试官问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>❓ Seata AT 模式的回滚机制？</td>
+<td>通过 UndoLog 保存数据快照，失败时根据前镜像回滚。</td>
+</tr>
+<tr>
+<td>❓ TCC 与 AT 区别？</td>
+<td>AT 自动管理事务；TCC 手动定义 Try&#x2F;Confirm&#x2F;Cancel。</td>
+</tr>
+<tr>
+<td>❓ 如何防止幂等问题？</td>
+<td>在 TCC&#x2F;Confirm 阶段使用事务日志或状态标识控制幂等性。</td>
+</tr>
+<tr>
+<td>❓ Seata 与 RocketMQ 事务消息的区别？</td>
+<td>Seata 用于分布式数据库事务，MQ 事务用于消息投递一致性。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>十、总结（背诵版）</strong></p>
+<blockquote>
+<p>Seata 是分布式事务协调框架，解决微服务下的“跨库一致性”问题。<br> 核心角色：<strong>TM、RM、TC</strong>，<br> 常用模式：<strong>AT 自动事务模式</strong>。</p>
+<p>AT 模式自动生成 UndoLog，失败自动回滚；<br> TCC 模式通过 Try&#x2F;Confirm&#x2F;Cancel 实现手动补偿；<br> SAGA 模式用于长事务补偿机制。</p>
+<p>✅ 一句话总结：<br> <em>Seata 让分布式事务像本地事务一样简单可靠。</em></p>
+</blockquote>
+<h1 id="🎯-面试题：分布式事务-TCC-模式详解（含执行流程-业务示例-面试扩展）"><a href="#🎯-面试题：分布式事务-TCC-模式详解（含执行流程-业务示例-面试扩展）" class="headerlink" title="🎯 面试题：分布式事务 TCC 模式详解（含执行流程 + 业务示例 + 面试扩展）"></a>🎯 面试题：分布式事务 TCC 模式详解（含执行流程 + 业务示例 + 面试扩展）</h1><hr>
+<p><strong>一、面试速答模板（高分版开场）</strong></p>
+<blockquote>
+<p><strong>TCC（Try-Confirm-Cancel）</strong> 模式是分布式事务中一种“业务层面的补偿型事务”方案，<br> 它通过将每个操作拆分为 <strong>三个阶段</strong> 来保证最终一致性：</p>
+<ul>
+<li><strong>Try（尝试）</strong>：预留资源；</li>
+<li><strong>Confirm（确认）</strong>：正式提交；</li>
+<li><strong>Cancel（取消）</strong>：回滚补偿。</li>
+</ul>
+<p>TCC 模式由业务方控制资源与回滚逻辑，属于一种 <strong>“业务可编程事务”</strong>，<br> 能在保持高性能的同时，实现 <strong>柔性事务（最终一致性）</strong>。</p>
+</blockquote>
+<hr>
+<p><strong>二、TCC 的三阶段机制详解</strong></p>
+<p>TCC 模式并不依赖数据库层事务，而是<strong>由应用服务显式实现事务控制逻辑</strong>。</p>
+<hr>
+<p><strong>✅ 阶段一：Try（预留资源）</strong></p>
+<ul>
+<li>作用：检查业务可行性并<strong>预留资源</strong>；</li>
+<li>示例：冻结账户余额、锁定库存；</li>
+<li>设计要求：<ul>
+<li>Try 操作要<strong>幂等</strong>；</li>
+<li>不可对外产生副作用；</li>
+<li>必须确保资源“可确认或可回滚”。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>✅ 阶段二：Confirm（确认提交）</strong></p>
+<ul>
+<li>作用：在所有子事务的 Try 都成功后，执行业务的正式提交；</li>
+<li>示例：扣减账户余额、扣除库存；</li>
+<li>特点：<ul>
+<li>Confirm 必须保证幂等；</li>
+<li>Confirm 操作通常<strong>不再进行任何校验</strong>；</li>
+<li>一旦执行，事务进入最终完成状态。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>✅ 阶段三：Cancel（取消补偿）</strong></p>
+<ul>
+<li>作用：当任意 Try 失败或部分 Confirm 失败时，执行补偿操作；</li>
+<li>示例：解冻余额、释放库存；</li>
+<li>特点：<ul>
+<li>Cancel 必须保证幂等；</li>
+<li>Cancel 逻辑与 Try 逻辑相反；</li>
+<li>若 Try 未执行成功，则 Cancel 应该能识别并忽略。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>三、TCC 执行流程示意图</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">          ┌────────────────────┐</span><br><span class="line">          │    事务协调者 TM    │</span><br><span class="line">          └────────────────────┘</span><br><span class="line">                     │</span><br><span class="line">        ┌────────────┼────────────┐</span><br><span class="line">        ▼             ▼             ▼</span><br><span class="line">┌────────────┐  ┌────────────┐  ┌────────────┐</span><br><span class="line">│ 账户服务A  │  │ 库存服务B  │  │ 积分服务C  │</span><br><span class="line">└────────────┘  └────────────┘  └────────────┘</span><br><span class="line">    Try()             Try()             Try()</span><br><span class="line">     ↓                 ↓                 ↓</span><br><span class="line">   成功              成功              成功</span><br><span class="line">     ↓                 ↓                 ↓</span><br><span class="line">   Confirm()         Confirm()         Confirm()</span><br></pre></td></tr></table></figure>
+
+<p>👉 若任一 Try 失败，事务管理器调用各服务的 Cancel 方法回滚补偿。</p>
+<hr>
+<p><strong>四、TCC 实际应用示例</strong></p>
+<p><strong>案例：电商下单扣库存 + 扣余额</strong></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>账户服务</th>
+<th>库存服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Try</td>
+<td>冻结余额</td>
+<td>锁定库存</td>
+</tr>
+<tr>
+<td>Confirm</td>
+<td>扣减余额</td>
+<td>扣减库存</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>解冻余额</td>
+<td>解锁库存</td>
+</tr>
+</tbody></table>
+<p><strong>伪代码示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Try 阶段</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">tryReserve</span><span class="params">(User user, <span class="type">int</span> amount)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (balance &gt;= amount) &#123;</span><br><span class="line">        freezeBalance(user, amount);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Confirm 阶段</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">confirmReserve</span><span class="params">(User user, <span class="type">int</span> amount)</span> &#123;</span><br><span class="line">    deductBalance(user, amount);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Cancel 阶段</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">cancelReserve</span><span class="params">(User user, <span class="type">int</span> amount)</span> &#123;</span><br><span class="line">    unfreezeBalance(user, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>五、TCC 模式的关键设计要点</strong></p>
+<table>
+<thead>
+<tr>
+<th>关键点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>幂等性</strong></td>
+<td>每个阶段可能被重复调用，必须保证幂等操作</td>
+</tr>
+<tr>
+<td><strong>空回滚（空补偿）</strong></td>
+<td>当 Try 未执行成功时，Cancel 不应误回滚</td>
+</tr>
+<tr>
+<td><strong>悬挂问题</strong></td>
+<td>Cancel 先于 Try 执行时，需判断防止误回滚</td>
+</tr>
+<tr>
+<td><strong>事务协调器</strong></td>
+<td>控制 Try&#x2F;Confirm&#x2F;Cancel 的全局调用与状态管理</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>六、TCC 与其他事务方案对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>方案类型</th>
+<th>一致性</th>
+<th>性能</th>
+<th>实现复杂度</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2PC</td>
+<td>强一致性</td>
+<td>低</td>
+<td>中</td>
+<td>分布式数据库</td>
+</tr>
+<tr>
+<td>TCC</td>
+<td>最终一致性</td>
+<td>高</td>
+<td>高</td>
+<td>金融、电商、支付系统</td>
+</tr>
+<tr>
+<td>Saga</td>
+<td>最终一致性</td>
+<td>高</td>
+<td>中</td>
+<td>长事务业务</td>
+</tr>
+<tr>
+<td>消息事务</td>
+<td>最终一致性</td>
+<td>高</td>
+<td>低</td>
+<td>异步消息场景</td>
+</tr>
+</tbody></table>
+<p>👉 TCC 适用于 <strong>强业务耦合</strong>、<strong>可编程控制</strong>、<strong>执行较快</strong> 的场景。</p>
+<hr>
+<p><strong>七、TCC 的常见问题与解决方案</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题类型</th>
+<th>说明</th>
+<th>解决方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>幂等问题</td>
+<td>接口可能被重复调用</td>
+<td>使用事务状态表或唯一业务号</td>
+</tr>
+<tr>
+<td>空回滚</td>
+<td>Cancel 先于 Try 执行</td>
+<td>增加 Try 状态校验</td>
+</tr>
+<tr>
+<td>悬挂问题</td>
+<td>Cancel 执行后 Try 才到</td>
+<td>在本地事务表中记录 Try 执行状态</td>
+</tr>
+<tr>
+<td>网络超时</td>
+<td>某个 Confirm&#x2F;Cancel 超时</td>
+<td>使用消息补偿或定时任务重试机制</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>八、TCC 框架与实现</strong></p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Seata TCC 模式</strong></td>
+<td>阿里开源分布式事务框架，支持 TCC&#x2F;AT&#x2F;Saga</td>
+</tr>
+<tr>
+<td><strong>Hmily TCC</strong></td>
+<td>国内成熟开源方案，支持 Dubbo、Spring Cloud</td>
+</tr>
+<tr>
+<td><strong>ByteTCC</strong></td>
+<td>轻量级、高性能 TCC 框架</td>
+</tr>
+<tr>
+<td><strong>自研 TCC</strong></td>
+<td>结合业务规则设计 Try&#x2F;Confirm&#x2F;Cancel 接口</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>九、面试官常追问问题</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>高分回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TCC 与 2PC 的区别？</td>
+<td>2PC 是数据库层协议，TCC 是业务层补偿机制；TCC 更灵活但一致性较弱。</td>
+</tr>
+<tr>
+<td>TCC 如何保证幂等？</td>
+<td>通过全局事务ID（XID）+ 本地幂等表，防止重复执行。</td>
+</tr>
+<tr>
+<td>如何处理 Confirm 阶段失败？</td>
+<td>使用重试机制或补偿任务，确保最终一致性。</td>
+</tr>
+<tr>
+<td>TCC 与 Saga 的区别？</td>
+<td>Saga 用反向事务补偿，TCC 用显式 Cancel 接口；TCC 实时性更高。</td>
+</tr>
+<tr>
+<td>哪些业务适合用 TCC？</td>
+<td>支付、转账、扣库存、积分发放等可控资源型事务。</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>十、总结（背诵版）</strong></p>
+<blockquote>
+<p><strong>TCC 模式核心：Try + Confirm + Cancel 三阶段补偿机制。</strong></p>
+<ul>
+<li>Try：预留资源；</li>
+<li>Confirm：提交事务；</li>
+<li>Cancel：回滚资源。</li>
+</ul>
+<p>特点：</p>
+<ul>
+<li>由业务方实现，粒度细，可控性高；</li>
+<li>具备幂等性、空回滚、防悬挂机制；</li>
+<li>实现最终一致性，性能优于 2PC。</li>
+</ul>
+<p>✅ <strong>口诀记忆：</strong><br> “Try 试探锁资源，Confirm 确认定乾坤，Cancel 回滚保一致。”</p>
+</blockquote>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Wsk</div><div class="post-copyright__author_desc">Believe in yourself</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://wsk0404.github.io/posts/750d7523.html">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://wsk0404.github.io/posts/750d7523.html')">Spring Cloud</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="/./img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/./img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/./img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div><div class="reward-link mode"><a class="reward-link-button" href="/wecaht/"><i class="anzhiyufont anzhiyu-icon-plant-fill"></i>运营模式与责任</a></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://wsk0404.github.io/posts/750d7523.html"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=Spring Cloud&amp;url=https://wsk0404.github.io/posts/750d7523.html&amp;pic=https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=091b2caa-3dd7-0f39-d111-d11126a28a1f" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="rm.copyPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://wsk0404.github.io" target="_blank">Wsk Blog</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"></div></div></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=c4efdf0d-13b7-9b79-58f9-5dc87298de5a" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/a541262a.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/SurYK9kV8bRd2Ll.jpg?_r_=270b421b-0d46-1cae-f154-454f8a7388d8" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Spring Boot</div></div></a></div><div class="next-post pull-right"><a href="/posts/bae4ff13.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=5817c1ec-68a8-4093-a7cc-44c8f273347a" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Redis</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2022/11/07/QVWvrnAsuGxelbS.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/zc998800/cdn/face/gif/m17.gif" ait="status"/></div></div><div class="author-info__description">路慢其修远兮 吾将上下而求索</div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Wsk</h1><div class="author-info__desc">Believe in yourself</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/gukeyang" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/1542898061" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://s2.loli.net/2023/10/19/vNio4QGBSX9x5lO.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF-Spring-Cloud%EF%BC%9F%E5%AE%83%E8%A7%A3%E5%86%B3%E4%BA%86%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%AD%E7%9A%84%E5%93%AA%E4%BA%9B%E9%97%AE%E9%A2%98%EF%BC%88%E5%90%AB%E6%9E%B6%E6%9E%84%E5%89%96%E6%9E%90-%E9%9D%A2%E8%AF%95%E9%AB%98%E5%88%86%E7%AD%94%E6%B3%95%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">🎯 面试题：什么是 Spring Cloud？它解决了微服务中的哪些问题（含架构剖析 + 面试高分答法）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ASpring-Cloud-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%8F%91%E7%8E%B0%E5%8E%9F%E7%90%86%EF%BC%88%E5%90%AB%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90-%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B-%E9%AB%98%E5%88%86%E7%AD%94%E6%B3%95%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">🎯 面试题：Spring Cloud 服务注册与发现原理（含机制解析 + 核心流程 + 高分答法）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ASpring-Cloud-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%88%E5%90%AB%E6%9C%BA%E5%88%B6%E5%8E%9F%E7%90%86-%E7%BB%84%E4%BB%B6%E6%BC%94%E8%BF%9B-%E7%AD%94%E9%A2%98%E6%A8%A1%E6%9D%BF%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">🎯 面试题：Spring Cloud 负载均衡（含机制原理 + 组件演进 + 答题模板）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ASpring-Cloud-Gateway-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%88%E5%90%AB%E5%8E%9F%E7%90%86%E6%9C%BA%E5%88%B6-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3-%E9%9D%A2%E8%AF%95%E8%BF%BD%E9%97%AE%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">🎯 面试题：Spring Cloud Gateway 是什么（含原理机制 + 架构详解 + 面试追问）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E4%B8%AD%E7%9A%84-2PC-%E4%B8%8E-3PC%EF%BC%88%E5%90%AB%E5%8E%9F%E7%90%86%E6%9C%BA%E5%88%B6-%E6%B5%81%E7%A8%8B%E5%9B%BE%E8%A7%A3-%E9%9D%A2%E8%AF%95%E5%BB%B6%E4%BC%B8%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">🎯 面试题：分布式事务中的 2PC 与 3PC（含原理机制 + 流程图解 + 面试延伸）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9ASpring-Cloud-Seata-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%88%E5%90%AB%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86-%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3-%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">🎯 面试题：Spring Cloud Seata 是什么（含分布式事务原理 + 模式详解 + 实战场景）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-TCC-%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3%EF%BC%88%E5%90%AB%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B-%E4%B8%9A%E5%8A%A1%E7%A4%BA%E4%BE%8B-%E9%9D%A2%E8%AF%95%E6%89%A9%E5%B1%95%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">🎯 面试题：分布式事务 TCC 模式详解（含执行流程 + 业务示例 + 面试扩展）</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/162c3636.html" title="IO 与序列化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/5MFUXBI3EhCAx6y.jpg?_r_=c4efdf0d-13b7-9b79-58f9-5dc87298de5a" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IO 与序列化"/></a><div class="content"><a class="title" href="/posts/162c3636.html" title="IO 与序列化">IO 与序列化</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/aa8deaab.html" title="多线程与并发"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/w3ErpsQhncfDed2.jpg?_r_=04cdb870-e321-33dd-46d1-c75beea7e633" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="多线程与并发"/></a><div class="content"><a class="title" href="/posts/aa8deaab.html" title="多线程与并发">多线程与并发</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/86c7f0f3.html" title="集合与泛型"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/w3ErpsQhncfDed2.jpg?_r_=4f973540-0903-b9a9-90af-7b83e54e19e7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="集合与泛型"/></a><div class="content"><a class="title" href="/posts/86c7f0f3.html" title="集合与泛型">集合与泛型</a><time datetime="2025-11-03T15:31:36.000Z" title="发表于 2025-11-03 23:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/f7ede91d.html" title="Java基础"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/g4UkwyDri9BWZtE.jpg?_r_=c460281f-4a15-2a64-f85a-881c8410f25e" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java基础"/></a><div class="content"><a class="title" href="/posts/f7ede91d.html" title="Java基础">Java基础</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b543ced0.html" title="RabbitMQ"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://s2.loli.net/2025/10/23/wfbr2eNcL1VvXIn.png?_r_=be81c140-ca4e-b769-ffa4-babbc83e79b0" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RabbitMQ"/></a><div class="content"><a class="title" href="/posts/b543ced0.html" title="RabbitMQ">RabbitMQ</a><time datetime="2025-11-03T09:31:36.000Z" title="发表于 2025-11-03 17:31:36">2025-11-03</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-上班摸鱼中.svg" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title="博客框架为Hexo_v5.4.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a class="github-badge" target="_blank" href="https://blog.anheyu.com/" style="margin-inline:5px" data-title="本站使用AnZhiYu主题" title="本站使用AnZhiYu主题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.9/img/Theme-AnZhiYu-2E67D3.svg" alt="本站使用AnZhiYu主题"/></a><a class="github-badge" target="_blank" href="https://www.dogecloud.com/" style="margin-inline:5px" data-title="本站使用多吉云为静态资源提供CDN加速" title="本站使用多吉云为静态资源提供CDN加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/CDN-多吉云-3693F3.svg" alt="本站使用多吉云为静态资源提供CDN加速"/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title="本站项目由Github托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Source-Github.svg" alt="本站项目由Github托管"/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg" alt="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"/></a></p></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Wsk" target="_blank">Wsk</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.png" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/fcircle/"><i class="anzhiyufont anzhiyu-icon-artstation faa-tada" style="font-size: 0.9em;"></i><span> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/?id=2898229193&amp;server=netease"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/air-conditioner/"><i class="anzhiyufont anzhiyu-icon-fan faa-tada" style="font-size: 0.9em;"></i><span> 小空调</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AOP/" style="font-size: 0.88rem;">AOP<sup>2</sup></a><a href="/tags/IO/" style="font-size: 0.88rem;">IO<sup>1</sup></a><a href="/tags/IOC/" style="font-size: 0.88rem;">IOC<sup>2</sup></a><a href="/tags/JVM/" style="font-size: 0.88rem;">JVM<sup>1</sup></a><a href="/tags/JVM%E8%B0%83%E4%BC%98/" style="font-size: 0.88rem;">JVM调优<sup>1</sup></a><a href="/tags/java%E5%9F%BA%E7%A1%80/" style="font-size: 0.88rem;">java基础<sup>1</sup></a><a href="/tags/mysql/" style="font-size: 0.88rem;">mysql<sup>1</sup></a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 0.88rem;">多线程<sup>1</sup></a><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 0.88rem;">并发<sup>1</sup></a><a href="/tags/%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 0.88rem;">序列化<sup>1</sup></a><a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 0.88rem;">异常<sup>1</sup></a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 0.88rem;">数据库<sup>1</sup></a><a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 0.88rem;">泛型<sup>1</sup></a><a href="/tags/%E7%94%B5%E5%95%86-%E8%AE%A2%E5%8D%95/" style="font-size: 0.88rem;">电商,订单<sup>1</sup></a><a href="/tags/%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/" style="font-size: 0.88rem;">自动装配<sup>1</sup></a><a href="/tags/%E8%B6%85%E5%8D%96-%E5%BA%93%E5%AD%98/" style="font-size: 0.88rem;">超卖 , 库存<sup>1</sup></a><a href="/tags/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" style="font-size: 0.88rem;">集合框架<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="chat-btn" type="button" title="聊天"><i class="anzhiyufont anzhiyu-icon-comment-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><a id="switch-commentBarrage" href="javascript:anzhiyu.switchCommentBarrage();" title="开关弹幕"><i class="anzhiyufont anzhiyu-icon-danmu"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8152976493&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.4/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2023 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2020 By 安知鱼 V1.6.8",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Wsk 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("04/01/2023 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      img.src = "";
+      img.title = "";
+      img.alt = "";
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+      appKey: 'TjKeHNK7GJrGTYuKYzGzh8yg',
+      avatar: 'mp',
+      serverURLs: '',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_亲亲":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再见":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_发怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_发财":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可爱":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_呕吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_坏笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尴尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_惊吓":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.cbd.int/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) anzhiyu.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script src="https://cdn.cbd.int/blueimp-md5@2.19.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=mp'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://4GK2IcRZ.api.lncldglobal.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": '4GK2IcRZ0PX28gP4kGsW08qs-gzGzoHsz',
+        "X-LC-Key": 'TjKeHNK7GJrGTYuKYzGzh8yg',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script>var visitorMail = "visitor@anheyu.com";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script src="//code.tidio.co/4nifo6zdbrmyjsngh2yzxwbnlhrvshrf.js" async="async"></script><script>(() => {
+  const isChatBtn = true
+  const isChatHideShow = true
+
+  if (isChatBtn) {
+    let isShow = false
+    const close = () => {
+      window.tidioChatApi.hide()
+      isShow = false
+    }
+    
+    const open = () => {
+      window.tidioChatApi.open()
+      window.tidioChatApi.show()
+      isShow = true
+    }
+
+    const onTidioChatApiReady = () => {
+      window.tidioChatApi.hide()
+      window.tidioChatApi.on("close", close)
+    }
+    if (window.tidioChatApi) {
+      window.tidioChatApi.on("ready", onTidioChatApiReady)
+    } else {
+      document.addEventListener("tidioChat-ready", onTidioChatApiReady)
+    }
+
+    window.chatBtnFn = () => {
+      if (!window.tidioChatApi) return
+      isShow ? close() : open()
+    }
+  } else if (isChatHideShow) {
+    window.chatBtn = {
+      hide: () => {
+        window.tidioChatApi && window.tidioChatApi.hide()
+      },
+      show: () => {
+        window.tidioChatApi && window.tidioChatApi.show()
+      }
+    }
+  }
+})()</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
